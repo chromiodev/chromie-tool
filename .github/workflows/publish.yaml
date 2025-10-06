@@ -135,4 +135,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="v${{ inputs.version }}"
-          gh release create $VERSION dist/* --title "Release v$VERSION"
+          gh release create $VERSION dist/* --title "Release $VERSION"
