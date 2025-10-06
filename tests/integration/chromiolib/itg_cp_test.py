@@ -50,7 +50,7 @@ async def test_export_coll_partially(
   # (2) act
   out = await copier.copy_coll(src_coll, dst_coll, limit=limit)
 
-  # (4) assessment
+  # (3) assessment
   # report
   assert out.coll == src_coll.name
   assert out.dst_coll == dst_coll.name
