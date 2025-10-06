@@ -211,6 +211,24 @@ async def coll(db: AsyncClientAPI) -> AsyncCollection:
   return await db.create_collection("pytest", get_or_create=True)
 
 
+src_coll = coll
+
+
+@pytest.fixture(scope="function")
+async def dst_coll(db: AsyncClientAPI) -> AsyncIterator[AsyncCollection]:
+  """Collection to use in the tests as destination."""
+
+  # (1) truncate collection
+  coll = await db.create_collection("pytest_cp", get_or_create=True)
+  await coll.delete(where={"id": {"$ne": "unknown"}})
+
+  # (2) return collection
+  yield coll
+
+  # (3) drop collection
+  await db.delete_collection(coll.name)
+
+
 @pytest.fixture(scope="module")
 async def coll2(db: AsyncClientAPI) -> AsyncCollection:
   """Second collection to use in some tests such as, for example,

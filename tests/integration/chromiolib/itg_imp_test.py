@@ -18,7 +18,7 @@ def importer() -> CollImporter:
 async def test_import_all_records(
   pytester: Pytester, importer: CollImporter, coll: AsyncCollection, cc_count: int
 ) -> None:
-  """Check that Importer.import_coll() imports all the records from the file."""
+  """Check that CollImporter.import_coll() imports all the records from the file."""
 
   # (1) precondition: the collection must not contain records
   assert await coll.count() == 0
@@ -44,7 +44,7 @@ async def test_import_all_records(
 async def test_import_with_limit(
   pytester: Pytester, importer: CollImporter, coll: AsyncCollection, cc_count: int
 ) -> None:
-  """Check that Importer.import_coll() imports the maximum number of records set."""
+  """Check that CollImporter.import_coll() imports the maximum number of records set."""
 
   limit = 2
 
