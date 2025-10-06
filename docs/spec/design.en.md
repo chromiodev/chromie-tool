@@ -5,7 +5,7 @@
 
 ### Purpose of *Chromie*
 
-**Chromie** is a command-line tool (CLI) designed to facilitate importing and exporting data from and to a **Chroma** vector database.
+**Chromie** is a command-line interface (CLI) tool designed to facilitate the import and export of data from and to a **Chroma** vector database.
 
 The project is composed of two main parts:
 
@@ -39,11 +39,11 @@ rpt | report
 
 **Chromie**'s architecture is based on a clear separation between the business logic and the user interface.
 
-- **chromio** Library:
+- **chromio** library:
 
-  - Has no knowledge of the CLI.
+  - It has no knowledge of the CLI.
 
-  - Manages the connection to **Chroma**.
+  - Manages the connection with **Chroma**.
 
   - Contains the logic for reading, writing, filtering, and transforming data.
 
@@ -51,15 +51,15 @@ rpt | report
 
   - It is asynchronous, using **asyncio**.
 
-- **chromie** Application:
+- **chromie** application:
 
-  - Is the entry point for the user.
+  - It is the entry point for the user.
 
   - Uses **argparse** to define and parse commands and arguments.
 
   - Orchestrates calls to the **chromio** library to execute the requested actions.
 
-  - Is responsible for presenting results and reports to the user in the console.
+  - It is responsible for presenting the results and reports to the user in the console.
 
 ### High-Level Component Diagram
 
@@ -81,19 +81,19 @@ graph LR
 
 ## *chromio* Library
 
-### *Chroma* Connectivity
+### Connectivity to *Chroma*
 
 The connection is managed by two main components:
 
 - **`uri`**:
-  Connection URI parser, returns ***`ChromioUri`*** instances that describe the URI and facilitate access to its components.
+  Connection URI parser, returns instances of ***`ChromioUri`*** that describe the URI and facilitate access to its components.
 
 - **`client`**:
-  Client for a **Chroma** instance based on a ***`ChromioUri`*** and additional information if necessary.
+  Client to a **Chroma** instance from a ***`ChromioUri`*** and additional information if necessary.
 
 ### Import/Export Engine (`ie`)
 
-This is the core of the library and contains the logic for moving data.
+It is the core of the library and contains the logic for moving data.
 
 ```mermaid
 classDiagram
@@ -144,7 +144,7 @@ Main program file.
 ### Command Structure (*cmds/*)
 
 Each command is represented and implemented by a module in this directory.
-Each of them inherits from or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
+Each of them inherits or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
 
 ```mermaid
 classDiagram
@@ -154,6 +154,7 @@ classDiagram
     <<abstract>>
   }
   
+  Cmd <|-- CpCmd
   Cmd <|-- ExpCmd
   Cmd <|-- ImpCmd
   Cmd <|-- LsCmd

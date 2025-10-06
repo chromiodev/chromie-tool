@@ -1,11 +1,11 @@
-# Use Cases: Chromie
+# Use cases: Chromie
 
 Users will interact with the application through the following use cases:
 
 
 ```mermaid
 ---
-title: Use Cases
+title: Use cases
 config:
 ---
 
@@ -89,4 +89,21 @@ graph LR
   end
 
   user --> importColl
+
+  %%%%%%%%%%
+  %% copy %%
+  %%%%%%%%%%
+  subgraph "Data copy"
+    copyColl@{ shape: "rounded", label: "
+      Copy collection<hr>
+      «in» Source URI
+      «in» Destination URI
+      «in» Collection name
+      «in» Field names to copy
+      «in» Batch size
+      «out» Copy report
+    " }
+  end
+
+  user --> copyColl
 ```

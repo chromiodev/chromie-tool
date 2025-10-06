@@ -19,10 +19,10 @@ which chromie
 ### Help
 
 ```bash
-# chromie
+# chromie help
 chromie -h
 
-# exp command
+# exp command help
 chromie exp -h
 ```
 
@@ -36,6 +36,12 @@ chromie exp server://localhost:8000/tenant/db/collection file.json
 
 ```bash
 chromie imp file.json server://localhost:8000/tenant/db/collection
+```
+
+### Copy
+
+```bash
+chromie cp server://///coll1 server://///coll2
 ```
 
 ### Listing the database collections

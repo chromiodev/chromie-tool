@@ -47,7 +47,7 @@ Un caso de prueba se considera **exitoso** si la interacción entre los componen
 
 ```mermaid
 ---
-title: Diagrama de casos de prueba (clientes)
+title: Diagrama de casos de prueba (CL)
 config:
 ---
 
@@ -86,7 +86,7 @@ graph BT
 
 ```mermaid
 ---
-title: Diagrama de casos de prueba (exportación)
+title: Diagrama de casos de prueba (EXP)
 config:
 ---
 
@@ -106,7 +106,7 @@ graph BT
 #### Exportación completa (*ITG-EXP-01*)
 
 - **Descripción**:
-  Comprueba que **`Exporter.export_coll()`** exporta todos los registros de una colección cuando no se especifica un límite.
+  Comprueba que **`CollExporter.export_coll()`** exporta todos los registros de una colección cuando no se especifica un límite.
 - **Tipo**:
   Lectura.
   - **Precondiciones**:
@@ -127,7 +127,7 @@ graph BT
 #### Exportación parcial (*ITG-EXP-02*)
 
 - **Descripción**:
-  Comprueba que **`Exporter.export_coll()`** exporta un número máximo de registros igual al **`limit`** especificado.
+  Comprueba que **`CollExporter.export_coll()`** exporta un número máximo de registros igual al **`limit`** especificado.
 
 - **Tipo**:
   Lectura.
@@ -150,7 +150,7 @@ graph BT
 
 ```mermaid
 ---
-title: Diagrama de casos de prueba (importación)
+title: Diagrama de casos de prueba (IMP)
 config:
 ---
 
@@ -170,7 +170,7 @@ graph BT
 #### Importación completa (ITG-IMP-01)
 
 - **Descripción**:
-  Comprueba que **`Importer.import_coll()`** importa todos los registros de un archivo a una colección vacía cuando no se especifica un límite.
+  Comprueba que **`CollImporter.import_coll()`** importa todos los registros de un archivo a una colección vacía cuando no se especifica un límite.
 
 - **Tipo**:
   L/E.
@@ -179,12 +179,11 @@ graph BT
 
   - El archivo de importación es válido y contiene al menos dos registros.
 
-  - La colección de destino existe y está vacía.
+  - La colección destino existe y está vacía.
 
 - **Poscondiciones**:
 
-  - La colección de destino contiene el mismo número de registros que el archivo de importación.
-
+  - La colección destino contiene el mismo número de registros que el archivo de importación.
 
 - **Salida Esperada**:
 
@@ -193,7 +192,7 @@ graph BT
 #### Importación parcial (*ITG-IMP-02*)
 
 - **Descripción**:
-  Comprueba que **`Importer.import_coll()`** importa un número máximo de registros igual el `limit` especificado.
+  Comprueba que **`CollImporter.import_coll()`** importa un número máximo de registros igual el `limit` especificado.
 
 - **Tipo**:
   L/E.
@@ -202,12 +201,77 @@ graph BT
 
   - El archivo de importación contiene más registros que el límite a aplicar (***2***).
 
-  - La colección de destino existe y está vacía.
+  - La colección destino existe y está vacía.
 
 - **Poscondiciones**:
 
-  - La colección de destino contiene exactamente el número de registros especificado en `limit`.
+  - La colección destino contiene exactamente el número de registros especificado en `limit`.
 
 - **Salida Esperada**:
 
   - El método devuelve un objeto-informe que indica el número de registros importados, coincide con **`limit`**.
+
+### Copia de datos (*CP*)
+
+```mermaid
+---
+title: Diagrama de casos de prueba (CP)
+config:
+---
+
+graph BT
+  %% use cases
+  copyColl@{ shape: "rounded", label: "Copiar una colección" }
+
+  subgraph "Casos de prueba"
+    copyFullColl@{ scope="rounded", label: "#lt;#lt;testcase>>ITG-CP-01: Copia completa de colección" }
+    copyPartialColl@{ scope="rounded", label: "#lt;#lt;testcase>>ITG-IMP-02: Copia parcial de colección" }
+  end
+
+  copyFullColl -.-> copyColl
+  copyPartialColl -.-> copyColl
+```
+
+#### Copia completa de colección (ITG-CP-01)
+
+- **Descripción**:
+  Comprueba que **`CollCopier.copy_coll()`** copia todos los registros de una colección en otra.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - La colección origen dispone de más de un registro.
+
+  - La colección destino existe y está vacía.
+
+- **Poscondiciones**:
+
+  - La colección destino contiene el mismo número de registros que la colección origen.
+
+- **Salida Esperada**:
+
+  - El método devuelve un objeto-informe que indica el número concreto de registros copiados.
+
+#### Copia parcial de colección (*ITG-CP-02*)
+
+- **Descripción**:
+  Comprueba que **`CollCopier.copy_coll()`** copia un número máximo de registros igual que el **`limit`** especificado.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - La colección origen contiene más registros que el límite a aplicar (***2***).
+
+  - La colección destino existe y está vacía.
+
+- **Poscondiciones**:
+
+  - La colección destino contiene exactamente el número de registros especificado en **`limit`**.
+
+- **Salida Esperada**:
+
+  - El método devuelve un objeto-informe que indica el número de registros copiados, coincide con **`limit`**.

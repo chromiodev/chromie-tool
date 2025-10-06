@@ -1,32 +1,39 @@
 from math import ceil
-from pathlib import Path
 
 import pytest
-from aiofiles import open
+from chromadb.api.models.AsyncCollection import AsyncCollection
 from pytest_mock import AsyncMockType, MockerFixture
 
 from chromio.ie.consts import DEFAULT_FIELDS
-from chromio.ie.exp import CollExporter
+from chromio.ie.cp import CollCopier
 
 
 @pytest.fixture(scope="module")
-def exporter(default_batch_size: int) -> CollExporter:
+def copier(default_batch_size: int) -> CollCopier:
   """Exporter to use in the tests."""
 
-  return CollExporter(batch_size=default_batch_size, fields=DEFAULT_FIELDS)
+  return CollCopier(batch_size=default_batch_size, fields=DEFAULT_FIELDS)
 
 
-async def test_export_all(
+@pytest.fixture(scope="function")
+def dst_coll(mocker: MockerFixture) -> AsyncMockType:
+  """Collection to use in the tests as destination."""
+
+  coll = mocker.AsyncMock(spec=AsyncCollection)
+  type(coll).name = mocker.PropertyMock(return_value="copy")
+  return coll
+
+
+async def test_copy_all(
   mocker: MockerFixture,
-  exporter: CollExporter,
+  copier: CollCopier,
   coll: AsyncMockType,
-  tmp_path: Path,
+  dst_coll: AsyncMockType,
   cc_records: list[dict],
-  cc_export: str,
   cc_record_batches: list[dict],
   default_batch_size: int,
 ) -> None:
-  """Check that export_coll() exports all the records."""
+  """Check that copy_coll() copies all the records."""
 
   # (1) arrange
   # prepare responses of coll.get() mock
@@ -46,12 +53,12 @@ async def test_export_all(
   ]
 
   # (2) act
-  out = await exporter.export_coll(coll, file_path := tmp_path / "test.json", v="1.1.0")
+  out = await copier.copy_coll(coll, dst_coll)
 
   # (3) assessment
   assert out.coll == coll.name
+  assert out.dst_coll == dst_coll.name
   assert out.count == len(cc_records)
-  assert out.file_path == str(file_path)
   assert out.duration >= 0
 
   assert get.await_args_list == [
@@ -63,6 +70,3 @@ async def test_export_all(
     )
     for i in range(0, ceil(out.count / default_batch_size) + 1)
   ]
-
-  async with open(file_path, "r") as file:
-    assert await file.read() == cc_export

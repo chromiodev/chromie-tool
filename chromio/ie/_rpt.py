@@ -10,10 +10,7 @@ class CollIERpt(ABC):
   """Collection name."""
 
   count: int
-  """Number of records imported or exported."""
+  """Number of records imported, exported or copied."""
 
   duration: int
-  """Import/export duration in ms."""
-
-  file_path: str
-  """File path where the data saved or got."""
+  """Operation duration in ms."""

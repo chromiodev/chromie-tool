@@ -23,7 +23,7 @@ def exporter() -> CollExporter:
 async def test_export_coll_fully(
   pytester: Pytester, exporter: CollExporter, db: AsyncClientAPI, coll: AsyncCollection
 ) -> None:
-  """Check that Exporter.export_coll() performs this expected."""
+  """Check that CollExporter.export_coll() performs this expected."""
 
   # (1) precondition: collection has at least two records
   assert (count := await coll.count()) > 2
@@ -57,7 +57,7 @@ async def test_export_coll_fully(
 async def test_export_coll_partially(
   pytester: Pytester, exporter: CollExporter, db: AsyncClientAPI, coll: AsyncCollection
 ) -> None:
-  """Check that Exporter.export_coll() performs this expected when limit set."""
+  """Check that CollExporter.export_coll() performs this expected when limit set."""
 
   # (1) precondition: collection has at least three records
   assert await coll.count() >= 3
