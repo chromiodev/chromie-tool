@@ -26,6 +26,9 @@ sys_prompt = """
 Translate the documentation for a project related to vector databases, concretely Chroma.
 The documentation is written in Markdown and the result must be too.
 When translating, keep the original format, including titles, lists, code blocks, etc.
+If the source Markdown contains links to another documents with the .es.md extension,
+in the destination these must be .en.md.
+You mustn't capitalize the use cases in the titles.
 """
 
 
@@ -60,7 +63,9 @@ def _translate_file(file: Path, llm: LLM) -> str:
   return resp.text
 
 
-def _translate_dir(dir: Path, src_ext: str, dst_ext: str, model: str) -> None:
+def _translate_dir(
+  dir: Path, src_ext: str, dst_ext: str, model: str, force: bool
+) -> None:
   """Translate the files of a specific directory.
 
   Args:
@@ -68,6 +73,7 @@ def _translate_dir(dir: Path, src_ext: str, dst_ext: str, model: str) -> None:
     src_ext: Extension for the files to translate such as, for example, .es.md or .md.
     dst_ext: Extension for the translated files.
     model: Model to use for the translation.
+    force: Force the translation even if the destination file is newer than the source.
   """
 
   # (1) prepare context
@@ -78,8 +84,9 @@ def _translate_dir(dir: Path, src_ext: str, dst_ext: str, model: str) -> None:
     dst = src.parent / src.name.replace(src_ext, dst_ext)
 
     # translate
-    print(f"Translating {src} to {dst}...", flush=True)
-    dst.write_text(_translate_file(src, llm))
+    if force or not dst.exists() or (src.stat().st_mtime > dst.stat().st_mtime):
+      print(f"Translating {src} to {dst}...", flush=True)
+      dst.write_text(_translate_file(src, llm))
 
 
 def handle_translate(args: Any) -> None:
@@ -90,14 +97,17 @@ def handle_translate(args: Any) -> None:
     print("ERROR: GOOGLE_API_KEY environment variable unset.", file=sys.stderr)
     exit(1)
 
-  # (2) translate
+  # (2) args
+  force = args.force
+
+  # (3) translate
   for dir in (arg,) if (arg := args.dir) != "all" else ("docs", "gemini"):
     match dir:
       case "docs":
-        _translate_dir(docs_dir, ".es.md", ".en.md", default_model)
+        _translate_dir(docs_dir, ".es.md", ".en.md", default_model, force)
 
       case "gemini":
-        _translate_dir(gemini_dir, ".es.md", ".md", default_model)
+        _translate_dir(gemini_dir, ".es.md", ".md", default_model, force)
 
 
 ########
@@ -127,6 +137,14 @@ cmd.add_argument(
   help="Directory to translate",
   action="store",
   choices=("all", "docs", "gemini"),
+)
+
+cmd.add_argument(
+  "--force",
+  "-f",
+  help="Force translation even if the destination file is newer than the source.",
+  action="store_true",
+  default=False,
 )
 
 # (2) run script

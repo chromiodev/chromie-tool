@@ -14,11 +14,13 @@ Las pruebas se diseñan bajo un enfoque de **caja negra**, validando el comporta
 
 Se validarán las funcionalidades principales de **chromie** a través de sus comandos principales siguientes:
 
-- **chromie ls**: Listado de colecciones.
+- **`chromie ls`**: Listado de colecciones.
 
-- **chromie exp**: Exportación de datos de una colección.
+- **`chromie exp`**: Exportación de datos de una colección.
 
-- **chromie imp**: Importación de datos a una colección.
+- **`chromie imp`**: Importación de datos a una colección.
+
+- **`chromie cp`**: Copia datos de una colección a otra.
 
 
 ## Entorno de pruebas
@@ -456,3 +458,69 @@ graph BT
   - **Código de salida**: 1.
 
   - **Salida de error**: Muestra mensaje de error.
+
+### Copia de datos (*CP*)
+
+```mermaid
+---
+title: Diagrama de casos de prueba (copia de colecciones)
+config:
+---
+
+graph BT
+  %% casos de uso
+  copyColl@{ shape: "rounded", label: "Copiar colección" }
+
+  subgraph "Casos de prueba"
+    copyReachableColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-CP-01: Copia una colección" }
+    copyNonReachableColl@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-CP-02: Intento de copia de una colección origen inalcanzable" }
+  end
+
+  copyReachableColl -.-> copyColl
+  copyNonReachableColl -.-> copyColl
+```
+
+#### Copia una colección (*FN-CP-01*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie cp`** copia correctamente los registros de una colección a otra.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - La colección origen existe y contiene un número conocido de registros.
+
+  - La colección destino existe y está vacía.
+
+- **Poscondiciones**:
+
+  - La colección destino contiene el mismo número de registros que la de entrada.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Se muestra un informe de la operación.
+
+#### Intento de copia de una colección origen inalcanzable (*FN-CP-02*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie cp`** gestiona el error cuando la colección origen no es alcanzable.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - La colección origen no existe.
+
+- **Poscondiciones**:
+  No se altera el estado de ninguna base de datos.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 1.
+
+  - **Salida de error**: Se muestra un mensaje de error informando sobre la imposibilidad de conectar con la colección origen.

@@ -5,10 +5,10 @@
 
 **Chroma** is establishing itself as a reference vector database management system due to its simplicity and power.
 However, a gap has been identified in its data import and export tools.
-The current **Chroma** command-line interface (CLI) does not allow storing data in portable files, limiting its use to migration between instances.
+The current **Chroma** command-line interface (CLI) does not allow data to be stored in portable files, limiting its use to migration between instances.
 
-This document details the design and requirements of the **Chromie** (*Chroma Import/Export*) project, an open-source CLI tool designed to address this need.
-Its purpose is to provide an intuitive interface for importing and exporting records from **Chroma** collections to standardized **JSON** files, for local and remote instances as well as **Chroma Cloud**.
+This document details the design and requirements of the **Chromie** (*Chroma Import/Export*) project, an open-source CLI tool conceived to address this need.
+Its purpose is to provide an intuitive interface for importing and exporting records from **Chroma** collections to standardized **JSON** files, for local, remote and **Chroma Cloud** instances.
 
 The purpose of this document is to serve as a central reference point for understanding the project, its scope, and its requirements.
 
@@ -34,7 +34,7 @@ The project is released under the **GNU General Public License v3.0** (**GPLv3**
 
 The application exposes its functionality through a command-line interface (CLI) that allows users to interact with **Chroma** databases.
 
-### Use Cases
+### Use cases
 
 [use-cases.md](use-cases.en.md)
 
@@ -93,8 +93,8 @@ To maintain a healthy project and foster an active community, the following mana
 
 ### Roles
 
-- **Maintainer**: Role assumed by the initial development team.
-  Is responsible for the long-term direction of the project.
+- **Maintainer**: A role assumed by the initial development team.
+  They are responsible for the long-term direction of the project.
   A maintainer reviews pull requests, approves code, manages issue triage, and is the main contact for the community.
 
 - **Contributor**: Anyone who submits a contribution to the project, whether it's a bug report, a code fix, or a documentation improvement.
@@ -127,21 +127,21 @@ A clear process will be followed for accepting issues to optimize the workflow:
       If it's a bug, verify that it can be reproduced.
       If not, the author will be asked for more information.
 
-    - **Identify Duplicates**: Check if the problem has already been reported in another issue.
+    - **Identify duplicates**: Check if the problem has already been reported in another issue.
       If so, the new issue is closed (marked as *duplicate*) and linked to the original one.
 
     - **Clarify**: Act as the main point of contact to clarify doubts or request additional information from the author before the issue is assigned.
 
 02. **Labeling**: Once validated, a **maintainer** will apply the appropriate labels to categorize the issue.
-    The goal is for any contributor to be able to understand the nature, priority, and difficulty of the task at a glance.
+    The goal is for any contributor to understand the nature, priority, and difficulty of the task at a glance.
 
 03. **Assignment**: After labeling, the issue is ready to be addressed.
-    A **maintainer** will assign it to an interested contributor or to themselves, giving the green light for its implementation.
+    A **maintainer** will assign it to an interested contributor or to themselves, kicking off its implementation.
 
 This process ensures that contributions are efficient and that contributors know the status of tasks at all times.
 
 
-## Process for Adding a New Command to *chromie*
+## Process for adding a new command to *chromie*
 
 The process for adding a new command to **chromie** is described below:
 
@@ -159,7 +159,7 @@ The process for adding a new command to **chromie** is described below:
 ## *Gemini* and *Gemini Code Assist*
 
 This project uses **Gemini** and **Gemini Code Assist** to support its development and the translation of documents in the **docs/spec/** directory into different languages.
-The specific configuration for **Gemini Code Assist** is located in the project's **.gemini** directory and is a good starting point, along with this and other documents, for new contributors.
+The specific configuration for **Gemini Code Assist** is located in the **.gemini** directory of the project and is a good starting point, along with this and other documents, for new contributors.
 Configuration can also be found in **vscode/settings.json**.
 
 

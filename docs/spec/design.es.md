@@ -154,6 +154,7 @@ classDiagram
     <<abstract>>
   }
   
+  Cmd <|-- CpCmd
   Cmd <|-- ExpCmd
   Cmd <|-- ImpCmd
   Cmd <|-- LsCmd

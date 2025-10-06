@@ -6,7 +6,7 @@
 This document defines the integration test cases for the **chromio** library.
 The objective is to validate the correct interaction between its internal modules and with external services, mainly a real instance of the **Chroma** database.
 
-The methodology used is **gray-box** testing, where there is knowledge of the internal architecture and the interfaces of the components to be integrated, but not of their detailed implementation.
+The methodology used is **gray box**, where there is knowledge of the internal architecture and the interfaces of the components to be integrated, but not of their detailed implementation.
 
 
 ## Scope
@@ -23,7 +23,7 @@ The tests focus on the integration of the following components and workflows of 
   The ability to export data from a collection and re-import it, verifying data integrity.
 
 
-## Test Environment
+## Test environment
 
 The execution environment for the integration tests has the following configuration.
 
@@ -32,22 +32,22 @@ Dependency | Type | Description
 Hardware | Internal | Machine with at least 2GB of RAM
 Operating system | Internal | Ubuntu 24.04
 Python | Internal | 3.13
-Testing framework | Internal | pytest 8.4
+Test framework | Internal | pytest 8.4
 Chroma | External | Docker chromadb/chroma
 
-The tests will be located in the **tests/integration** directory of the project.
+The tests will be located in the project's **tests/integration** directory.
 Each test file must have the prefix **itg_** and the suffix **_test.py**, for example, *itg_exp_test.py*.
 
 
-## Test Cases
+## Test cases
 
 A test case is considered **successful** if the interaction between the components produces the result and final state defined in the expected output and postconditions.
 
-### Client Connectivity (*CL*)
+### Client connectivity (*CL*)
 
 ```mermaid
 ---
-title: Test Case Diagram (clients)
+title: Test case diagram (clients)
 config:
 ---
 
@@ -55,38 +55,38 @@ graph BT
   %% use cases
   createClient@{ shape: "rounded", label: "Create client" }
 
-  subgraph "Test Cases"
-    createServerClient@{ shape: "rounded", label: "#lt;#lt;testcase>><br>ITG-CL-01: Create client to server" }
+  subgraph "Test cases"
+    createServerClient@{ shape: "rounded", label: "#lt;#lt;testcase>><br>ITG-CL-01: Client creation to server" }
   end
 
   createServerClient -.-> createClient
 ```
 
-#### Create client to server (*ITG-CL-01*)
+#### Client creation to server (*ITG-CL-01*)
 
 - **Description**:
-  Verifies that a **chromio** client (***`ChromioClient`***) can be created from a valid URI to an accessible **Chroma** server.
+  Checks that a **chromio** client (***`ChromioClient`***) can be created from a valid URI to an accessible **Chroma** server.
 
 - **Type**:
   Read.
 
 - **Preconditions**:
   
-  - A running **Chroma** instance accessible over the network.
+  - A **Chroma** instance running and accessible over the network.
 
 - **Postconditions**:
 
-  - A successful connection is established with the **Chroma** server.
+  - A successful connection to the **Chroma** server is established.
 
 - **Expected Output**:
 
   - The method returns an **`AsyncClientAPI`** instance representing an active connection to the database server.
 
-### Data Export (*EXP*)
+### Data export (*EXP*)
 
 ```mermaid
 ---
-title: Test Case Diagram (export)
+title: Test case diagram (export)
 config:
 ---
 
@@ -94,7 +94,7 @@ graph BT
   %% use cases
   exportColl@{ shape: "rounded", label: "Export a collection" }
 
-  subgraph "Test Cases"
+  subgraph "Test cases"
     exportFullColl@{ scope="rounded", label: "#lt;#lt;testcase>>ITG-EXP-01: Full export" }
     exportPartialColl@{ scope="rounded", label: "#lt;#lt;testcase>>ITG-EXP-02: Partial export" }
   end
@@ -106,7 +106,7 @@ graph BT
 #### Full export (*ITG-EXP-01*)
 
 - **Description**:
-  Verifies that **`Exporter.export_coll()`** exports all records from a collection when no limit is specified.
+  Checks that **`Exporter.export_coll()`** exports all records from a collection when no limit is specified.
 - **Type**:
   Read.
   - **Preconditions**:
@@ -117,17 +117,17 @@ graph BT
 
   - An export file is generated in **JSON** format.
 
-  - The file contains the same number of items as records in the collection.
+  - The file contains the same number of items as there are records in the collection.
 
   - All records have the **`id`**, **`metadata`**, and **`document`** fields.
 - **Expected output**:
 
-  The method returns a report object indicating the exact number of exported records and the path to the generated file.
+  The method returns a report object indicating the exact number of records exported and the path to the generated file.
 
 #### Partial export (*ITG-EXP-02*)
 
 - **Description**:
-  Verifies that **`Exporter.export_coll()`** exports a maximum number of records equal to the specified **`limit`**.
+  Checks that **`Exporter.export_coll()`** exports a maximum number of records equal to the specified **`limit`**.
 
 - **Type**:
   Read.
@@ -146,11 +146,11 @@ graph BT
 
   - The method returns a report object indicating that the number of exported records matches the **`limit`**.
 
-### Data Import (*IMP*)
+### Data import (*IMP*)
 
 ```mermaid
 ---
-title: Test Case Diagram (import)
+title: Test case diagram (import)
 config:
 ---
 
@@ -158,7 +158,7 @@ graph BT
   %% use cases
   importColl@{ shape: "rounded", label: "Import to a collection" }
 
-  subgraph "Test Cases"
+  subgraph "Test cases"
     importFullColl@{ scope="rounded", label: "#lt;#lt;testcase>>ITG-IMP-01: Full import" }
     importPartialColl@{ scope="rounded", label: "#lt;#lt;testcase>>ITG-IMP-02: Partial import" }
   end
@@ -170,7 +170,7 @@ graph BT
 #### Full import (ITG-IMP-01)
 
 - **Description**:
-  Verifies that **`Importer.import_coll()`** imports all records from a file into an empty collection when no limit is specified.
+  Checks that **`Importer.import_coll()`** imports all records from a file into an empty collection when no limit is specified.
 
 - **Type**:
   R/W.
@@ -193,7 +193,7 @@ graph BT
 #### Partial import (*ITG-IMP-02*)
 
 - **Description**:
-  Verifies that **`Importer.import_coll()`** imports a maximum number of records equal to the specified `limit`.
+  Checks that **`Importer.import_coll()`** imports a maximum number of records equal to the specified `limit`.
 
 - **Type**:
   R/W.
