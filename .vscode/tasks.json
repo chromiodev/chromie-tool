@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "group": "test",
+      "label": "Unit tests",
+      "type": "shell",
+      "command": "poetry run pytest tests/unit",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "showReuseMessage": false,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "group": "none",
+      "label": "Pyright",
+      "type": "shell",
+      "command": "poetry run pyright",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "showReuseMessage": false,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "group": "none",
+      "label": "Ruff (check and format)",
+      "type": "shell",
+      "command": "poetry run ruff check && poetry run ruff format --config .ruff.format.toml",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "showReuseMessage": false,
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chromie import/export schema",
+  "description": "Import/export schema designed and used for Chromie.",
+  "type": "object",
+  "required": ["version", "metadata", "data"],
+  "properties": {
+    "version": {
+      "description": "Schema version.",
+      "const": "1.0"
+    },
+
+    "metadata": {
+      "description": "Export metadata.",
+      "type": "object",
+      "required": ["chroma", "coll"],
+      "properties": {
+        "chroma": {
+          "description": "Chroma instance info.",
+          "type": "object",
+          "properties": {
+            "version": {
+              "description": "Chroma instance version.",
+              "type": "string"
+            }
+          }
+        },
+        "db": {
+          "description": "Source database name.",
+          "type": "string"
+        },
+        "coll": {
+          "description": "Source collection info.",
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "description": "Collection name.",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+
+    "data": {
+      "description": "Collection records.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Record identifier.",
+            "type": "string"
+          },
+          "metadata": {
+            "description": "Record metadata.",
+            "type": "object"
+          },
+          "doc": {
+            "description": "Record document.",
+            "type": "string"
+          },
+          "embedding": {
+            "description": "Embedding or vector.",
+            "type": "array"
+          }
+        }
+      }
+    }
+  }
+}

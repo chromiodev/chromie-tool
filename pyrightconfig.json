@@ -1,0 +1,6 @@
+{
+  "pythonVersion": "3.13",
+  "pythonPlatform": "All",
+  "include": ["chromio/", "tests/"],
+  "exclude": ["**/node_modules/", "**/__pycache__/"]
+}

@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a bug
+title: "[bug] "
+labels: [bug, pending triage]
+
+body:
+  - id: background
+    type: textarea
+    attributes:
+      label: Bug description
+      description: Provide a description of the issue you're seeing
+      placeholder: Description
+    validations:
+      required: true
+  
+  - id: expected-behavior
+    type: textarea
+    attributes:
+      label: Expected behavior
+      description: Provide a description of the expected behavior/result
+      placeholder: Expected behavior
+    validations:
+      required: false
+  
+  - id: additional-info
+    type: textarea
+    attributes:
+      label: Additional information
+      description: Add additional info considered of interest
+      placeholder: Something of your interest for us
+    validations:
+      required: false
+
+  - id: priority
+    type: dropdown
+    attributes:
+      label: Priority
+      description: Please, select the priority level for you
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true

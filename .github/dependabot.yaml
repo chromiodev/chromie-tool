@@ -1,0 +1,29 @@
+version: 2
+
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: thursday
+      time: "01:00"
+    pull-request-branch-name:
+      separator: /
+    labels:
+      - src
+      - dependencies
+    commit-message:
+      prefix: depbot
+      prefix-development: depbot
+      include: scope
+    versioning-strategy: increase
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: thursday
+      time: "01:00"
+    labels:
+      - ci
+      - dependencies

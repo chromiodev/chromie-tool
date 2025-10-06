@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "chroma": {"version": "1.1.0"},
+    "coll": {"name": "test"}
+  },
+  "data": [
+    {"id": "01cc", "metadata": {"title": "modern times", "year": "1936", "rating": 8.5, "cert": "G", "genres": "Comedy, Drama, Family", "director": "Charles Chaplin"}, "document": "Title: modern times\nDirector: Charles Chaplin\nReleased year: 1936\nCertificate: G\nRuntime: 87 min\nGenre: Comedy, Drama, Family\nRating: 8.5\nOverview: The Tramp struggles to live in modern industrial society with the help of a young homeless"},
+    {"id": "02cc", "metadata": {"year": "1940", "rating": 8.4, "cert": "G", "genres": "Comedy, Drama, Romance", "director": "Charles Chaplin", "title": "the great dictator"}, "document": "Title: the great dictator\nDirector: Charles Chaplin\nReleased year: 1940\nCertificate: G\nRuntime: 125 min\nGenre: Comedy, Drama, Romance\nRating: 8.4\nOverview: Dictator Adenoid Hynkel tries to expand his empire, while a poor Jewish barber tries to avoid persecution from Hynkel's regime."},
+    {"id": "03cc", "metadata": {"director": "Charles Chaplin", "cert": "G", "year": "1952", "genres": "Comedy, Drama, Romance", "rating": 8.3, "title": "limelight"}, "document": "Title: limelight\nDirector: Charles Chaplin\nReleased year: 1952\nCertificate: G\nRuntime: 137 min\nGenre: Comedy, Drama, Romance\nRating: 8.3\nOverview: A washed-up comedian helps a suicidal dancer find her way back to the stage and love."}
+  ]
+}

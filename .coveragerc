@@ -1,0 +1,13 @@
+[run]
+source = chromio
+data_file = .coverage/coverage
+branch = true
+omit =
+  tests/*
+  */.local/*
+  chromie/*
+
+[report]
+fail_under = 100
+format = text
+show_missing = true

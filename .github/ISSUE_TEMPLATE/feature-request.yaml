@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an idea for this project
+title: "[feat] "
+labels: [feature, pending triage]
+
+body:
+  - id: background
+    type: textarea
+    attributes:
+      label: Please, describe the feature
+      description: What would you like to get added?
+      placeholder: Description
+    validations:
+      required: true
+  
+  - id: solving
+    type: textarea
+    attributes:
+      label:  Please, describe what problem solving
+      description:  What problem is it solving?
+      placeholder: Description of the problem to resolve
+    validations:
+      required: false
+
+  - id: priority
+    type: dropdown
+    attributes:
+      label: Priority
+      description: Please, select the priority level for you
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true

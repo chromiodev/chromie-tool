@@ -1,0 +1,48 @@
+name: CI (functional tests)
+
+on:
+  workflow_dispatch:
+
+  workflow_run:
+    workflows: ["CI (unit tests)"]
+    types: [completed]
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  python:
+    name: Pure Python app tests (Python ${{ matrix.python }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+
+    strategy:
+      matrix:
+        python: [3.13]
+        os: [ubuntu-latest]
+    
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+      
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install
+      
+      - name: Run functional tests
+        run: poetry run pytest tests/functional

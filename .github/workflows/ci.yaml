@@ -1,0 +1,52 @@
+name: CI (unit tests)
+
+on:
+  workflow_dispatch:
+  
+  push:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  unit:
+    name: Python ${{ matrix.python }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        python: [3.13]
+        os: [ubuntu-latest, macos-latest]
+    
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
+      - name: Static code analysis (Pyright)
+        run: poetry run pyright
+
+      - name: Static code analysis (Ruff)
+        run: |
+          poetry run ruff check
+          poetry run ruff format --check
+
+      - name: Run unit tests
+        run: poetry run pytest tests/unit --cov

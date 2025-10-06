@@ -1,0 +1,75 @@
+[
+  {
+    "id": "01qt",
+    "metadata": {
+      "title": "pulp fiction",
+      "year": "1994",
+      "director": "Quentin Tarantino",
+      "genres": "Crime, Drama",
+      "rating": 8.9,
+      "cert": "A"
+    },
+    "document": "Title: pulp fiction\nDirector: Quentin Tarantino\nReleased year: 1994\nCertificate: A\nRuntime: 154 min\nGenre: Crime, Drama\nRating: 8.9\nOverview: The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption."
+  },
+
+  {
+    "id": "02qt",
+    "metadata": {
+      "director": "Quentin Tarantino",
+      "cert": "A",
+      "year": "2012",
+      "title": "django unchained",
+      "rating": 8.4,
+      "genres": "Drama, Western"
+    },
+    "document": "Title: django unchained\nDirector: Quentin Tarantino\nReleased year: 2012\nCertificate: A\nRuntime: 165 min\nGenre: Drama, Western\nRating: 8.4\nOverview: With the help of a German bounty hunter, a freed slave sets out to rescue his wife from a brutal Mississippi plantation owner."
+  },
+  {
+    "id": "03qt",
+    "metadata": {
+      "year": "2009",
+      "rating": 8.3,
+      "cert": "A",
+      "director": "Quentin Tarantino",
+      "genres": "Adventure, Drama, War",
+      "title": "inglourious basterds"
+    },
+    "document": "Title: inglourious basterds\nDirector: Quentin Tarantino\nReleased year: 2009\nCertificate: A\nRuntime: 153 min\nGenre: Adventure, Drama, War\nRating: 8.3\nOverview: In Nazi-occupied France during World War II, a plan to assassinate Nazi leaders by a group of Jewish U.S. soldiers coincides with a theatre owner's vengeful plans for the same."
+  },
+  {
+    "id": "04qt",
+    "metadata": {
+      "rating": 8.3,
+      "director": "Quentin Tarantino",
+      "year": "1992",
+      "genres": "Crime, Drama, Thriller",
+      "cert": "R",
+      "title": "reservoir dogs"
+    },
+    "document": "Title: reservoir dogs\nDirector: Quentin Tarantino\nReleased year: 1992\nCertificate: R\nRuntime: 99 min\nGenre: Crime, Drama, Thriller\nRating: 8.3\nOverview: When a simple jewelry heist goes horribly wrong, the surviving criminals begin to suspect that one of them is a police informant."
+  },
+  {
+    "id": "05qt",
+    "metadata": {
+      "title": "kill bill: vol. 1",
+      "director": "Quentin Tarantino",
+      "cert": "R",
+      "genres": "Action, Crime, Drama",
+      "year": "2003",
+      "rating": 8.1
+    },
+    "document": "Title: kill bill: vol. 1\nDirector: Quentin Tarantino\nReleased year: 2003\nCertificate: R\nRuntime: 111 min\nGenre: Action, Crime, Drama\nRating: 8.1\nOverview: After awakening from a four-year coma, a former assassin wreaks vengeance on the team of assassins who betrayed her."
+  },
+  {
+    "id": "06qt",
+    "metadata": {
+      "director": "Quentin Tarantino",
+      "year": "2004",
+      "cert": "R",
+      "genres": "Action, Crime, Thriller",
+      "rating": 7.9,
+      "title": "kill bill: vol. 2"
+    },
+    "document": "Title: kill bill: vol. 2\nDirector: Quentin Tarantino\nReleased year: 2004\nCertificate: R\nRuntime: 136 min\nGenre: Action, Crime, Thriller\nRating: 7.9\nOverview: The Bride continues her quest of vengeance against her former boss and lover Bill, the reclusive bouncer Budd, and the treacherous assassin Elle Driver."
+  }
+]

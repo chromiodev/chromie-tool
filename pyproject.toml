@@ -1,0 +1,72 @@
+[project]
+name = "chromie-tool"
+version = "0.1.2"
+description = "Chroma import/export tool."
+authors = [
+  {name = "Raúl G. González", email = "raul@chromio.dev"},
+]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+requires-python = ">=3.12.0, <3.14.0"
+keywords= [
+  "chroma",
+  "chromadb",
+  "cli",
+  "export",
+  "import",
+  "tool",
+  "vector database",
+]
+classifiers= [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+
+  "Environment :: Console",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.13",
+
+  # Topic
+  "Topic :: Database",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+]
+dependencies = [
+  "aiofiles (>=24.1.0,<25.0.0)",
+  "chromadb (>=1.1.1,<2.0.0)",
+]
+
+[project.scripts]
+chromie = "chromie.app:run"
+
+[project.urls]
+homepage = "https://github.com/chromiodev/chromie"
+repository = "https://github.com/chromiodev/chromie"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+requires-poetry = ">=2.2.0"
+packages = [
+  {include = "chromio"},
+  {include = "chromie"},
+]
+
+[tool.poetry.group.tests.dependencies]
+faker = "^37.8.0"
+pytest = "^8.4.2"
+pytest-asyncio = "^1.2.0"
+pytest-cov = "^7.0.0"
+pytest-docker = "^3.2.3"
+pytest-html = "^4.1.1"
+pytest-mock = "^3.15.1"
+pytest-xdist = "^3.8.0"
+
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.406"
+ruff = "^0.13.2"
+llama-index-core = "^0.14.4"
+llama-index-llms-google-genai = "^0.6.2"
