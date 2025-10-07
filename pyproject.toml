@@ -1,6 +1,6 @@
 [project]
 name = "chromie-tool"
-version = "0.3.0"
+version = "0.4.0"
 description = "Chroma import/export tool."
 authors = [
   {name = "Raúl G. González", email = "raul@chromio.dev"},
@@ -56,7 +56,7 @@ packages = [
 ]
 
 [tool.poetry.group.tests.dependencies]
-faker = "^37.8.0"
+faker = "^37.11.0"
 pytest = "^8.4.2"
 pytest-asyncio = "^1.2.0"
 pytest-cov = "^7.0.0"
