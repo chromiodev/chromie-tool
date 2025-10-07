@@ -11,10 +11,10 @@ pytestmark = [pytest.mark.usefixtures("arrange_coll")]
 
 @pytest.mark.readonly
 @pytest.mark.attr(id="FN-EXP-01")
-async def test_export_existing_coll(
+async def test_export_full_coll(
   pytester: Pytester, capsys: CaptureFixture, coll: AsyncCollection
 ) -> None:
-  """Check that 'chromie exp' exports an existing collection."""
+  """Check that 'chromie exp' exports an existing collection fully."""
 
   # (1) precondition
   assert (count := await coll.count()) > 1
@@ -48,7 +48,7 @@ async def test_export_existing_coll(
 
 
 @pytest.mark.readonly
-@pytest.mark.attr(id="FN-EXP-03")
+@pytest.mark.attr(id="FN-EXP-02")
 async def test_export_unknown_coll(
   pytester: Pytester, capsys: CaptureFixture, db: AsyncClientAPI
 ) -> None:
@@ -69,3 +69,44 @@ async def test_export_unknown_coll(
   # (3) assessment
   assert out.ret == 1
   out.stderr.re_match_lines_random((r"Collection .unknown. does not exist",))
+
+
+@pytest.mark.readonly
+@pytest.mark.attr(id="FN-EXP-03")
+async def test_export_coll_partially_with_metafilter(
+  pytester: Pytester, capsys: CaptureFixture, coll: AsyncCollection
+) -> None:
+  """Check that 'chromie exp' exports an existing collection partially using a
+  metafilter.
+  """
+
+  # (1) precondition
+  assert (count := await coll.count()) > 1
+  assert (filtered := len((await coll.get(where={"cert": "R"}))["ids"])) < count
+
+  # (2) arrange
+  outfile = pytester.makefile(".json", export="")
+
+  # (3) act
+  out = pytester.run("chromie", "exp", "-f", "cert='R'", "server://///pytest", outfile)
+  capsys.readouterr()
+
+  # (4) assessment
+  # terminal
+  assert out.ret == 0
+
+  out.stdout.re_match_lines_random(
+    (
+      r"Collection: pytest",
+      f"Count: {filtered}",
+      r"Duration \(s\): .+",
+    ),
+  )
+
+  # valid json
+  assert isinstance(out := json.loads(outfile.read_text()), dict)
+
+  # file content
+  assert out["version"] == "1.0"
+  assert out["metadata"] == {"chroma": {"version": "1.0.0"}, "coll": {"name": "pytest"}}
+  assert len(out["data"]) == filtered

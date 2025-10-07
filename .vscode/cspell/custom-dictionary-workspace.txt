@@ -30,7 +30,9 @@ maxprocesses
 md
 metadatas
 metafilter
+metafiltro
 minversion
+optor
 parseargs
 pipx
 poscondición

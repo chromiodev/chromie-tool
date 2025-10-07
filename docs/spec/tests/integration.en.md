@@ -6,7 +6,7 @@
 This document defines the integration test cases for the **chromio** library.
 The objective is to validate the correct interaction between its internal modules and with external services, mainly a real instance of the **Chroma** database.
 
-The methodology used is **gray-box testing**, where there is knowledge of the internal architecture and the interfaces of the components to be integrated, but not of their detailed implementation.
+The methodology used is **gray-box** testing, where there is knowledge of the internal architecture and the interfaces of the components to be integrated, but not of their detailed implementation.
 
 
 ## Scope
@@ -16,7 +16,7 @@ The tests focus on the integration of the following components and workflows of 
 - **`client`** module:
   Creation and management of Chroma clients from a URI.
 
-- **`ie`** module (*Import/Export*):
+- **`ie`** (*Import/Export*) module:
   The implementation of exporters and importers with a **Chroma** database instance.
 
 - **Full workflow**:
@@ -30,9 +30,9 @@ The execution environment for the integration tests has the following configurat
 Dependency | Type | Description
 :--: | :--: | :--
 Hardware | Internal | Machine with at least 2GB of RAM
-Operating System | Internal | Ubuntu 24.04
+Operating system | Internal | Ubuntu 24.04
 Python | Internal | 3.13
-Test Framework | Internal | pytest 8.4
+Test framework | Internal | pytest 8.4
 Chroma | External | Docker chromadb/chroma
 
 The tests will be located in the **tests/integration** directory of the project.
@@ -56,13 +56,13 @@ graph BT
   createClient@{ shape: "rounded", label: "Create client" }
 
   subgraph "Test cases"
-    createServerClient@{ shape: "rounded", label: "#lt;#lt;testcase>><br>ITG-CL-01: Client creation to server" }
+    createServerClient@{ shape: "rounded", label: "#lt;#lt;testcase>><br>ITG-CL-01: Server client creation" }
   end
 
   createServerClient -.-> createClient
 ```
 
-#### Client creation to server (*ITG-CL-01*)
+#### Server client creation (*ITG-CL-01*)
 
 - **Description**:
   Checks that a **chromio** client (***`ChromioClient`***) can be created from a valid URI to an accessible **Chroma** server.
@@ -72,7 +72,7 @@ graph BT
 
 - **Pre-conditions**:
   
-  - A running and network-accessible **Chroma** instance.
+  - A running **Chroma** instance accessible over the network.
 
 - **Post-conditions**:
 
@@ -144,7 +144,7 @@ graph BT
 
 - **Expected Output**:
 
-  - The method returns a report object indicating that the number of exported records matches the **`limit`**.
+  - The method returns a report object indicating the number of exported records, which matches the **`limit`**.
 
 ### Data import (*IMP*)
 

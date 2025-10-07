@@ -53,6 +53,31 @@ chromie ls server:////
 # names and counts
 chromie ls -c server:////
 ```
+### Metadata filters
+
+The **`--metafilter`** or **`-f`** options allow to select records from metadata in the **`cp`** and **`exp`** commands.
+Format:
+
+```
+predicate
+predicate and predicate
+predicate or predicate
+```
+
+Examples:
+
+```
+-f "director='Quentin Tarantino'"
+-f "director='Quentin Tarantino' or director='Alfred Hitchcock'"
+```
+
+Operators: **`=`**, **`!=`**, **`>`**, **`>=`**, **`<`**, **`<=`**, **`and`** and **`or`**.
+
+Boolean literals: **`true`**, **`True`**, **`false`** and **`False`**.
+
+> **Constraint**.
+> Right now, only one or two predicates are possible.
+> In the future, it will be resolved and this note removed.
 
 
 ## URIs
