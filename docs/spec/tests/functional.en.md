@@ -32,7 +32,7 @@ Dependency | Type | Description
 Hardware | Internal | Machine with at least 2GB of RAM
 Operating system | Internal | Ubuntu 24.04
 Python | Internal | 3.13
-Testing framework | Internal | pytest 8.4
+Test framework | Internal | pytest 8.4
 Chroma | Internal | Docker chromadb/chroma
 
 The tests will be located in the **tests/functional** directory of the project.
@@ -59,7 +59,7 @@ graph BT
   subgraph "Test cases"
     listCollNames@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-01: Listing names" }
     listCollNamesAndCount@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-02: Listing names and record counts" }
-    listOnUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-03: Attempt to list from an inaccessible DB" }
+    listOnUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-03: Attempt to list from a non-existent DB" }
   end
 
 
@@ -76,12 +76,12 @@ graph BT
 - **Type**:
   Read.
 
-- **Preconditions**:
+- **Pre-conditions**:
   
   - The database contains at least two collections.
 
-- **Postconditions**:
-  The system state is not altered.
+- **Post-conditions**:
+  The state of the system is not altered.
 
 - **Expected output**:
 
@@ -97,12 +97,12 @@ graph BT
 - **Type**:
   Read.
 
-- **Preconditions**:
+- **Pre-conditions**:
 
   - The database contains at least two collections with a variable number of records.
 
-- **Postconditions**:
-  The system state is not altered.
+- **Post-conditions**:
+  The state of the system is not altered.
 
 - **Expected output**:
 
@@ -113,16 +113,16 @@ graph BT
 #### Attempt to list from an inaccessible database (*FN-LS-03*)
 
 - **Description**:
-  Checks that **`chromie ls`** shows an error when it cannot access the database.
+  Checks that **`chromie ls`** displays an error when it cannot access the database.
 
 - **Type**:
   Read.
 
-- **Preconditions**:
+- **Pre-conditions**:
   None.
 
-- **Postconditions**:
-  The system state is not altered.
+- **Post-conditions**:
+  The state of the system is not altered.
 
 - **Expected output**:
 
@@ -143,15 +143,17 @@ graph BT
   exportColl@{ shape: "rounded", label: "Export collection" }
 
   subgraph "Test cases"
-    exportExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-01: Export existing collection" }
+    exportFullColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-01: Export full collection" }
     exportNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-02: Attempt to export non-existent collection" }
+    exportCollPartiallyWithMetafilter@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-03: Partially export collection with metafilter" }
   end
 
-  exportExistingColl -.-> exportColl
+  exportFullColl -.-> exportColl
   exportNonExistingColl -.-> exportColl
+  exportCollPartiallyWithMetafilter -.-> exportColl
 ```
 
-#### Exporting an existing collection (*FN-EXP-01*)
+#### Export full collection (*FN-EXP-01*)
 
 - **Description**:
   Checks that the **`chromie exp`** command correctly exports the records of an existing collection to a file.
@@ -159,11 +161,11 @@ graph BT
 - **Type**:
   Read.
 
-- **Preconditions**:
+- **Pre-conditions**:
   
   - The test collection exists and contains records.
 
-- **Postconditions**:
+- **Post-conditions**:
 
   - A file is generated in **JSON** format.
 
@@ -178,22 +180,46 @@ graph BT
 #### Attempt to export a non-existent collection (*FN-EXP-02*)
 
 - **Description**:
-  Checks that the **`chromie exp`** command shows an error when trying to export a non-existent collection.
+  Checks that the **`chromie exp`** command displays an error when trying to export a non-existent collection.
 
 - **Type**:
   Read.
 
-- **Preconditions**:
+- **Pre-conditions**:
   The specified collection does not exist in the database.
 
-- **Postconditions**:
-  The system state is not altered.
+- **Post-conditions**:
+  The state of the system is not altered.
 
 - **Expected output**:
 
   - **Exit code**: 1.
   
   - **Error output**: Error message indicating that the collection does not exist.
+
+#### Partially export collection with metafilter (*FN-EXP-03*)
+
+- **Description**:
+  Checks that the **`chromie exp`** command correctly exports records from an existing collection to a file, selecting only those that match a specific metafilter.
+
+- **Type**:
+  Read.
+
+- **Pre-conditions**:
+  
+  - The test collection exists and contains records.
+
+- **Post-conditions**:
+
+  - A file is generated in **JSON** format.
+
+  - The file contains the number of items that match the metadata in the collection.
+
+- **Expected output**:
+
+  - **Exit code**: 0.
+
+  - **Standard output**: An operation report is displayed.
 
 ### Importing data (*IMP*)
 
@@ -220,21 +246,21 @@ graph BT
   importIntoUnknownServer -.-> importColl
 ```
 
-#### Importing into an empty collection (*FN-IMP-01*)
+#### Import into an empty collection (*FN-IMP-01*)
 
 - **Description**:
-  Checks that the **`chromie imp`** command correctly imports records from a file into an existing empty collection.
+  Checks that the **`chromie imp`** command correctly imports records from a file into an existing, empty collection.
 
 - **Type**:
   R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
 
   - The input file is valid and contains a known number of records.
 
   - The destination collection exists and is empty.
 
-- **Postconditions**:
+- **Post-conditions**:
 
   - The collection contains the same number of records as the input file.
 
@@ -244,21 +270,21 @@ graph BT
 
   - **Standard output**: An operation report is displayed.
 
-#### Importing into a non-empty collection (*FN-IMP-02*)
+#### Import into a non-empty collection (*FN-IMP-02*)
 
 - **Description**:
-  Checks that the **`chromie imp`** command inserts records into an existing non-empty collection.
+  Checks that the **`chromie imp`** command inserts records into an existing, non-empty collection.
 
 - **Type**:
   R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
 
   - The input file is valid.
 
   - The destination collection exists and contains records.
 
-- **Postconditions**:
+- **Post-conditions**:
 
   - The collection contains the initial data plus the new data.
 
@@ -266,7 +292,7 @@ graph BT
 
   - **Exit code**: 0.
 
-  - **Standard output**: An operation report is displayed, indicating the number of processed records.
+  - **Standard output**: An operation report is displayed, indicating the number of records processed.
 
 #### Attempt to import into an inaccessible database (*FN-IMP-03*)
 
@@ -276,11 +302,11 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
 
   - The input file is valid.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
@@ -312,7 +338,7 @@ graph BT
   invalidCloudUri -.-> printUri
 ```
 
-#### Showing segments of a server URI (*FN-URI-01*)
+#### Show segments of a server URI (*FN-URI-01*)
 
 - **Description**:
   Checks that **`chromie uri`** shows the segments of a server URI.
@@ -320,11 +346,11 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
   
-  - The **`CHROMA_PORT`** environment variable has been set to ***8008***.
+  - The **`CHROMA_PORT`** environment variable is set to ***8008***.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
@@ -333,7 +359,7 @@ graph BT
 
   - **Standard output**: Shows the URI segments.
 
-#### Showing segments of a cloud URI (*FN-URI-02*)
+#### Show segments of a cloud URI (*FN-URI-02*)
 
 - **Description**:
   Checks that **`chromie uri`** shows the segments of a *cloud* URI.
@@ -341,11 +367,11 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
   
   - The **`CHROMA_TENANT`** and **`CHROMA_DATABASE`** environment variables have non-default values.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
@@ -362,11 +388,11 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
   
   - The **`CHROMA_TENANT`** and **`CHROMA_DATABASE`** environment variables are not defined.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
@@ -398,7 +424,7 @@ graph BT
   pingUnreachableServer -.-> pingServer
 ```
 
-#### Checking connection to a reachable server (*FN-PING-01*)
+#### Check connection to a reachable server (*FN-PING-01*)
 
 - **Description**:
   Checks that **`chromie ping`** connects to a server and shows that everything went well.
@@ -406,19 +432,19 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
   None.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
 
   - **Exit code**: 0.
 
-  - **Standard output**: Shows that the communication was successful.
+  - **Standard output**: Shows that communication was successful.
 
-#### Checking connection to an existing collection (*FN-PING-02*)
+#### Check connection to an existing collection (*FN-PING-02*)
 
 - **Description**:
   Checks that **`chromie ping`** connects to a server and verifies the existence of a given collection, showing that everything went well.
@@ -426,18 +452,18 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
   
   - The collection exists.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
 
   - **Exit code**: 0.
 
-  - **Standard output**: Shows that the communication was successful.
+  - **Standard output**: Shows that communication was successful.
 
 #### Attempt to connect to an unreachable server (*FN-PING-03*)
 
@@ -447,10 +473,10 @@ graph BT
 - **Type**:
   No R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
   None.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:
@@ -480,7 +506,7 @@ graph BT
   copyNonReachableColl -.-> copyColl
 ```
 
-#### Copying a collection (*FN-CP-01*)
+#### Copy a collection (*FN-CP-01*)
 
 - **Description**:
   Checks that the **`chromie cp`** command correctly copies records from one collection to another.
@@ -488,15 +514,15 @@ graph BT
 - **Type**:
   R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
 
   - The source collection exists and contains a known number of records.
 
   - The destination collection exists and is empty.
 
-- **Postconditions**:
+- **Post-conditions**:
 
-  - The destination collection contains the same number of records as the source one.
+  - The destination collection contains the same number of records as the source.
 
 - **Expected output**:
 
@@ -512,11 +538,11 @@ graph BT
 - **Type**:
   R/W.
 
-- **Preconditions**:
+- **Pre-conditions**:
 
   - The source collection does not exist.
 
-- **Postconditions**:
+- **Post-conditions**:
   The state of any database is not altered.
 
 - **Expected output**:

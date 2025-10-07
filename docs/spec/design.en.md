@@ -10,7 +10,7 @@
 The project is composed of two main parts:
 
 - **chromio**:
-  A **Python** library that contains all the business logic for interacting with **Chroma**.
+  A **Python** library that contains all the business logic to interact with **Chroma**.
   It is reusable and can be integrated into other projects.
 
 - **chromie**:
@@ -27,8 +27,10 @@ coll | collection
 db | database
 dir | directory
 doc | document
+fld | field
 ie | import/export
 meta | metadata
+optor | operator
 rec | record
 rpt | report
 
@@ -43,7 +45,7 @@ rpt | report
 
   - It has no knowledge of the CLI.
 
-  - Manages the connection with **Chroma**.
+  - Manages the connection to **Chroma**.
 
   - Contains the logic for reading, writing, filtering, and transforming data.
 
@@ -61,7 +63,7 @@ rpt | report
 
   - It is responsible for presenting the results and reports to the user in the console.
 
-### High-Level Component Diagram
+### High-level Component Diagram
 
 ```mermaid
 ---
@@ -86,10 +88,10 @@ graph LR
 The connection is managed by two main components:
 
 - **`uri`**:
-  Connection URI parser, returns instances of ***`ChromioUri`*** that describe the URI and facilitate access to its components.
+  A connection URI parser, it returns instances of ***`ChromioUri`*** that describe the URI and facilitate access to its components.
 
 - **`client`**:
-  Client to a **Chroma** instance from a ***`ChromioUri`*** and additional information if necessary.
+  A client for a **Chroma** instance, created from a ***`ChromioUri`*** and additional information if necessary.
 
 ### Import/Export Engine (`ie`)
 
@@ -144,7 +146,7 @@ Main program file.
 ### Command Structure (*cmds/*)
 
 Each command is represented and implemented by a module in this directory.
-Each of them inherits or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
+Each of them inherits from or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
 
 ```mermaid
 classDiagram

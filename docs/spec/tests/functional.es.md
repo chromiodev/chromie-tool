@@ -143,15 +143,17 @@ graph BT
   exportColl@{ shape: "rounded", label: "Exportar colección" }
 
   subgraph "Casos de prueba"
-    exportExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-01: Exporta colección existente" }
+    exportFullColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-01: Exporta colección completa" }
     exportNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-02: Intento de exportación de colección inexistente" }
+    exportCollPartiallyWithMetafilter@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-03: Exporta colección parcialmente con metafiltro" }
   end
 
-  exportExistingColl -.-> exportColl
+  exportFullColl -.-> exportColl
   exportNonExistingColl -.-> exportColl
+  exportCollPartiallyWithMetafilter -.-> exportColl
 ```
 
-#### Exporta colección existente (*FN-EXP-01*)
+#### Exporta colección completa (*FN-EXP-01*)
 
 - **Descripción**:
   Comprueba que el comando **`chromie exp`** exporta correctamente los registros de una colección existente a un archivo.
@@ -194,6 +196,30 @@ graph BT
   - **Código de salida**: 1.
   
   - **Salida de error**: Mensaje de error indicando que la colección no existe.
+
+#### Exporta colección parcialmente con metafiltro (*FN-EXP-03*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie exp`** exporta correctamente los registros de una colección existente a un archivo, seleccionando sólo aquellos que cumplan un determinado metafiltro.
+
+- **Tipo**:
+  Lectura.
+
+- **Precondiciones**:
+  
+  - La colección de prueba existe y contiene registros.
+
+- **Poscondiciones**:
+
+  - Se genera un archivo en formato **JSON**.
+
+  - El archivo contiene el número de elementos que registros tiene la colección con ese metadato.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Se muestra un informe de la operación.
 
 ### Importación de datos (*IMP*)
 
