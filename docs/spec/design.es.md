@@ -27,8 +27,10 @@ coll | collection
 db | database
 dir | directory
 doc | document
+fld | field
 ie | import/export
 meta | metadata
+optor | operator
 rec | record
 rpt | report
 
