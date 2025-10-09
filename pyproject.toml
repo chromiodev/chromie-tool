@@ -67,6 +67,6 @@ pytest-xdist = "^3.8.0"
 
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.406"
-ruff = "^0.13.2"
+ruff = "^0.14.0"
 llama-index-core = "^0.14.4"
 llama-index-llms-google-genai = "^0.6.2"
