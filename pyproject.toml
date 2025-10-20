@@ -34,7 +34,7 @@ classifiers= [
 ]
 dependencies = [
   "aiofiles (>=24.1.0,<25.0.0)",
-  "chromadb (>=1.1.1,<2.0.0)",
+  "chromadb (>=1.2.0,<2.0.0)",
 ]
 
 [project.scripts]
@@ -67,6 +67,6 @@ pytest-xdist = "^3.8.0"
 
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.406"
-ruff = "^0.14.0"
+ruff = "^0.14.1"
 llama-index-core = "^0.14.5"
 llama-index-llms-google-genai = "^0.6.2"
