@@ -18,6 +18,7 @@ gemini
 genai
 github
 GITHUB_ACTIONS
+httpx
 isinstance
 listColls
 llms
