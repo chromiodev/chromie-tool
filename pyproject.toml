@@ -34,8 +34,9 @@ classifiers= [
 ]
 dependencies = [
   "aiofiles (>=24.1.0,<25.0.0)",
-  "chromadb (>=1.2.0,<2.0.0)",
+  "chromadb (>=1.2.1,<2.0.0)",
   "httpx (>=0.28.1,<0.29.0)",
+  "jsonschema (>=4.25.1,<5.0.0)",
 ]
 
 [project.scripts]
@@ -55,9 +56,12 @@ packages = [
   {include = "chromio"},
   {include = "chromie"},
 ]
+include = [
+  "assets/schemas/",
+]
 
 [tool.poetry.group.tests.dependencies]
-faker = "^37.11.0"
+faker = "^37.12.0"
 pytest = "^8.4.2"
 pytest-asyncio = "^1.2.0"
 pytest-cov = "^7.0.0"
@@ -67,7 +71,7 @@ pytest-mock = "^3.15.1"
 pytest-xdist = "^3.8.0"
 
 [tool.poetry.group.dev.dependencies]
-pyright = "^1.1.406"
-ruff = "^0.14.1"
+pyright = "^1.1.407"
+ruff = "^0.14.2"
 llama-index-core = "^0.14.5"
 llama-index-llms-google-genai = "^0.6.2"

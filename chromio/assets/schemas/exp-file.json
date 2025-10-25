@@ -13,7 +13,7 @@
     "metadata": {
       "description": "Export metadata.",
       "type": "object",
-      "required": ["chroma", "coll"],
+      "required": ["coll"],
       "properties": {
         "chroma": {
           "description": "Chroma instance info.",
@@ -48,6 +48,7 @@
       "type": "array",
       "items": {
         "type": "object",
+        "required": ["id"],
         "properties": {
           "id": {
             "description": "Record identifier.",
@@ -57,13 +58,16 @@
             "description": "Record metadata.",
             "type": "object"
           },
-          "doc": {
+          "document": {
             "description": "Record document.",
             "type": "string"
           },
           "embedding": {
             "description": "Embedding or vector.",
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         }
       }

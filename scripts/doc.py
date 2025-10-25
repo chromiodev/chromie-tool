@@ -29,6 +29,8 @@ When translating, keep the original format, including titles, lists, code blocks
 If the source Markdown contains links to another documents with the .es.md extension,
 in the destination these must be .en.md.
 You mustn't capitalize the use cases in the titles.
+When needed, uses pre-conditions and post-conditions instead of preconditions and
+postconditions, respectively.
 """
 
 

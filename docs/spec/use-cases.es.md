@@ -64,8 +64,14 @@ graph LR
       «in» API key if needed
       «out» Collection names
     " }
+
+    checkExportFile@{ shape: "rounded", label: "
+      Check/validate an export file<hr>
+      «in» File path to check
+    " }
   end
   
+  user --> checkExportFile
   user --> exportColl
   user --> exportDb
   user --> listColls
