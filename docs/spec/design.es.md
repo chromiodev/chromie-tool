@@ -158,6 +158,7 @@ classDiagram
   
   Cmd <|-- CpCmd
   Cmd <|-- CheckCmd
+  Cmd <|-- DlCmd
   Cmd <|-- ExpCmd
   Cmd <|-- ImpCmd
   Cmd <|-- LsCmd

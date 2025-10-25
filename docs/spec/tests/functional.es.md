@@ -613,3 +613,93 @@ graph BT
   - **Código de salida**: 1.
 
   - **Salida de error**: Se muestra un mensaje de error informando del problema.
+
+### Descarga de dataset preparado (*DL*)
+
+```mermaid
+---
+title: Diagrama de casos de prueba (datasets)
+config:
+---
+
+graph BT
+  %% casos de uso
+  downloadDataset@{ shape: "rounded", label: "Descargar dataset" }
+
+  subgraph "Casos de prueba"
+    downloadExistingDataset@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-DL-01: Descarga de dataset existente" }
+    downloadExistingDatasetWithCheck@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-DL-01: Descarga de dataset existente y comprobación de archivo descargado" }
+    downloadNonNonexistingDataset@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-DL-03: Intento de descarga de dataset inexistente" }
+  end
+
+  downloadExistingDataset -.-> downloadDataset
+  downloadExistingDatasetWithCheck -.-> downloadDataset
+  downloadNonNonexistingDataset -.-> downloadDataset
+```
+
+#### Descarga de dataset existente (*FN-DL-01*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie dl`** descarga un dataset existente.
+
+- **Tipo**:
+  Sólo lectura.
+
+- **Precondiciones**:
+
+  - El dataset debe existir.
+
+- **Poscondiciones**:
+
+  - Se ha creado el archivo de exportación.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Muestra lo que se está descargando y dónde se almacenará.
+
+#### Descarga de dataset existente y comprobación de archivo descargado (*FN-DL-02*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie dl -c`** descarga un dataset existente y valida el archivo descargado con el esquema de **Chromie**.
+
+- **Tipo**:
+  Sólo lectura.
+
+- **Precondiciones**:
+
+  - El dataset debe existir.
+
+- **Poscondiciones**:
+
+  - Se ha creado el archivo de exportación.
+
+  - El archivo de exportación cumple con el JSONSchema.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Se muestra un mensaje de descarga y otro de comprobación.
+
+#### Descarga de dataset existente y comprobación de archivo descargado (*FN-DL-03*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie dl -c`** descarga un dataset existente y valida el archivo descargado con el esquema de **Chromie**.
+
+- **Tipo**:
+  Sólo lectura.
+
+- **Precondiciones**:
+
+  - El dataset no debe existir.
+
+- **Poscondiciones**:
+  No se altera el estado de ninguna base de datos.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 1.
+
+  - **Salida de error**: Se muestra un mensaje de error indicando que no existe el dataset indicado.

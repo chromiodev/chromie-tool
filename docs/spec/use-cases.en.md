@@ -36,6 +36,12 @@ graph LR
   %% export %%
   %%%%%%%%%%%%
   subgraph "Data export"
+    downloadDataset@{ shape: "rounded", label: "
+      Download dataset<hr>
+      «in» Dataset path
+      «in» Destination file path
+    "}
+
     exportColl@{ shape: "rounded", label: "
       Export collection<hr>
       «in» URI
@@ -64,8 +70,15 @@ graph LR
       «in» API key if needed
       «out» Collection names
     " }
+
+    checkExportFile@{ shape: "rounded", label: "
+      Check/validate an export file<hr>
+      «in» File path to check
+    " }
   end
   
+  user --> downloadDataset
+  user --> checkExportFile
   user --> exportColl
   user --> exportDb
   user --> listColls

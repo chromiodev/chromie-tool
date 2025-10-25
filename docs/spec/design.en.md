@@ -35,17 +35,17 @@ rec | record
 rpt | report
 
 
-## General Architecture
+## General architecture
 
-### Separation of Concerns
+### Separation of responsibilities
 
-The **Chromie** architecture is based on a clear separation between the business logic and the user interface.
+**Chromie**'s architecture is based on a clear separation between the business logic and the user interface.
 
 - **chromio** library:
 
   - It has no knowledge of the CLI.
 
-  - Manages the connection to **Chroma**.
+  - Manages the connection with **Chroma**.
 
   - Contains the logic for reading, writing, filtering, and transforming data.
 
@@ -59,15 +59,15 @@ The **Chromie** architecture is based on a clear separation between the business
 
   - Uses **argparse** to define and parse commands and arguments.
 
-  - Orchestrates calls to the **chromio** library to execute the requested actions.
+  - Orchestrates the calls to the **chromio** library to execute the requested actions.
 
   - It is responsible for presenting the results and reports to the user in the console.
 
-### High-level Component Diagram
+### High-level component diagram
 
 ```mermaid
 ---
-title: Component Diagram
+title: Component diagram
 config:
 ---
 
@@ -81,7 +81,7 @@ graph LR
 ```
 
 
-## *chromio* Library
+## *chromio* library
 
 ### Connectivity to *Chroma*
 
@@ -93,7 +93,7 @@ The connection is managed by two main components:
 - **`client`**:
   Client to a **Chroma** instance from a ***`ChromioUri`*** and additional information if necessary.
 
-### Import/Export Engine (`ie`)
+### Import/export engine (`ie`)
 
 It is the heart of the library and contains the logic for moving data.
 
@@ -139,11 +139,11 @@ classDiagram
 
 ## *chromie* CLI
 
-### Entry Point (*app.py*)
+### Entry point (*app.py*)
 
 Main program file.
 
-### Command Structure (*cmds/*)
+### Command structure (*cmds/*)
 
 Each command is represented and implemented by a module in this directory.
 Each of them inherits or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
@@ -158,6 +158,7 @@ classDiagram
   
   Cmd <|-- CpCmd
   Cmd <|-- CheckCmd
+  Cmd <|-- DlCmd
   Cmd <|-- ExpCmd
   Cmd <|-- ImpCmd
   Cmd <|-- LsCmd
