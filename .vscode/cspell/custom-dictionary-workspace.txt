@@ -13,11 +13,13 @@ colls
 dbms
 delenv
 dotenv
+eurostat
 exportColls
 gemini
 genai
 github
 GITHUB_ACTIONS
+httpx
 isinstance
 jsonschema
 listColls
@@ -40,6 +42,7 @@ pipx
 poscondición
 poscondiciones
 postconditions
+prc_hicp_manr
 pypa
 pypi
 pyproject

@@ -26,10 +26,24 @@ chromie -h
 chromie exp -h
 ```
 
+### Download prepared datasets
+
+Prepared datasets: [https://github.com/chromiodev/datasets](https://github.com/chromiodev/datasets).
+
+```bash
+chromie dl -l es eurostat/prc_hicp_manr
+```
+
 ### Export
 
 ```bash
 chromie exp server://localhost:8000/tenant/db/collection file.json
+```
+
+### Check an export file
+
+```bash
+chromie check prc_hicp_manr-es.json
 ```
 
 ### Import
@@ -53,6 +67,7 @@ chromie ls server:////
 # names and counts
 chromie ls -c server:////
 ```
+
 ### Metadata filters
 
 The **`--metafilter`** or **`-f`** options allow to select records from metadata in the **`cp`** and **`exp`** commands.
