@@ -23,6 +23,7 @@ def TestCmd() -> type:
         {"names": ["--opt1"], "help": "opt1 help", "metavar": "opt1"},
         {"names": ["--opt2"], "help": "opt2 help"},
         {"names": ["arg1"], "help": "arg1 help"},
+        {"names": ["arg2"], "help": "arg2 help", "required": True},
       ]
 
     @override
@@ -47,7 +48,7 @@ def test_define(mocker: MockerFixture, TestCmd: type) -> None:
   # (3) assessment
   assert add_parser.call_count == 1
   assert set_defaults.call_count == 1
-  assert add_argument.call_count == 3
+  assert add_argument.call_count == 4
 
 
 async def test_handle(mocker: MockerFixture, TestCmd: type) -> None:
