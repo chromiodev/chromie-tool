@@ -39,7 +39,7 @@ rpt | report
 
 ### Separation of Concerns
 
-**Chromie**'s architecture is based on a clear separation between the business logic and the user interface.
+The **Chromie** architecture is based on a clear separation between the business logic and the user interface.
 
 - **chromio** library:
 
@@ -88,14 +88,14 @@ graph LR
 The connection is managed by two main components:
 
 - **`uri`**:
-  A connection URI parser, it returns instances of ***`ChromioUri`*** that describe the URI and facilitate access to its components.
+  Connection URI parser, returns instances of ***`ChromioUri`*** that describe the URI and facilitate access to its components.
 
 - **`client`**:
-  A client for a **Chroma** instance, created from a ***`ChromioUri`*** and additional information if necessary.
+  Client to a **Chroma** instance from a ***`ChromioUri`*** and additional information if necessary.
 
 ### Import/Export Engine (`ie`)
 
-It is the core of the library and contains the logic for moving data.
+It is the heart of the library and contains the logic for moving data.
 
 ```mermaid
 classDiagram
@@ -146,7 +146,7 @@ Main program file.
 ### Command Structure (*cmds/*)
 
 Each command is represented and implemented by a module in this directory.
-Each of them inherits from or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
+Each of them inherits or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.
 
 ```mermaid
 classDiagram
@@ -157,6 +157,7 @@ classDiagram
   }
   
   Cmd <|-- CpCmd
+  Cmd <|-- CheckCmd
   Cmd <|-- ExpCmd
   Cmd <|-- ImpCmd
   Cmd <|-- LsCmd

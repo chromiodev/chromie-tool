@@ -6,6 +6,7 @@ from typing import Self, final
 
 from dotenv import load_dotenv
 
+from .cmds.check import CheckCmd
 from .cmds.cp import CpCmd
 from .cmds.exp import ExpCmd
 from .cmds.imp import ImpCmd
@@ -14,7 +15,7 @@ from .cmds.ping import PingCmd
 from .cmds.uri import UriCmd
 
 # CLI commands.
-Cmds = (UriCmd, PingCmd, LsCmd, CpCmd, ExpCmd, ImpCmd)
+Cmds = (UriCmd, PingCmd, LsCmd, CpCmd, CheckCmd, ExpCmd, ImpCmd)
 
 
 @final

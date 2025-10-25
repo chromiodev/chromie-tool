@@ -19,6 +19,7 @@ genai
 github
 GITHUB_ACTIONS
 isinstance
+jsonschema
 listColls
 llms
 loadfile
@@ -33,10 +34,12 @@ metafilter
 metafiltro
 minversion
 optor
+ospath
 parseargs
 pipx
 poscondición
 poscondiciones
+postconditions
 pypa
 pypi
 pyproject
