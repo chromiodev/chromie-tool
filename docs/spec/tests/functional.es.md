@@ -550,3 +550,66 @@ graph BT
   - **Código de salida**: 1.
 
   - **Salida de error**: Se muestra un mensaje de error informando sobre la imposibilidad de conectar con la colección origen.
+
+### Validación de archivo de exportación (*CK*)
+
+```mermaid
+---
+title: Diagrama de casos de prueba (validación de archivo de exportación)
+config:
+---
+
+graph BT
+  %% casos de uso
+  checkFile@{ shape: "rounded", label: "Validar archivo de exportación" }
+
+  subgraph "Casos de prueba"
+    checkValidFile@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-CK-01: Validación de archivo correcto" }
+    checkInvalidFile@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-CK-02: Validación de archivo incorrecto" }
+  end
+
+  checkValidFile -.-> checkFile
+  checkInvalidFile -.-> checkFile
+```
+
+#### Validación de archivo correcto (*FN-CK-01*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie check`** valida un archivo de exportación que cumple con el esquema.
+
+- **Tipo**:
+  Sólo lectura.
+
+- **Precondiciones**:
+
+  - El archivo a validar existe.
+
+- **Poscondiciones**:
+  No se altera el estado de ninguna base de datos.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Muestra OK.
+
+#### Validación de archivo incorrecto (*FN-CK-02*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie check`** gestiona el error cuando el archivo no cumple con el esquema.
+
+- **Tipo**:
+  Sólo lectura.
+
+- **Precondiciones**:
+
+  - El archivo a validar existe.
+
+- **Poscondiciones**:
+  No se altera el estado de ninguna base de datos.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 1.
+
+  - **Salida de error**: Se muestra un mensaje de error informando del problema.

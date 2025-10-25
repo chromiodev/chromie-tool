@@ -39,6 +39,7 @@ parseargs
 pipx
 poscondición
 poscondiciones
+postconditions
 pypa
 pypi
 pyproject

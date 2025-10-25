@@ -12,7 +12,7 @@ async def test_check_valid_file(
 ) -> None:
   """Check that 'chromie check' exits with 0 when OK."""
 
-  # (1) arrange
+  # (1) precondition/arrange
   file_path = pytester.copy_example(str(data_dir / "cc-export.json"))
 
   # (2) act
@@ -32,7 +32,7 @@ async def test_check_invalid_file(
 ) -> None:
   """Check that 'chromie check' exits with 0 when OK."""
 
-  # (1) arrange
+  # (1) precondition/arrange
   file_path = pytester.makefile(
     ".json",
     exp="""
