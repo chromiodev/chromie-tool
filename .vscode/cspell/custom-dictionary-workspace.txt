@@ -13,6 +13,7 @@ colls
 dbms
 delenv
 dotenv
+eurostat
 exportColls
 gemini
 genai
@@ -41,6 +42,7 @@ pipx
 poscondición
 poscondiciones
 postconditions
+prc_hicp_manr
 pypa
 pypi
 pyproject

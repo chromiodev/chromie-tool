@@ -1,5 +1,6 @@
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, override
 
 from chromio.ie.ck import ExpFileChecker, ValidationError
@@ -22,6 +23,7 @@ class CheckCmd(Cmd):
         "names": ["src"],
         "help": "file path to validate",
         "required": True,
+        "type": Path,
       },
     ]
 

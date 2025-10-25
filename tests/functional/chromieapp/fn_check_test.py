@@ -25,11 +25,7 @@ async def test_check_valid_file(
 
 
 @pytest.mark.attr(id="FN-CK-02")
-async def test_check_invalid_file(
-  pytester: Pytester,
-  capsys: CaptureFixture,
-  data_dir: Path,
-) -> None:
+async def test_check_invalid_file(pytester: Pytester, capsys: CaptureFixture) -> None:
   """Check that 'chromie check' exits with 0 when OK."""
 
   # (1) precondition/arrange

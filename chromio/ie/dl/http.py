@@ -8,7 +8,7 @@ from ._downloader import Downloader
 FILE_NAME = "data"
 """File name containing the dataset."""
 
-FILE_EXT = ".zip"
+FILE_EXT = ".json"
 """File extension."""
 
 
@@ -30,7 +30,7 @@ class HttpDownloader(Downloader):
     url = self._build_url(name, lang)
 
     # (2) request URL and return content stream
-    if (resp := await httpx.AsyncClient().request("GET", url)).is_success:
-      raise ValueError(f"'{url}' not found.")
+    if not (resp := await httpx.AsyncClient().request("GET", url)).is_success:
+      raise FileNotFoundError(f"'{url}' not found.")
 
     return resp.aiter_bytes()
