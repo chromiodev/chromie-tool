@@ -42,7 +42,7 @@ async def test_import_all(
   assert add.await_count == ceil(cc_count / default_batch_size)
 
 
-async def test_import_all_removing_metafields(
+async def test_import_all_removing_metadata(
   importer: CollImporter,
   coll: AsyncMockType,
   data_dir: Path,
@@ -72,3 +72,36 @@ async def test_import_all_removing_metafields(
 
   for call in add.await_args_list:
     assert "cert" not in call.kwargs["metadatas"]
+
+
+async def test_import_all_setting_metadata(
+  importer: CollImporter,
+  coll: AsyncMockType,
+  data_dir: Path,
+  cc_count: int,
+  default_batch_size: int,
+) -> None:
+  """Check that import() imports the records w/ some metadata set to other values."""
+
+  # (1) arrange
+  # prepare responses of coll.add() mock
+  (add := coll.add).return_value = None
+
+  # (2) act
+  out = await importer.import_coll(
+    coll, file_path := data_dir / "cc-export.json", set={"cert": "C", "dir": "D"}
+  )
+
+  # (3) assessment
+  # report
+  assert out.coll == "test"
+  assert out.count == cc_count
+  assert out.file_path == str(file_path)
+  assert out.duration >= 0
+
+  # add mock
+  assert add.await_count == ceil(cc_count / default_batch_size)
+
+  for call in add.await_args_list:
+    assert call.kwargs["metadatas"][0]["cert"] == "C"
+    assert call.kwargs["metadatas"][0]["dir"] == "D"

@@ -52,9 +52,15 @@ class ImpCmd(Cmd):
       },
       {
         "names": ["--metadata-to-remove", "-M"],
-        "help": "Metafields to remove in the import (separator: ',')",
+        "help": "Metadata to remove (separator: ',')",
         "metavar": "fld1,fld2,fld3...",
-        "default": "",
+        "type": lambda arg: arg.split(","),
+      },
+      {
+        "names": ["--metadata-to-set", "-m"],
+        "help": "Metadata to set/overwrite (separator: ',')",
+        "metavar": "f1:v1,f2:v2,f3:v3...",
+        "type": lambda arg: {(i := kv.split(":"))[0]: i[1] for kv in arg.split(",")},
       },
       {
         "names": ["--batch", "-b"],
@@ -89,8 +95,10 @@ class ImpCmd(Cmd):
 
     # (3) args
     file = args.input
-    remove, batch_size, limit = args.metadata_to_remove.split(","), args.batch, args.limit
+    batch_size, limit = args.batch, args.limit
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
+    remove = md if (md := args.metadata_to_remove) is not None else []
+    set = md if (md := args.metadata_to_set) is not None else {}
 
     # (4) create client
     cli = await client(uri, api_key)
@@ -98,7 +106,7 @@ class ImpCmd(Cmd):
 
     # (5) import
     importer = CollImporter(batch_size, fields)
-    rpt = await importer.import_coll(coll, file, remove=remove, limit=limit)
+    rpt = await importer.import_coll(coll, file, limit=limit, remove=remove, set=set)
 
     # (6) show report
     print(

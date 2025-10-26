@@ -238,14 +238,16 @@ graph BT
     importIntoNonEmptyColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-02: Importa a una colección no vacía" }
     importIntoNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-IMP-03: Importa a una colección inexistente" }
     importIntoUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-04: Intento de importación a base de datos inaccesible" }
-    importIntoEmptyCollRemovingMetafields@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-05: Importa a una colección vacía sin algunos metacampos" }
+    importIntoCollRemovingMetadata@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-05: Importa a una colección sin algunos metadatos" }
+    importIntoCollSettingMetadata@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-06: Importa a una colección estableciendo algunos metadatos" }
   end
 
   importIntoEmptyColl -.-> importColl
   importIntoNonEmptyColl -.-> importColl
   importIntoNonExistingColl -.-> importColl
   importIntoUnknownServer -.-> importColl
-  importIntoEmptyCollRemovingMetafields -.-> importColl
+  importIntoCollRemovingMetadata -.-> importColl
+  importIntoCollSettingMetadata -.-> importColl
 ```
 
 #### Importa a una colección vacía (*FN-IMP-01*)
@@ -317,7 +319,7 @@ graph BT
 
   - **Salida de error**: Se muestra un mensaje de error informando sobre la imposibilidad de conectar con la base de datos.
 
-#### Importa a una colección vacía sin algunos metacampos (*FN-IMP-05*)
+#### Importa a una colección sin algunos metadatos (*FN-IMP-05*)
 
 - **Descripción**:
   Comprueba que el comando **`chromie imp -M`** importa correctamente los registros de un archivo a una colección existente vacía, pero sin los metadatos indicados.
@@ -338,6 +340,34 @@ graph BT
   - La colección contiene el mismo número de registros que el archivo de entrada.
 
   - El primer registro ha sido importado sin *rating*.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Se muestra un informe de la operación.
+
+#### Importa a una colección estableciendo algunos metadatos (*FN-IMP-06*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie imp -m`** importa correctamente los registros de un archivo a una colección existente vacía, estableciendo y sobrescribiendo algunos metadatos indicados.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - El archivo de entrada es válido y contiene un número conocido de registros.
+
+  - La colección de destino existe y está vacía.
+
+  - El primer registro a importar dispone del metacampo *cert* y su valor es distinto de *C*.
+
+- **Poscondiciones**:
+
+  - La colección contiene el mismo número de registros que el archivo de entrada.
+
+  - El primer registro tiene *cert* a *C* y *dir* a *D*.
 
 - **Salida esperada**:
 

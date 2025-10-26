@@ -23,6 +23,7 @@ class CollImporter(CollIEBase):
     /,
     limit: int | None = None,
     remove: list[str] = [],
+    set: dict = {},
   ) -> CollImportRpt:
     """Imports a collection from a file.
 
@@ -30,12 +31,12 @@ class CollImporter(CollIEBase):
       coll: Collection to import.
       file: File path to import.
       limit: Maximum number of records to import.
-      remove: Metafields to remove in the import.
+      remove: Metadata to remove in the import.
+      set: Metadata to set/override in the import.
 
     Returns:
       An import report.
     """
-
     # (1) read the export file
     start = time()
     recs = []
@@ -44,17 +45,16 @@ class CollImporter(CollIEBase):
     async with open(file, mode="r") as f:
       recs = json.loads(await f.read())["data"]
 
-    # remove metafields when needed
-    if len(remove) > 0:
-      recs = [
-        {
-          **rec,
-          "metadata": {
-            key: val for key, val in rec["metadata"].items() if key not in remove
-          },
-        }
-        for rec in recs
-      ]
+    # remove/set metafields if needed
+    if len(remove) > 0 or len(set) > 0:
+      for rec in recs:
+        md = rec["metadata"]
+
+        for key in remove:
+          del md[key]
+
+        for key, val in set.items():
+          md[key] = val
 
     # (2) write
     count = await CollWriter().write(
