@@ -1,22 +1,13 @@
 from math import ceil
 from pathlib import Path
 
-import pytest
 from pytest_mock import AsyncMockType
 
 from chromio.ie.consts import DEFAULT_FIELDS
 from chromio.ie.imp.importer import CollImporter
 
 
-@pytest.fixture(scope="module")
-def importer(default_batch_size: int) -> CollImporter:
-  """Exporter to use in the tests."""
-
-  return CollImporter(batch_size=default_batch_size, fields=DEFAULT_FIELDS)
-
-
 async def test_import_all(
-  importer: CollImporter,
   coll: AsyncMockType,
   data_dir: Path,
   cc_count: int,
@@ -25,11 +16,11 @@ async def test_import_all(
   """Check that import() imports all the records."""
 
   # (1) arrange
-  # prepare responses of coll.add() mock
+  importer = CollImporter(coll=coll, batch_size=default_batch_size, fields=DEFAULT_FIELDS)
   (add := coll.add).return_value = None
 
   # (2) act
-  out = await importer.import_coll(coll, file_path := data_dir / "cc-export.json")
+  out = await importer.import_coll(file_path := data_dir / "cc-export.json")
 
   # (3) assessment
   # report

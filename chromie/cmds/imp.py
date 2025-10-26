@@ -91,8 +91,8 @@ class ImpCmd(Cmd):
     coll = await cli.create_collection(coll_name, get_or_create=True)
 
     # (5) import
-    importer = CollImporter(batch_size, fields)
-    rpt = await importer.import_coll(coll, file, limit=limit)
+    importer = CollImporter(coll=coll, batch_size=batch_size, fields=fields)
+    rpt = await importer.import_coll(file, limit=limit)
 
     # (6) show report
     print(

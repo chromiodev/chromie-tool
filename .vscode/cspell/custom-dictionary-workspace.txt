@@ -32,6 +32,7 @@ ltout
 maxprocesses
 md
 metadatas
+metafields
 metafilter
 metafiltro
 minversion

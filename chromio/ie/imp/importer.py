@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from time import time
 
@@ -16,9 +16,14 @@ from .rpt import CollImportRpt
 class CollImporter(CollIEBase):
   """Imports a collection from file."""
 
+  coll: AsyncCollection
+  """Collection where to import."""
+
+  metafields_to_remove: list[str] = field(default_factory=list)
+  """Metafields names to remove in the import."""
+
   async def import_coll(
     self,
-    coll: AsyncCollection,
     file: Path,
     /,
     limit: int | None = None,
@@ -43,7 +48,11 @@ class CollImporter(CollIEBase):
 
     # (2) write
     count = await CollWriter().write(
-      records, coll, fields=self.fields, limit=limit, batch_size=self.batch_size
+      records,
+      (coll := self.coll),
+      fields=self.fields,
+      limit=limit,
+      batch_size=self.batch_size,
     )
 
     # (3) return report
