@@ -151,7 +151,7 @@ def test_import_into_unknown_server(
 @pytest.mark.usefixtures("truncate_coll")
 @pytest.mark.readonly
 @pytest.mark.attr(id="FN-IMP-05")
-async def test_import_wo_some_metafield(
+async def test_import_removing_metafields(
   data_dir: Path,
   pytester: Pytester,
   capsys: CaptureFixture,
@@ -190,3 +190,49 @@ async def test_import_wo_some_metafield(
   # coll content
   assert await coll.count() == count
   assert "rating" not in cast(dict, await coll.get(rec["id"]))["metadatas"][0]
+
+
+@pytest.mark.usefixtures("truncate_coll")
+@pytest.mark.readonly
+@pytest.mark.attr(id="FN-IMP-06")
+async def test_import_setting_metafields(
+  data_dir: Path,
+  pytester: Pytester,
+  capsys: CaptureFixture,
+  coll: AsyncCollection,
+  cc_records: list[dict],
+) -> None:
+  """Check that 'chromie imp -m' imports setting/overwriting metafields."""
+
+  # (1) precondition
+  assert await coll.count() == 0
+  assert (rec := cc_records[0])["metadata"]["cert"] != "C"
+  assert "dir" not in (rec := cc_records[0])["metadata"]
+
+  # (2) arrange
+  input_file = pytester.copy_example(str(data_dir / "cc-export.json"))
+
+  # (3) act
+  out = pytester.run(
+    "chromie", "imp", "-m", "cert:C,dir:D", input_file, "server://///pytest"
+  )
+  capsys.readouterr()
+
+  # (4) assessment
+  count = len(cc_records)
+
+  # terminal
+  assert out.ret == 0
+
+  out.stdout.re_match_lines_random(
+    (
+      r"Collection: pytest",
+      f"Count: {count}",
+      r"Duration \(s\): .+",
+    ),
+  )
+
+  # coll content
+  assert await coll.count() == count
+  assert (md := cast(dict, await coll.get(rec["id"]))["metadatas"][0])["cert"] == "C"
+  assert md["dir"] == "D"
