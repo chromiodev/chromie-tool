@@ -6,11 +6,11 @@ from chromio.ie.consts import DEFAULT_BATCH_SIZE, DEFAULT_FIELDS
 from chromio.ie.imp.importer import CollImporter
 
 
-@pytest.fixture(scope="function")
-def importer(coll: AsyncCollection) -> CollImporter:
+@pytest.fixture(scope="module")
+def importer() -> CollImporter:
   """Importer to use in the tests."""
 
-  return CollImporter(coll=coll, batch_size=DEFAULT_BATCH_SIZE, fields=DEFAULT_FIELDS)
+  return CollImporter(batch_size=DEFAULT_BATCH_SIZE, fields=DEFAULT_FIELDS)
 
 
 @pytest.mark.attr(id="ITG-IMP-01")
@@ -30,7 +30,7 @@ async def test_import_all_records(
   input_file = pytester.copy_example("tests/data/cc-export.json")
 
   # (3) act
-  out = await importer.import_coll(input_file)
+  out = await importer.import_coll(coll, input_file)
 
   # (4) assessment
   # report
@@ -62,7 +62,7 @@ async def test_import_with_limit(
   input_file = pytester.copy_example("tests/data/cc-export.json")
 
   # (3) act
-  out = await importer.import_coll(input_file, limit=limit)
+  out = await importer.import_coll(coll, input_file, limit=limit)
 
   # (4) assessment
   # report
