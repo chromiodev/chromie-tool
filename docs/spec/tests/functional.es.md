@@ -238,12 +238,14 @@ graph BT
     importIntoNonEmptyColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-02: Importa a una colección no vacía" }
     importIntoNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-IMP-03: Importa a una colección inexistente" }
     importIntoUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-04: Intento de importación a base de datos inaccesible" }
+    importIntoEmptyCollRemovingMetafields@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-05: Importa a una colección vacía sin algunos metacampos" }
   end
 
   importIntoEmptyColl -.-> importColl
   importIntoNonEmptyColl -.-> importColl
   importIntoNonExistingColl -.-> importColl
   importIntoUnknownServer -.-> importColl
+  importIntoEmptyCollRemovingMetafields -.-> importColl
 ```
 
 #### Importa a una colección vacía (*FN-IMP-01*)
@@ -314,6 +316,34 @@ graph BT
   - **Código de salida**: 1.
 
   - **Salida de error**: Se muestra un mensaje de error informando sobre la imposibilidad de conectar con la base de datos.
+
+#### Importa a una colección vacía sin algunos metacampos (*FN-IMP-05*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie imp -M`** importa correctamente los registros de un archivo a una colección existente vacía, pero sin los metadatos indicados.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - El archivo de entrada es válido y contiene un número conocido de registros.
+
+  - La colección de destino existe y está vacía.
+
+  - El primer registro a importar dispone del metacampo *rating*.
+
+- **Poscondiciones**:
+
+  - La colección contiene el mismo número de registros que el archivo de entrada.
+
+  - El primer registro ha sido importado sin *rating*.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Se muestra un informe de la operación.
 
 ### Analizador de URIs (*URI*)
 

@@ -23,14 +23,19 @@ default_model = "gemini-2.5-pro"
 
 # System prompt to use in the LLM model.
 sys_prompt = """
-Translate the documentation for a project related to vector databases, concretely Chroma.
+Translate the documentation for a Python project related to vector databases, concretely Chroma.
 The documentation is written in Markdown and the result must be too.
-When translating, keep the original format, including titles, lists, code blocks, etc.
-If the source Markdown contains links to another documents with the .es.md extension,
-in the destination these must be .en.md.
-You mustn't capitalize the use cases in the titles.
-When needed, uses pre-conditions and post-conditions instead of preconditions and
-postconditions, respectively.
+Observations that you must keep in mind:
+
+- When translating, keep the original format, including titles, lists, code blocks, etc.
+
+- If the source Markdown contains links to another documents with the .es.md extension,
+  in the destination these must be .en.md.
+
+- You mustn't capitalize the use cases in the titles.
+
+- When needed, you use pre-conditions and post-conditions instead of preconditions and
+  postconditions, respectively.
 """
 
 

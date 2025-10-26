@@ -16,7 +16,10 @@ def importer() -> CollImporter:
 @pytest.mark.attr(id="ITG-IMP-01")
 @pytest.mark.usefixtures("truncate_coll")
 async def test_import_all_records(
-  pytester: Pytester, importer: CollImporter, coll: AsyncCollection, cc_count: int
+  pytester: Pytester,
+  importer: CollImporter,
+  coll: AsyncCollection,
+  cc_count: int,
 ) -> None:
   """Check that CollImporter.import_coll() imports all the records from the file."""
 
@@ -42,7 +45,10 @@ async def test_import_all_records(
 @pytest.mark.attr(id="ITG-IMP-02")
 @pytest.mark.usefixtures("truncate_coll")
 async def test_import_with_limit(
-  pytester: Pytester, importer: CollImporter, coll: AsyncCollection, cc_count: int
+  pytester: Pytester,
+  importer: CollImporter,
+  coll: AsyncCollection,
+  cc_count: int,
 ) -> None:
   """Check that CollImporter.import_coll() imports the maximum number of records set."""
 

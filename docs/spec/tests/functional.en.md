@@ -7,7 +7,7 @@ The purpose of this document is to define and describe the functional test cases
 The idea is to ensure a structured approach, focusing on the main functionalities of the tool.
 It serves as a guide for the execution, validation, and documentation of the tests.
 
-The tests are designed under a **black box** approach, validating the observable behavior of the application (inputs and outputs) without knowledge of its internal structure.
+The tests are designed under a **black-box** approach, validating the observable behavior of the application (inputs and outputs) without knowledge of its internal structure.
 
 
 ## Scope
@@ -36,7 +36,7 @@ Test framework | Internal | pytest 8.4
 Chroma | Internal | Docker chromadb/chroma
 
 The tests will be located in the **tests/functional** directory of the project.
-Each test file must have the prefix **fn_** and the suffix **_test.py**, for example, *fn_exp_test.py*.
+Each test file must have the prefix **fn_** and the suffix **_test.py**, such as *fn_exp_test.py*.
 
 
 ## Test cases
@@ -57,8 +57,8 @@ graph BT
   listColls@{ shape: "rounded", label: "List collections" }
 
   subgraph "Test cases"
-    listCollNames@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-01: List names" }
-    listCollNamesAndCount@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-02: List names and record counts" }
+    listCollNames@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-01: Listing names" }
+    listCollNamesAndCount@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-02: Listing names and record counts" }
     listOnUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-LS-03: Attempt to list from a non-existent DB" }
   end
 
@@ -108,12 +108,12 @@ graph BT
 
   - **Exit code**: 0.
 
-  - **Standard output**: A table is displayed with the collection names and their corresponding record counts.
+  - **Standard output**: A table is displayed with the names of the collections and their corresponding record counts.
 
-#### Attempting to list on an inaccessible database (*FN-LS-03*)
+#### Attempt to list on an inaccessible database (*FN-LS-03*)
 
 - **Description**:
-  Checks that **`chromie ls`** shows an error when it cannot access the database.
+  Checks that **`chromie ls`** displays an error when it cannot access the database.
 
 - **Type**:
   Read.
@@ -128,7 +128,7 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: An error message is displayed informing about the inability to connect to the database.
+  - **Error output**: An error message is displayed, reporting the inability to connect to the database.
 
 ### Exporting data (*EXP*)
 
@@ -144,8 +144,8 @@ graph BT
 
   subgraph "Test cases"
     exportFullColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-01: Export full collection" }
-    exportNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-02: Attempt to export a non-existent collection" }
-    exportCollPartiallyWithMetafilter@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-03: Partially export collection with a metafilter" }
+    exportNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-02: Attempt to export non-existent collection" }
+    exportCollPartiallyWithMetafilter@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-EXP-03: Partially export collection with meta-filter" }
   end
 
   exportFullColl -.-> exportColl
@@ -153,7 +153,7 @@ graph BT
   exportCollPartiallyWithMetafilter -.-> exportColl
 ```
 
-#### Exporting a full collection (*FN-EXP-01*)
+#### Export full collection (*FN-EXP-01*)
 
 - **Description**:
   Checks that the **`chromie exp`** command correctly exports the records of an existing collection to a file.
@@ -177,10 +177,10 @@ graph BT
 
   - **Standard output**: An operation report is displayed.
 
-#### Attempting to export a non-existent collection (*FN-EXP-02*)
+#### Attempt to export a non-existent collection (*FN-EXP-02*)
 
 - **Description**:
-  Checks that the **`chromie exp`** command shows an error when trying to export a non-existent collection.
+  Checks that the **`chromie exp`** command displays an error when trying to export a non-existent collection.
 
 - **Type**:
   Read.
@@ -195,12 +195,12 @@ graph BT
 
   - **Exit code**: 1.
   
-  - **Standard error**: Error message indicating that the collection does not exist.
+  - **Error output**: Error message indicating that the collection does not exist.
 
-#### Partially exporting a collection with a metafilter (*FN-EXP-03*)
+#### Partially export collection with meta-filter (*FN-EXP-03*)
 
 - **Description**:
-  Checks that the **`chromie exp`** command correctly exports the records of an existing collection to a file, selecting only those that meet a certain metafilter.
+  Checks that the **`chromie exp`** command correctly exports the records of an existing collection to a file, selecting only those that meet a certain meta-filter.
 
 - **Type**:
   Read.
@@ -213,7 +213,7 @@ graph BT
 
   - A file is generated in **JSON** format.
 
-  - The file contains the number of items that match the records in the collection with that metadata.
+  - The file contains the number of items that match the metadata in the collection.
 
 - **Expected output**:
 
@@ -238,15 +238,17 @@ graph BT
     importIntoNonEmptyColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-02: Import into a non-empty collection" }
     importIntoNonExistingColl@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-IMP-03: Import into a non-existent collection" }
     importIntoUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-04: Attempt to import into an inaccessible database" }
+    importIntoEmptyCollRemovingMetafields@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-05: Import into an empty collection without some meta-fields" }
   end
 
   importIntoEmptyColl -.-> importColl
   importIntoNonEmptyColl -.-> importColl
   importIntoNonExistingColl -.-> importColl
   importIntoUnknownServer -.-> importColl
+  importIntoEmptyCollRemovingMetafields -.-> importColl
 ```
 
-#### Importing into an empty collection (*FN-IMP-01*)
+#### Import into an empty collection (*FN-IMP-01*)
 
 - **Description**:
   Checks that the **`chromie imp`** command correctly imports records from a file into an existing empty collection.
@@ -270,10 +272,10 @@ graph BT
 
   - **Standard output**: An operation report is displayed.
 
-#### Importing into a non-empty collection (*FN-IMP-02*)
+#### Import into a non-empty collection (*FN-IMP-02*)
 
 - **Description**:
-  Checks that the **`chromie imp`** command inserts the records into an existing non-empty collection.
+  Checks that the **`chromie imp`** command inserts records into an existing non-empty collection.
 
 - **Type**:
   R/W.
@@ -294,7 +296,7 @@ graph BT
 
   - **Standard output**: An operation report is displayed, indicating the number of records processed.
 
-#### Attempting to import into an inaccessible database (*FN-IMP-03*)
+#### Attempt to import into an inaccessible database (*FN-IMP-03*)
 
 - **Description**:
   Checks that **`chromie imp`** handles the error when the destination database is not accessible.
@@ -313,7 +315,35 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: An error message is displayed informing about the inability to connect to the database.
+  - **Error output**: An error message is displayed, reporting the inability to connect to the database.
+
+#### Import into an empty collection without some meta-fields (*FN-IMP-05*)
+
+- **Description**:
+  Checks that the **`chromie imp -M`** command correctly imports records from a file into an existing empty collection, but without the specified metadata.
+
+- **Type**:
+  R/W.
+
+- **Pre-conditions**:
+
+  - The input file is valid and contains a known number of records.
+
+  - The destination collection exists and is empty.
+
+  - The first record to be imported has the *rating* meta-field.
+
+- **Post-conditions**:
+
+  - The collection contains the same number of records as the input file.
+
+  - The first record has been imported without the *rating* field.
+
+- **Expected output**:
+
+  - **Exit code**: 0.
+
+  - **Standard output**: An operation report is displayed.
 
 ### URI parser (*URI*)
 
@@ -328,8 +358,8 @@ graph BT
   printUri@{ shape: "rounded", label: "Show URI segments" }
 
   subgraph "Test cases"
-    printServerUri@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-URI-01: Show server URI segments" }
-    printCloudUri@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-URI-02: Show cloud URI segments" }
+    printServerUri@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-URI-01: Show segments of a server URI" }
+    printCloudUri@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-URI-02: Show segments of a cloud URI" }
     invalidCloudUri@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-URI-03: Attempt with an invalid cloud URI" }
   end
 
@@ -338,10 +368,10 @@ graph BT
   invalidCloudUri -.-> printUri
 ```
 
-#### Showing server URI segments (*FN-URI-01*)
+#### Show segments of a server URI (*FN-URI-01*)
 
 - **Description**:
-  Checks that **`chromie uri`** shows the segments of a server URI.
+  Checks that **`chromie uri`** displays the segments of a server URI.
 
 - **Type**:
   No R/W.
@@ -357,12 +387,12 @@ graph BT
 
   - **Exit code**: 0.
 
-  - **Standard output**: Shows the URI segments.
+  - **Standard output**: Displays the URI segments.
 
-#### Showing cloud URI segments (*FN-URI-02*)
+#### Show segments of a cloud URI (*FN-URI-02*)
 
 - **Description**:
-  Checks that **`chromie uri`** shows the segments of a *cloud* URI.
+  Checks that **`chromie uri`** displays the segments of a *cloud* URI.
 
 - **Type**:
   No R/W.
@@ -378,12 +408,12 @@ graph BT
 
   - **Exit code**: 0.
 
-  - **Standard output**: Shows the variable names with their respective values.
+  - **Standard output**: Displays the names of the variables with their respective values.
 
-#### Attempting with an invalid cloud URI (*FN-URI-03*)
+#### Attempt with an invalid cloud URI (*FN-URI-03*)
 
 - **Description**:
-  Checks that **`chromie uri`** shows an error when the URI does not have a tenant.
+  Checks that **`chromie uri`** shows an error when the URI has no tenant.
 
 - **Type**:
   No R/W.
@@ -399,7 +429,7 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: Shows an error due to the missing tenant.
+  - **Error output**: Displays an error due to the missing tenant.
 
 ### URI check (*PING*)
 
@@ -424,7 +454,7 @@ graph BT
   pingUnreachableServer -.-> pingServer
 ```
 
-#### Checking connection to a reachable server (*FN-PING-01*)
+#### Check connection to a reachable server (*FN-PING-01*)
 
 - **Description**:
   Checks that **`chromie ping`** connects to a server and shows that everything went well.
@@ -444,7 +474,7 @@ graph BT
 
   - **Standard output**: Shows that communication was successful.
 
-#### Checking connection to an existing collection (*FN-PING-02*)
+#### Check connection to an existing collection (*FN-PING-02*)
 
 - **Description**:
   Checks that **`chromie ping`** connects to a server and verifies the existence of a given collection, showing that everything went well.
@@ -465,10 +495,10 @@ graph BT
 
   - **Standard output**: Shows that communication was successful.
 
-#### Attempting to connect to an unreachable server (*FN-PING-03*)
+#### Attempt to connect to an unreachable server (*FN-PING-03*)
 
 - **Description**:
-  Checks that **`chromie ping`** shows an error message when the server cannot be reached.
+  Checks that **`chromie uri`** displays an error message when the server cannot be reached.
 
 - **Type**:
   No R/W.
@@ -483,7 +513,7 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: Shows an error message.
+  - **Error output**: Displays an error message.
 
 ### Copying data (*CP*)
 
@@ -499,14 +529,14 @@ graph BT
 
   subgraph "Test cases"
     copyReachableColl@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-CP-01: Copy a collection" }
-    copyNonReachableColl@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-CP-02: Attempt to copy from an unreachable source collection" }
+    copyNonReachableColl@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-CP-02: Attempt to copy an unreachable source collection" }
   end
 
   copyReachableColl -.-> copyColl
   copyNonReachableColl -.-> copyColl
 ```
 
-#### Copying a collection (*FN-CP-01*)
+#### Copy a collection (*FN-CP-01*)
 
 - **Description**:
   Checks that the **`chromie cp`** command correctly copies records from one collection to another.
@@ -522,7 +552,7 @@ graph BT
 
 - **Post-conditions**:
 
-  - The destination collection contains the same number of records as the source one.
+  - The destination collection contains the same number of records as the source.
 
 - **Expected output**:
 
@@ -530,7 +560,7 @@ graph BT
 
   - **Standard output**: An operation report is displayed.
 
-#### Attempting to copy from an unreachable source collection (*FN-CP-02*)
+#### Attempt to copy an unreachable source collection (*FN-CP-02*)
 
 - **Description**:
   Checks that the **`chromie cp`** command handles the error when the source collection is not reachable.
@@ -549,7 +579,7 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: An error message is displayed informing about the inability to connect to the source collection.
+  - **Error output**: An error message is displayed, reporting the inability to connect to the source collection.
 
 ### Export file validation (*CK*)
 
@@ -572,7 +602,7 @@ graph BT
   checkInvalidFile -.-> checkFile
 ```
 
-#### Validating a correct file (*FN-CK-01*)
+#### Validation of a correct file (*FN-CK-01*)
 
 - **Description**:
   Checks that the **`chromie check`** command validates an export file that complies with the schema.
@@ -593,7 +623,7 @@ graph BT
 
   - **Standard output**: Displays OK.
 
-#### Validating an incorrect file (*FN-CK-02*)
+#### Validation of an incorrect file (*FN-CK-02*)
 
 - **Description**:
   Checks that the **`chromie check`** command handles the error when the file does not comply with the schema.
@@ -612,7 +642,7 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: An error message is displayed reporting the problem.
+  - **Error output**: An error message is displayed, reporting the problem.
 
 ### Downloading a prepared dataset (*DL*)
 
@@ -637,7 +667,7 @@ graph BT
   downloadNonNonexistingDataset -.-> downloadDataset
 ```
 
-#### Downloading an existing dataset (*FN-DL-01*)
+#### Download an existing dataset (*FN-DL-01*)
 
 - **Description**:
   Checks that the **`chromie dl`** command downloads an existing dataset.
@@ -659,10 +689,10 @@ graph BT
 
   - **Standard output**: Shows what is being downloaded and where it will be stored.
 
-#### Downloading an existing dataset and checking the downloaded file (*FN-DL-02*)
+#### Download an existing dataset and check the downloaded file (*FN-DL-02*)
 
 - **Description**:
-  Checks that the **`chromie dl -c`** command downloads an existing dataset and validates the downloaded file with the **Chromie** schema.
+  Checks that the **`chromie dl -c`** command downloads an existing dataset and validates the downloaded file against the **Chromie** schema.
 
 - **Type**:
   Read-only.
@@ -683,10 +713,10 @@ graph BT
 
   - **Standard output**: A download message and a check message are displayed.
 
-#### Attempting to download a non-existent dataset (*FN-DL-03*)
+#### Attempt to download a non-existent dataset (*FN-DL-03*)
 
 - **Description**:
-  Checks that the **`chromie dl`** command shows an error when trying to download a non-existent dataset.
+  Checks that the **`chromie dl`** command shows an error when trying to download a dataset that does not exist.
 
 - **Type**:
   Read-only.
@@ -702,4 +732,4 @@ graph BT
 
   - **Exit code**: 1.
 
-  - **Standard error**: An error message is displayed indicating that the specified dataset does not exist.
+  - **Error output**: An error message is displayed indicating that the specified dataset does not exist.

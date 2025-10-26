@@ -51,6 +51,12 @@ class ImpCmd(Cmd):
         "default": ["meta", "doc"],
       },
       {
+        "names": ["--metadata-to-remove", "-M"],
+        "help": "Metafields to remove in the import (separator: ',')",
+        "metavar": "fld1,fld2,fld3...",
+        "default": "",
+      },
+      {
         "names": ["--batch", "-b"],
         "help": "batch size",
         "type": int,
@@ -83,7 +89,7 @@ class ImpCmd(Cmd):
 
     # (3) args
     file = args.input
-    batch_size, limit = args.batch, args.limit
+    remove, batch_size, limit = args.metadata_to_remove.split(","), args.batch, args.limit
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
 
     # (4) create client
@@ -92,7 +98,7 @@ class ImpCmd(Cmd):
 
     # (5) import
     importer = CollImporter(batch_size, fields)
-    rpt = await importer.import_coll(coll, file, limit=limit)
+    rpt = await importer.import_coll(coll, file, remove=remove, limit=limit)
 
     # (6) show report
     print(
