@@ -49,7 +49,11 @@ chromie check prc_hicp_manr-es.json
 ### Import
 
 ```bash
-chromie imp file.json server://localhost:8000/tenant/db/collection
+# import all the content of movies.json
+chromie imp movies.json server://localhost:8000/tenant/db/collection
+
+# import all the content of file.json, but skipping the cert and rating metadata
+chromie imp movies.json -M cert,rating server://localhost:8000/tenant/db/collection
 ```
 
 ### Copy

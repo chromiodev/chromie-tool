@@ -31,6 +31,8 @@ ltinclude
 ltout
 maxprocesses
 md
+metacampo
+metacampos
 metadatas
 metafield
 metafields

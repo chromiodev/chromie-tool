@@ -49,7 +49,7 @@ async def test_import_all_removing_metafields(
   cc_count: int,
   default_batch_size: int,
 ) -> None:
-  """Check that import() imports all the records, but removing some fields."""
+  """Check that import() imports the records w/o some metafields."""
 
   # (1) arrange
   # prepare responses of coll.add() mock

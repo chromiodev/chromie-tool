@@ -158,7 +158,7 @@ async def test_import_wo_some_metafield(
   coll: AsyncCollection,
   cc_records: list[dict],
 ) -> None:
-  """Check that 'chromie imp' imports all except some metafield."""
+  """Check that 'chromie imp -M' doesn't import the given metadata."""
 
   # (1) precondition
   assert await coll.count() == 0
