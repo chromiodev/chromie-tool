@@ -12,7 +12,9 @@ pytestmark = [pytest.mark.usefixtures("arrange_coll")]
 @pytest.mark.readonly
 @pytest.mark.attr(id="FN-EXP-01")
 async def test_export_full_coll(
-  pytester: Pytester, capsys: CaptureFixture, coll: AsyncCollection
+  pytester: Pytester,
+  capsys: CaptureFixture,
+  coll: AsyncCollection,
 ) -> None:
   """Check that 'chromie exp' exports an existing collection fully."""
 
@@ -33,7 +35,7 @@ async def test_export_full_coll(
   out.stdout.re_match_lines_random(
     (
       r"Collection: pytest",
-      f"Count: {count}",
+      rf"Count: {count}",
       r"Duration \(s\): .+",
     ),
   )
@@ -98,7 +100,7 @@ async def test_export_coll_partially_with_metafilter(
   out.stdout.re_match_lines_random(
     (
       r"Collection: pytest",
-      f"Count: {filtered}",
+      rf"Count: {filtered}",
       r"Duration \(s\): .+",
     ),
   )
