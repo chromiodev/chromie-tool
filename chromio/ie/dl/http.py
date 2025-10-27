@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import AsyncIterator, override
 
@@ -24,13 +25,31 @@ class HttpDownloader(Downloader):
 
     return f"{self.base}/{path}/{FILE_NAME}-{lang}{FILE_EXT}"
 
+  def _build_headers(self) -> dict[str, str]:
+    """Builds the HTTP request headers.
+
+    The user must configure the GH_TOKEN environment variable only if this performs
+    very much requests. Needed for GitHub Actions too.
+    """
+
+    # (1) build the headers
+    headers = {}
+
+    if token := os.getenv("GH_TOKEN"):
+      headers["Authorization"] = f"Bearer {token}"  # pragma: no cover
+
+    # (2) return the headers
+    return headers
+
   @override
   async def _download_bytes(self, name: str, lang: str) -> AsyncIterator[bytes]:
     # (1) build URL to request
     url = self._build_url(name, lang)
 
     # (2) request URL and return content stream
-    if not (resp := await httpx.AsyncClient().request("GET", url)).is_success:
+    if not (
+      resp := await httpx.AsyncClient().request("GET", url, headers=self._build_headers())
+    ).is_success:
       raise FileNotFoundError(f"'{url}' not found.")
 
     return resp.aiter_bytes()
