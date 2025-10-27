@@ -526,18 +526,18 @@ files = [
 
 [[package]]
 name = "chromadb"
-version = "1.2.1"
+version = "1.2.2"
 description = "Chroma."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "chromadb-1.2.1-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:8e83b7e49f3fbbf0fe636702a8fbc4c59739aa82a1f48eb677e6a30100572ef6"},
-    {file = "chromadb-1.2.1-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:bfb49f6f4173b8aeff8322986687c410d91d267215c1324f6dee01fa0e7da378"},
-    {file = "chromadb-1.2.1-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bf267761cca873d2d2b0feb51faa1695704ef1f44a360e1c2f1d2916e808e2b7"},
-    {file = "chromadb-1.2.1-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:960004cf4c83edb477ed60117d5eff6e2c4d717eb0833910b1e7b2ea203346d4"},
-    {file = "chromadb-1.2.1-cp39-abi3-win_amd64.whl", hash = "sha256:41796043af5861601b1ae4c0ca53b1599cd27cefad2e6389666755da87aad3ea"},
-    {file = "chromadb-1.2.1.tar.gz", hash = "sha256:32b2edd2be641a7288def4ed0462363aecd59fd26675c605d08167f105194932"},
+    {file = "chromadb-1.2.2-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:ff4a8f04af2b08f7ad6605354dc3c0bf83a32a3b9805a624424c370aefe41375"},
+    {file = "chromadb-1.2.2-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:81b824f548da576fff0096a7a85deb8a7601f7a0e8f6d7bfb617d0b6c49ee213"},
+    {file = "chromadb-1.2.2-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:132915ea7f55784a8cc81cc0895f55c6845f89bf9fbaac3d915cccc764536998"},
+    {file = "chromadb-1.2.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:050de2f05ddc19c819e59f7a1fb22c027a900c7af8173ae3b4b2ab429ef8cca4"},
+    {file = "chromadb-1.2.2-cp39-abi3-win_amd64.whl", hash = "sha256:a818df5122e13eef1a871373ed5d4947371755acc5bb50687c7fa69aafa47199"},
+    {file = "chromadb-1.2.2.tar.gz", hash = "sha256:056dfec5139f8cf791b5a86ecf51888052a3a653be1640ef551c9b928d51c179"},
 ]
 
 [package.dependencies]
@@ -5056,4 +5056,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12.0, <3.14.0"
-content-hash = "f3fcd0fa35a0247f9cd9752858cd4a4bf75d1b856033fbfd7d0e9e5a213ea395"
+content-hash = "7899c785eef2f59dc517ff091004bfa1cccde7ddee0ff7f27bd3b2d7736e379e"

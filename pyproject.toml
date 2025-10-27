@@ -1,6 +1,6 @@
 [project]
 name = "chromie-tool"
-version = "0.4.0"
+version = "0.5.0"
 description = "Chroma import/export tool."
 authors = [
   {name = "Raúl G. González", email = "raul@chromio.dev"},
@@ -34,7 +34,7 @@ classifiers= [
 ]
 dependencies = [
   "aiofiles (>=24.1.0,<25.0.0)",
-  "chromadb (>=1.2.1,<2.0.0)",
+  "chromadb (>=1.2.2,<2.0.0)",
   "httpx (>=0.28.1,<0.29.0)",
   "jsonschema (>=4.25.1,<5.0.0)",
 ]
