@@ -165,7 +165,7 @@ Configuration can also be found in **vscode/settings.json**.
 
 ## Other Documents
 
-- **Style Guide**, [.gemini/styleguide.md](../../.gemini/styleguide.md).
+- **Style Guide**, [../styleguide.en.md](../styleguide.en.md).
 
 - **Design Document: Chromie**, [design.en.md](design.en.md).
 
