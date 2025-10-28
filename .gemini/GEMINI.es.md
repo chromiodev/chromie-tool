@@ -97,4 +97,4 @@ El proyecto está diseñado con una clara separación de responsabilidades:
 ## Guía de estilo
 
 El proyecto tiene una guía de estilo a seguir en todas las contribuciones.
-Se encuentra disponible en el archivo **docs/styleguide.md**.
+Se encuentra disponible en el archivo **docs/styleguide.es.md**.

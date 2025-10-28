@@ -97,4 +97,4 @@ The project is designed with a clear separation of responsibilities:
 ## Style guide
 
 The project has a style guide that must be followed for all contributions.
-This is available in the file **docs/styleguide.md**.
+This is available in the file **docs/styleguide.en.md**.
