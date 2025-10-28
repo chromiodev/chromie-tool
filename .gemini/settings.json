@@ -1,0 +1,10 @@
+{
+  "contextFile": ".gemini/GEMINI.md",
+  "excludeTools": [],
+  "commands": {
+    "test": "poetry run pytest",
+    "lint": "poetry run pyright && poetry run ruff check .",
+    "format": "poetry run ruff format .",
+    "coverage": "poetry run pytest tests/unit --cov"
+  }
+}

@@ -60,45 +60,6 @@ El proyecto está diseñado con una clara separación de responsabilidades:
 ```
 
 
-## Comandos claves de desarrollo
-
-- **Instalar dependencias**:
-
-  ```bash
-  poetry install
-  ```
-
-- **Ejecutar el formateador de código**:
-
-  ```bash
-  ruff format .
-  ```
-
-- **Ejecutar el linter para detectar errores y problemas de estilo**:
-
-  ```bash
-  ruff check .
-  ```
-
-- **Ejecutar el chequeo de tipos estáticos**:
-
-  ```bash
-  pyright
-  ```
-
-- **Ejecutar el conjunto completo de pruebas**:
-
-  ```bash
-  pytest
-  ```
-
-- **Ejecutar la aplicación CLI localmente**:
-
-  ```bash
-  chromie --help
-  ```
-
-
 ## Flujo de Trabajo para Contribuciones
 
 01. **Crea una rama**:
@@ -131,3 +92,9 @@ El proyecto está diseñado con una clara separación de responsabilidades:
 
 06. **Realiza la confirmación**:
     Escribe un mensaje de commit claro y conciso.
+
+
+## Guía de estilo
+
+El proyecto tiene una guía de estilo a seguir en todas las contribuciones.
+Se encuentra disponible en el archivo **docs/styleguide.md**.

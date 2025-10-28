@@ -60,45 +60,6 @@ The project is designed with a clear separation of responsibilities:
 ```
 
 
-## Key Development Commands
-
-- **Install dependencies**:
-
-  ```bash
-  poetry install
-  ```
-
-- **Run the code formatter**:
-
-  ```bash
-  ruff format .
-  ```
-
-- **Run the linter to detect errors and style issues**:
-
-  ```bash
-  ruff check .
-  ```
-
-- **Run the static type checker**:
-
-  ```bash
-  pyright
-  ```
-
-- **Run the full test suite**:
-
-  ```bash
-  pytest
-  ```
-
-- **Run the CLI application locally**:
-
-  ```bash
-  chromie --help
-  ```
-
-
 ## Contribution Workflow
 
 01. **Create a branch**:
@@ -131,3 +92,9 @@ The project is designed with a clear separation of responsibilities:
 
 06. **Make the commit**:
     Write a clear and concise commit message.
+
+
+## Style guide
+
+The project has a style guide that must be followed for all contributions.
+This is available in the file **docs/styleguide.md**.
