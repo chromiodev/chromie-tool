@@ -5,3 +5,8 @@
 __pycache__
 build/
 dist/
+
+.antlr*
+chromio/filter/metafilter/_antlr4/*
+!chromio/filter/metafilter/_antlr4/Lexer.py
+!chromio/filter/metafilter/_antlr4/FilterParser.py

@@ -39,6 +39,12 @@
 
   "ruff.nativeServer": "on",
   "ruff.configuration": ".ruff.toml",
+  
+  "antlr4.generation": {
+    "mode": "internal",
+    "outputDir": "./_antlr4",
+    "listeners": false
+  },
 
   "cSpell.language": "en,es",
   "cSpell.customDictionaries": {

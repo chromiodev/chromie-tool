@@ -1,6 +1,26 @@
 {
   "version": "2.0.0",
+    "inputs": [
+    {
+      "id": "antlrOut",
+      "description": "Dir path where ANTLR4 must generate the Python code.",
+      "type": "promptString",
+      "default": "./_antlr4"
+    }
+  ],
   "tasks": [
+        {
+      "group": "none",
+      "label": "ANTLR4",
+      "type": "shell",
+      "command": "cd chromio/filter/metafilter && poetry run antlr4 -o ${input:antlrOut} Lexer.g4 && poetry run antlr4 -no-listener -o ${input:antlrOut} Filter.g4 && ls -l ${input:antlrOut}",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "showReuseMessage": false,
+        "panel": "dedicated"
+      }
+    },
     {
       "group": "test",
       "label": "Unit tests",
