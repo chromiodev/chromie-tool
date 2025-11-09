@@ -91,10 +91,7 @@ literal_num: val=LITERAL_INT {return int($val.text)};
 literal_scalar:
   literal_text {return $literal_text.ctx}
   | literal_num {return $literal_num.ctx}
-  | 'true' {return True}
-  | 'True' {return True}
-  | 'false' {return False}
-  | 'False' {return False}
+  | LITERAL_BOOL {return $LITERAL_BOOL.text == 'true'}
 ;
 
 /// A list literal: [...].
