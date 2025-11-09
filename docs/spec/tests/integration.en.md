@@ -6,7 +6,7 @@
 This document defines the integration test cases for the **chromio** library.
 The objective is to validate the correct interaction between its internal modules and with external services, mainly a real instance of the **Chroma** database.
 
-The methodology used is **gray-box** testing, where there is knowledge of the internal architecture and the interfaces of the components to be integrated, but not of their detailed implementation.
+The methodology used is **gray box** testing, where there is knowledge of the internal architecture and the interfaces of the components to be integrated, but not of their detailed implementation.
 
 
 ## Scope
@@ -35,13 +35,13 @@ Python | Internal | 3.13
 Test framework | Internal | pytest 8.4
 Chroma | External | Docker chromadb/chroma
 
-The tests will be located in the **tests/integration** directory of the project.
+The tests will be located in the project's **tests/integration** directory.
 Each test file must have the prefix **itg_** and the suffix **_test.py**, for example, *itg_exp_test.py*.
 
 
 ## Test cases
 
-A test case is considered **successful** if the interaction between the components produces the result and the final state defined in the expected output and post-conditions.
+A test case is considered **successful** if the interaction between the components produces the result and the final state defined in the expected output and the post-conditions.
 
 ### Client connectivity (*CL*)
 
@@ -76,7 +76,7 @@ graph BT
 
 - **Post-conditions**:
 
-  - A successful connection is established with the **Chroma** server.
+  - A successful connection to the **Chroma** server is established.
 
 - **Expected Output**:
 
