@@ -85,6 +85,7 @@ Coverage | 100% with pytest-cov
 Documentation of this document | Spanish, English
 CI/CD | GitHub Actions
 Chroma | chromadb
+Parser generator | ANTLR4
 
 
 ## Project Management
