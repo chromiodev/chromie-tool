@@ -76,6 +76,37 @@ graph BT
 
   - La nueva colección contiene el mismo número de registros que la colección original.
 
+- **Flujo de usuario**:
+
+  ```mermaid
+  ---
+  config:
+    mirrorActors: false
+  ---
+
+  sequenceDiagram
+    %% participantes
+    actor user as Usuario
+    participant exp as exportador
+    participant db1@{ type: "database" }
+    participant imp as importador
+    participant db2@{ type: "database" }
+
+    %% mensajes
+    %% exportación
+    user ->> +exp: exporta colección
+    exp ->> +db1: lee datos
+    db1 --) -exp: datos
+    exp ->> exp: genera archivo de exportación
+    exp --) -user: informe
+
+    %% importación
+    user ->> +imp: importa colección
+    imp ->> +db2: carga datos
+    db2 --) -imp: ok
+    imp --) -user: informe
+  ```
+
 - **Salida esperada**:
 
   - **Código de salida**: 0 para ambos comandos (**`chromie exp`** y **`chromie imp`**).
@@ -118,6 +149,33 @@ graph BT
   - Se crea una nueva colección en la base de datos.
 
   - La nueva colección contiene los registros del *dataset*.
+
+- **Flujo de usuario**:
+
+  ```mermaid
+  ---
+  config:
+    mirrorActors: false
+  ---
+
+  sequenceDiagram
+    %% participantes
+    actor user as Usuario
+    participant dl as descargador
+    participant imp as importador
+    participant db@{ type: "database" }
+
+    %% mensajes
+    %% descarga
+    user ->> +dl: descarga dataset
+    dl --) -user: dataset
+
+    %% importación
+    user ->> +imp: importa colección
+    imp ->> +db: carga datos
+    db --) -imp: ok
+    imp --) -user: informe
+  ```
 
 - **Salida esperada**:
 

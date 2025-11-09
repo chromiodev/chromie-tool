@@ -227,5 +227,5 @@ chromie ping cloud://///movies
 
 ## API key
 
-When API key needed, **`--key`** or **`-k`** must be set.
+When an API key needed, **`--key`** or **`-k`** must be set.
 We can use the **`CHROMA_API_KEY`** environment variable too.
