@@ -1,6 +1,9 @@
 target-version = "py313"
 line-length = 90
 indent-width = 2
+extend-exclude = [
+  "chromio/filter/metadata/_antlr4",
+]
 
 [format]
 indent-style = "space"

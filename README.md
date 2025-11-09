@@ -90,17 +90,36 @@ predicate or predicate
 Examples:
 
 ```
--f "director='Quentin Tarantino'"
--f "director='Quentin Tarantino' or director='Alfred Hitchcock'"
+-f "dir='Quentin Tarantino'"
+-f "dir='Quentin Tarantino' or dir='Alfred Hitchcock'"
+-f "dir in ['Quentin Tarantino, 'Alfred Hitchcock']"
 ```
 
-Operators: **`=`**, **`!=`**, **`>`**, **`>=`**, **`<`**, **`<=`**, **`and`** and **`or`**.
+Predicates:
 
-Boolean literals: **`true`**, **`True`**, **`false`** and **`False`**.
+```
+field     # similar to: field == true
+not field # similar to: field != true
+field = literal_scalar
+field == literal_scalar
+field != literal_scalar
+field < literal_scalar
+field <= literal_scalar
+field > literal_scalar
+field >= literal_scalar
+field in [literal_scalar, literal_scalar, ...]
+field not in [literal_scalar, literal_scalar, ...]
+field between literal_num|literal_text and literal_num|literal_text
+field not between literal_num|literal_text and literal_num|literal_text
+```
 
-> **Constraint**.
-> Right now, only one or two predicates are possible.
-> In the future, it will be resolved and this note removed.
+Literals:
+
+- Literal text: *'A text'*.
+
+- Literal number: *1234*.
+
+- Literal boolean: *true* or *false*.
 
 
 ## URIs
