@@ -14,6 +14,7 @@ collname
 colls
 dbms
 delenv
+descargador
 dotenv
 DQUOTE
 eurostat
