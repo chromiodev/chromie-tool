@@ -92,7 +92,7 @@ Examples:
 ```
 -f "dir='Quentin Tarantino'"
 -f "dir='Quentin Tarantino' or dir='Alfred Hitchcock'"
--f "dir in ['Quentin Tarantino, 'Alfred Hitchcock']"
+-f "dir in ['Quentin Tarantino', 'Alfred Hitchcock']"
 ```
 
 Predicates:
