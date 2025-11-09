@@ -23,7 +23,8 @@ default_model = "gemini-2.5-pro"
 
 # System prompt to use in the LLM model.
 sys_prompt = """
-Translate the documentation for a Python project related to vector databases, concretely Chroma.
+Translate the technical documentation for a Python project related to vector databases, concretely Chroma.
+Its audience consists of software developers (Python and NoSQL).
 The documentation is written in Markdown and the result must be too.
 Observations that you must keep in mind:
 
@@ -36,6 +37,8 @@ Observations that you must keep in mind:
 
 - When needed, you use pre-conditions and post-conditions instead of preconditions and
   postconditions, respectively.
+
+- If you are translating a user story, remember its format: As a ROLE, I ACTION, so that REASON.
 """
 
 
