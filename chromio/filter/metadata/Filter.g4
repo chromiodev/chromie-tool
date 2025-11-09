@@ -7,11 +7,34 @@ options {
 
 @parser::header {
 from .._core import *
+from ...loc import Loc
+from ...errors import FilterSyntaxError
+
+def multi_cond(optors: LogicalOptor, predicates: list[Predicate]) -> MultiCond:
+  """Builds a MultiCond."""
+
+  # (1) arrange
+  optors = [o.text for o in optors]
+
+  # (2) check that all the operators are the same
+  optor = optors[0]
+
+  for o in optors[1:]:
+    if optor != o:
+      raise FilterSyntaxError(
+        Loc(0, 0),
+        f"All the logical operators must be '{optor}'."
+      )
+
+  # (3) build
+  return MultiCond(optor, predicates)
 }
 
 /// A filter expression.
-cond:
+cond: (
   predicate {return SimpleCond($predicate.ctx)}
+  | p+=predicate (o+=(AND|OR) p+=predicate)+ {return multi_cond($o, $p)}
+) EOF
 ;
 
 /// A predicate, that is, a simple condition.

@@ -13,7 +13,7 @@
       "group": "none",
       "label": "ANTLR4",
       "type": "shell",
-      "command": "cd chromio/filter/metafilter && poetry run antlr4 -o ${input:antlrOut} Lexer.g4 && poetry run antlr4 -no-listener -o ${input:antlrOut} Filter.g4 && ls -l ${input:antlrOut}",
+      "command": "cd chromio/filter/metadata && poetry run antlr4 -o ${input:antlrOut} Lexer.g4 && poetry run antlr4 -no-listener -o ${input:antlrOut} Filter.g4 && ls -l ${input:antlrOut}",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

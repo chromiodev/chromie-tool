@@ -6,7 +6,7 @@ omit =
   tests/*
   */.local/*
   chromie/*
-  chromio/filter/metafilter/_antlr4/*
+  chromio/filter/metadata/_antlr4/*
 
 [report]
 fail_under = 100

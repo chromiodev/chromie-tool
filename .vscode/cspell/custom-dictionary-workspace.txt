@@ -43,6 +43,7 @@ metafilter
 metafiltro
 minversion
 optor
+optors
 ospath
 parseargs
 pipx

@@ -10,54 +10,79 @@ else:
 
 
 from .._core import *
+from ...loc import Loc
+from ...errors import FilterSyntaxError
+
+def multi_cond(optors: LogicalOptor, predicates: list[Predicate]) -> MultiCond:
+  """Builds a MultiCond."""
+
+  # (1) arrange
+  optors = [o.text for o in optors]
+
+  # (2) check that all the operators are the same
+  optor = optors[0]
+
+  for o in optors[1:]:
+    if optor != o:
+      raise FilterSyntaxError(
+        Loc(0, 0),
+        f"All the logical operators must be '{optor}'."
+      )
+
+  # (3) build
+  return MultiCond(optor, predicates)
 
 def serializedATN():
     return [
-        4,1,22,136,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
-        6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,1,0,1,0,1,0,1,1,1,
+        4,1,22,149,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,1,0,1,0,1,0,1,0,1,
+        0,1,0,4,0,31,8,0,11,0,12,0,32,1,0,1,0,3,0,37,8,0,1,0,1,0,1,1,1,1,
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,52,8,1,1,2,1,2,1,2,1,2,1,2,1,2,3,2,
-        60,8,2,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,
-        4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,84,8,4,1,5,1,5,1,5,1,5,1,5,3,5,
-        91,8,5,1,6,1,6,1,6,1,6,1,6,3,6,98,8,6,1,7,1,7,1,7,1,8,1,8,1,8,1,
-        9,1,9,1,9,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,
-        1,10,1,10,1,10,3,10,123,8,10,1,11,1,11,1,11,1,11,4,11,129,8,11,11,
-        11,12,11,130,1,11,1,11,1,11,1,11,0,0,12,0,2,4,6,8,10,12,14,16,18,
-        20,22,0,1,2,0,12,12,16,16,144,0,24,1,0,0,0,2,51,1,0,0,0,4,59,1,0,
-        0,0,6,61,1,0,0,0,8,83,1,0,0,0,10,90,1,0,0,0,12,97,1,0,0,0,14,99,
-        1,0,0,0,16,102,1,0,0,0,18,105,1,0,0,0,20,122,1,0,0,0,22,124,1,0,
-        0,0,24,25,3,2,1,0,25,26,6,0,-1,0,26,1,1,0,0,0,27,28,3,6,3,0,28,29,
-        6,1,-1,0,29,52,1,0,0,0,30,31,5,15,0,0,31,32,3,6,3,0,32,33,6,1,-1,
-        0,33,52,1,0,0,0,34,35,3,6,3,0,35,36,3,8,4,0,36,37,3,20,10,0,37,38,
-        6,1,-1,0,38,52,1,0,0,0,39,40,3,6,3,0,40,41,3,10,5,0,41,42,3,22,11,
-        0,42,43,6,1,-1,0,43,52,1,0,0,0,44,45,3,6,3,0,45,46,3,12,6,0,46,47,
-        3,4,2,0,47,48,5,12,0,0,48,49,3,4,2,0,49,50,6,1,-1,0,50,52,1,0,0,
-        0,51,27,1,0,0,0,51,30,1,0,0,0,51,34,1,0,0,0,51,39,1,0,0,0,51,44,
-        1,0,0,0,52,3,1,0,0,0,53,54,3,16,8,0,54,55,6,2,-1,0,55,60,1,0,0,0,
-        56,57,3,18,9,0,57,58,6,2,-1,0,58,60,1,0,0,0,59,53,1,0,0,0,59,56,
-        1,0,0,0,60,5,1,0,0,0,61,62,5,20,0,0,62,63,6,3,-1,0,63,7,1,0,0,0,
-        64,65,5,2,0,0,65,84,6,4,-1,0,66,67,5,3,0,0,67,84,6,4,-1,0,68,69,
-        5,4,0,0,69,84,6,4,-1,0,70,71,5,5,0,0,71,84,6,4,-1,0,72,73,5,6,0,
-        0,73,84,6,4,-1,0,74,75,5,7,0,0,75,84,6,4,-1,0,76,77,5,8,0,0,77,84,
-        6,4,-1,0,78,79,5,13,0,0,79,84,6,4,-1,0,80,81,5,15,0,0,81,82,5,13,
-        0,0,82,84,6,4,-1,0,83,64,1,0,0,0,83,66,1,0,0,0,83,68,1,0,0,0,83,
-        70,1,0,0,0,83,72,1,0,0,0,83,74,1,0,0,0,83,76,1,0,0,0,83,78,1,0,0,
-        0,83,80,1,0,0,0,84,9,1,0,0,0,85,86,5,14,0,0,86,91,6,5,-1,0,87,88,
-        5,15,0,0,88,89,5,14,0,0,89,91,6,5,-1,0,90,85,1,0,0,0,90,87,1,0,0,
-        0,91,11,1,0,0,0,92,93,5,13,0,0,93,98,6,6,-1,0,94,95,5,15,0,0,95,
-        96,5,13,0,0,96,98,6,6,-1,0,97,92,1,0,0,0,97,94,1,0,0,0,98,13,1,0,
-        0,0,99,100,7,0,0,0,100,101,6,7,-1,0,101,15,1,0,0,0,102,103,5,17,
-        0,0,103,104,6,8,-1,0,104,17,1,0,0,0,105,106,5,18,0,0,106,107,6,9,
-        -1,0,107,19,1,0,0,0,108,109,3,16,8,0,109,110,6,10,-1,0,110,123,1,
-        0,0,0,111,112,3,18,9,0,112,113,6,10,-1,0,113,123,1,0,0,0,114,115,
-        5,1,0,0,115,123,6,10,-1,0,116,117,5,2,0,0,117,123,6,10,-1,0,118,
-        119,5,3,0,0,119,123,6,10,-1,0,120,121,5,4,0,0,121,123,6,10,-1,0,
-        122,108,1,0,0,0,122,111,1,0,0,0,122,114,1,0,0,0,122,116,1,0,0,0,
-        122,118,1,0,0,0,122,120,1,0,0,0,123,21,1,0,0,0,124,125,5,9,0,0,125,
-        128,3,20,10,0,126,127,5,11,0,0,127,129,3,20,10,0,128,126,1,0,0,0,
-        129,130,1,0,0,0,130,128,1,0,0,0,130,131,1,0,0,0,131,132,1,0,0,0,
-        132,133,5,10,0,0,133,134,6,11,-1,0,134,23,1,0,0,0,7,51,59,83,90,
-        97,122,130
+        1,1,1,1,1,1,1,1,1,1,1,1,3,1,65,8,1,1,2,1,2,1,2,1,2,1,2,1,2,3,2,73,
+        8,2,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,
+        1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,97,8,4,1,5,1,5,1,5,1,5,1,5,3,5,104,
+        8,5,1,6,1,6,1,6,1,6,1,6,3,6,111,8,6,1,7,1,7,1,7,1,8,1,8,1,8,1,9,
+        1,9,1,9,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,
+        10,1,10,1,10,3,10,136,8,10,1,11,1,11,1,11,1,11,4,11,142,8,11,11,
+        11,12,11,143,1,11,1,11,1,11,1,11,0,0,12,0,2,4,6,8,10,12,14,16,18,
+        20,22,0,1,2,0,12,12,16,16,159,0,36,1,0,0,0,2,64,1,0,0,0,4,72,1,0,
+        0,0,6,74,1,0,0,0,8,96,1,0,0,0,10,103,1,0,0,0,12,110,1,0,0,0,14,112,
+        1,0,0,0,16,115,1,0,0,0,18,118,1,0,0,0,20,135,1,0,0,0,22,137,1,0,
+        0,0,24,25,3,2,1,0,25,26,6,0,-1,0,26,37,1,0,0,0,27,30,3,2,1,0,28,
+        29,7,0,0,0,29,31,3,2,1,0,30,28,1,0,0,0,31,32,1,0,0,0,32,30,1,0,0,
+        0,32,33,1,0,0,0,33,34,1,0,0,0,34,35,6,0,-1,0,35,37,1,0,0,0,36,24,
+        1,0,0,0,36,27,1,0,0,0,37,38,1,0,0,0,38,39,5,0,0,1,39,1,1,0,0,0,40,
+        41,3,6,3,0,41,42,6,1,-1,0,42,65,1,0,0,0,43,44,5,15,0,0,44,45,3,6,
+        3,0,45,46,6,1,-1,0,46,65,1,0,0,0,47,48,3,6,3,0,48,49,3,8,4,0,49,
+        50,3,20,10,0,50,51,6,1,-1,0,51,65,1,0,0,0,52,53,3,6,3,0,53,54,3,
+        10,5,0,54,55,3,22,11,0,55,56,6,1,-1,0,56,65,1,0,0,0,57,58,3,6,3,
+        0,58,59,3,12,6,0,59,60,3,4,2,0,60,61,5,12,0,0,61,62,3,4,2,0,62,63,
+        6,1,-1,0,63,65,1,0,0,0,64,40,1,0,0,0,64,43,1,0,0,0,64,47,1,0,0,0,
+        64,52,1,0,0,0,64,57,1,0,0,0,65,3,1,0,0,0,66,67,3,16,8,0,67,68,6,
+        2,-1,0,68,73,1,0,0,0,69,70,3,18,9,0,70,71,6,2,-1,0,71,73,1,0,0,0,
+        72,66,1,0,0,0,72,69,1,0,0,0,73,5,1,0,0,0,74,75,5,20,0,0,75,76,6,
+        3,-1,0,76,7,1,0,0,0,77,78,5,2,0,0,78,97,6,4,-1,0,79,80,5,3,0,0,80,
+        97,6,4,-1,0,81,82,5,4,0,0,82,97,6,4,-1,0,83,84,5,5,0,0,84,97,6,4,
+        -1,0,85,86,5,6,0,0,86,97,6,4,-1,0,87,88,5,7,0,0,88,97,6,4,-1,0,89,
+        90,5,8,0,0,90,97,6,4,-1,0,91,92,5,13,0,0,92,97,6,4,-1,0,93,94,5,
+        15,0,0,94,95,5,13,0,0,95,97,6,4,-1,0,96,77,1,0,0,0,96,79,1,0,0,0,
+        96,81,1,0,0,0,96,83,1,0,0,0,96,85,1,0,0,0,96,87,1,0,0,0,96,89,1,
+        0,0,0,96,91,1,0,0,0,96,93,1,0,0,0,97,9,1,0,0,0,98,99,5,14,0,0,99,
+        104,6,5,-1,0,100,101,5,15,0,0,101,102,5,14,0,0,102,104,6,5,-1,0,
+        103,98,1,0,0,0,103,100,1,0,0,0,104,11,1,0,0,0,105,106,5,13,0,0,106,
+        111,6,6,-1,0,107,108,5,15,0,0,108,109,5,13,0,0,109,111,6,6,-1,0,
+        110,105,1,0,0,0,110,107,1,0,0,0,111,13,1,0,0,0,112,113,7,0,0,0,113,
+        114,6,7,-1,0,114,15,1,0,0,0,115,116,5,17,0,0,116,117,6,8,-1,0,117,
+        17,1,0,0,0,118,119,5,18,0,0,119,120,6,9,-1,0,120,19,1,0,0,0,121,
+        122,3,16,8,0,122,123,6,10,-1,0,123,136,1,0,0,0,124,125,3,18,9,0,
+        125,126,6,10,-1,0,126,136,1,0,0,0,127,128,5,1,0,0,128,136,6,10,-1,
+        0,129,130,5,2,0,0,130,136,6,10,-1,0,131,132,5,3,0,0,132,136,6,10,
+        -1,0,133,134,5,4,0,0,134,136,6,10,-1,0,135,121,1,0,0,0,135,124,1,
+        0,0,0,135,127,1,0,0,0,135,129,1,0,0,0,135,131,1,0,0,0,135,133,1,
+        0,0,0,136,21,1,0,0,0,137,138,5,9,0,0,138,141,3,20,10,0,139,140,5,
+        11,0,0,140,142,3,20,10,0,141,139,1,0,0,0,142,143,1,0,0,0,143,141,
+        1,0,0,0,143,144,1,0,0,0,144,145,1,0,0,0,145,146,5,10,0,0,146,147,
+        6,11,-1,0,147,23,1,0,0,0,9,32,36,64,72,96,103,110,135,143
     ]
 
 class FilterParser ( Parser ):
@@ -141,10 +166,33 @@ class FilterParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
             self._predicate = None # PredicateContext
+            self.p = list() # of PredicateContexts
+            self._AND = None # Token
+            self.o = list() # of Tokens
+            self._OR = None # Token
+            self._tset50 = None # Token
 
-        def predicate(self):
-            return self.getTypedRuleContext(FilterParser.PredicateContext,0)
+        def EOF(self):
+            return self.getToken(FilterParser.EOF, 0)
 
+        def predicate(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(FilterParser.PredicateContext)
+            else:
+                return self.getTypedRuleContext(FilterParser.PredicateContext,i)
+
+
+        def AND(self, i:int=None):
+            if i is None:
+                return self.getTokens(FilterParser.AND)
+            else:
+                return self.getToken(FilterParser.AND, i)
+
+        def OR(self, i:int=None):
+            if i is None:
+                return self.getTokens(FilterParser.OR)
+            else:
+                return self.getToken(FilterParser.OR, i)
 
         def getRuleIndex(self):
             return FilterParser.RULE_cond
@@ -156,11 +204,50 @@ class FilterParser ( Parser ):
 
         localctx = FilterParser.CondContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_cond)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 24
-            localctx._predicate = self.predicate()
-            return SimpleCond(localctx._predicate)
+            self.state = 36
+            self._errHandler.sync(self)
+            la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
+            if la_ == 1:
+                self.state = 24
+                localctx._predicate = self.predicate()
+                return SimpleCond(localctx._predicate)
+                pass
+
+            elif la_ == 2:
+                self.state = 27
+                localctx._predicate = localctx._predicate = self.predicate()
+                localctx.p.append(localctx._predicate)
+                self.state = 30 
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+                while True:
+                    self.state = 28
+                    localctx._tset50 = self._input.LT(1)
+                    _la = self._input.LA(1)
+                    if not(_la==12 or _la==16):
+                        localctx._tset50 = self._errHandler.recoverInline(self)
+                    else:
+                        self._errHandler.reportMatch(self)
+                        self.consume()
+                    localctx.o.append(localctx._tset50)
+                    self.state = 29
+                    localctx._predicate = localctx._predicate = self.predicate()
+                    localctx.p.append(localctx._predicate)
+                    self.state = 32 
+                    self._errHandler.sync(self)
+                    _la = self._input.LA(1)
+                    if not (_la==12 or _la==16):
+                        break
+
+                return multi_cond(localctx.o, localctx.p)
+                pass
+
+
+            self.state = 38
+            self.match(FilterParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -233,59 +320,59 @@ class FilterParser ( Parser ):
         localctx = FilterParser.PredicateContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_predicate)
         try:
-            self.state = 51
+            self.state = 64
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,0,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 27
+                self.state = 40
                 localctx._field = self.field()
                 return Predicate(localctx._field, "==", True)
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 30
+                self.state = 43
                 self.match(FilterParser.NOT)
-                self.state = 31
+                self.state = 44
                 localctx._field = self.field()
                 return Predicate(localctx._field, "!=", True)
                 pass
 
             elif la_ == 3:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 34
+                self.state = 47
                 localctx._field = self.field()
-                self.state = 35
+                self.state = 48
                 localctx._cmp_optor = self.cmp_optor()
-                self.state = 36
+                self.state = 49
                 localctx._literal_scalar = self.literal_scalar()
                 return Predicate(localctx._field, localctx._cmp_optor, localctx._literal_scalar)
                 pass
 
             elif la_ == 4:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 39
+                self.state = 52
                 localctx._field = self.field()
-                self.state = 40
+                self.state = 53
                 localctx._in_optor = self.in_optor()
-                self.state = 41
+                self.state = 54
                 localctx._literal_list = self.literal_list()
                 return Predicate(localctx._field, localctx._in_optor, localctx._literal_list)
                 pass
 
             elif la_ == 5:
                 self.enterOuterAlt(localctx, 5)
-                self.state = 44
+                self.state = 57
                 localctx._field = self.field()
-                self.state = 45
+                self.state = 58
                 localctx._between_optor = self.between_optor()
-                self.state = 46
+                self.state = 59
                 localctx._between_value = self.between_value()
                 localctx.i.append(localctx._between_value)
-                self.state = 47
+                self.state = 60
                 self.match(FilterParser.AND)
-                self.state = 48
+                self.state = 61
                 localctx._between_value = self.between_value()
                 localctx.i.append(localctx._between_value)
                 return Predicate(localctx._field, localctx._between_optor, localctx.i)
@@ -329,18 +416,18 @@ class FilterParser ( Parser ):
         localctx = FilterParser.Between_valueContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_between_value)
         try:
-            self.state = 59
+            self.state = 72
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [17]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 53
+                self.state = 66
                 localctx._literal_text = self.literal_text()
                 return localctx._literal_text
                 pass
             elif token in [18]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 56
+                self.state = 69
                 localctx._literal_num = self.literal_num()
                 return localctx._literal_num
                 pass
@@ -379,7 +466,7 @@ class FilterParser ( Parser ):
         self.enterRule(localctx, 6, self.RULE_field)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 61
+            self.state = 74
             localctx.name = self.match(FilterParser.ID)
             return (None if localctx.name is None else localctx.name.text)
         except RecognitionException as re:
@@ -436,62 +523,62 @@ class FilterParser ( Parser ):
         localctx = FilterParser.Cmp_optorContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_cmp_optor)
         try:
-            self.state = 83
+            self.state = 96
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [2]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 64
+                self.state = 77
                 self.match(FilterParser.T__1)
                 return Optor.EQ
                 pass
             elif token in [3]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 66
+                self.state = 79
                 self.match(FilterParser.T__2)
                 return Optor.EQ
                 pass
             elif token in [4]:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 68
+                self.state = 81
                 self.match(FilterParser.T__3)
                 return Optor.NOT_EQ
                 pass
             elif token in [5]:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 70
+                self.state = 83
                 self.match(FilterParser.LA_BRACKET)
                 return Optor.LT
                 pass
             elif token in [6]:
                 self.enterOuterAlt(localctx, 5)
-                self.state = 72
+                self.state = 85
                 self.match(FilterParser.LA_BRACKET_EQ)
                 return Optor.LTE
                 pass
             elif token in [7]:
                 self.enterOuterAlt(localctx, 6)
-                self.state = 74
+                self.state = 87
                 self.match(FilterParser.RA_BRACKET)
                 return Optor.GT
                 pass
             elif token in [8]:
                 self.enterOuterAlt(localctx, 7)
-                self.state = 76
+                self.state = 89
                 self.match(FilterParser.RA_BRACKET_EQ)
                 return Optor.GTE
                 pass
             elif token in [13]:
                 self.enterOuterAlt(localctx, 8)
-                self.state = 78
+                self.state = 91
                 self.match(FilterParser.BETWEEN)
                 return Optor.BETWEEN
                 pass
             elif token in [15]:
                 self.enterOuterAlt(localctx, 9)
-                self.state = 80
+                self.state = 93
                 self.match(FilterParser.NOT)
-                self.state = 81
+                self.state = 94
                 self.match(FilterParser.BETWEEN)
                 return Optor.NOT_BETWEEN
                 pass
@@ -531,20 +618,20 @@ class FilterParser ( Parser ):
         localctx = FilterParser.In_optorContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_in_optor)
         try:
-            self.state = 90
+            self.state = 103
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [14]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 85
+                self.state = 98
                 self.match(FilterParser.IN)
                 return Optor.IN
                 pass
             elif token in [15]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 87
+                self.state = 100
                 self.match(FilterParser.NOT)
-                self.state = 88
+                self.state = 101
                 self.match(FilterParser.IN)
                 return Optor.NOT_IN
                 pass
@@ -584,20 +671,20 @@ class FilterParser ( Parser ):
         localctx = FilterParser.Between_optorContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_between_optor)
         try:
-            self.state = 97
+            self.state = 110
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [13]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 92
+                self.state = 105
                 self.match(FilterParser.BETWEEN)
                 return Optor.BETWEEN
                 pass
             elif token in [15]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 94
+                self.state = 107
                 self.match(FilterParser.NOT)
-                self.state = 95
+                self.state = 108
                 self.match(FilterParser.BETWEEN)
                 return Optor.NOT_BETWEEN
                 pass
@@ -640,7 +727,7 @@ class FilterParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 99
+            self.state = 112
             localctx.optor = self._input.LT(1)
             _la = self._input.LA(1)
             if not(_la==12 or _la==16):
@@ -681,7 +768,7 @@ class FilterParser ( Parser ):
         self.enterRule(localctx, 16, self.RULE_literal_text)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 102
+            self.state = 115
             localctx.val = self.match(FilterParser.LITERAL_TEXT)
             return (None if localctx.val is None else localctx.val.text)[1:-1]
         except RecognitionException as re:
@@ -716,7 +803,7 @@ class FilterParser ( Parser ):
         self.enterRule(localctx, 18, self.RULE_literal_num)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 105
+            self.state = 118
             localctx.val = self.match(FilterParser.LITERAL_INT)
             return int((None if localctx.val is None else localctx.val.text))
         except RecognitionException as re:
@@ -756,42 +843,42 @@ class FilterParser ( Parser ):
         localctx = FilterParser.Literal_scalarContext(self, self._ctx, self.state)
         self.enterRule(localctx, 20, self.RULE_literal_scalar)
         try:
-            self.state = 122
+            self.state = 135
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [17]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 108
+                self.state = 121
                 localctx._literal_text = self.literal_text()
                 return localctx._literal_text
                 pass
             elif token in [18]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 111
+                self.state = 124
                 localctx._literal_num = self.literal_num()
                 return localctx._literal_num
                 pass
             elif token in [1]:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 114
+                self.state = 127
                 self.match(FilterParser.T__0)
                 return True
                 pass
             elif token in [2]:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 116
+                self.state = 129
                 self.match(FilterParser.T__1)
                 return True
                 pass
             elif token in [3]:
                 self.enterOuterAlt(localctx, 5)
-                self.state = 118
+                self.state = 131
                 self.match(FilterParser.T__2)
                 return False
                 pass
             elif token in [4]:
                 self.enterOuterAlt(localctx, 6)
-                self.state = 120
+                self.state = 133
                 self.match(FilterParser.T__3)
                 return False
                 pass
@@ -848,27 +935,27 @@ class FilterParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 124
+            self.state = 137
             self.match(FilterParser.LBRACKET)
-            self.state = 125
+            self.state = 138
             localctx._literal_scalar = self.literal_scalar()
             localctx.items.append(localctx._literal_scalar)
-            self.state = 128 
+            self.state = 141 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 126
+                self.state = 139
                 self.match(FilterParser.COMMA)
-                self.state = 127
+                self.state = 140
                 localctx._literal_scalar = self.literal_scalar()
                 localctx.items.append(localctx._literal_scalar)
-                self.state = 130 
+                self.state = 143 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (_la==11):
                     break
 
-            self.state = 132
+            self.state = 145
             self.match(FilterParser.RBRACKET)
             return localctx.items
         except RecognitionException as re:

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, override
 
 from chromio.client import client
-from chromio.filter import MetaFilterParser
+from chromio.filter.metadata import MetafilterParser
 from chromio.ie import Field
 from chromio.ie.consts import DEFAULT_BATCH_SIZE
 from chromio.ie.cp.copier import CollCopier
@@ -110,7 +110,9 @@ class CpCmd(Cmd):
     # (3) args
     batch_size, limit = args.batch, args.limit
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
-    metafilter = MetaFilterParser().parse(exp) if (exp := args.metafilter) else None
+    metafilter = (
+      MetafilterParser().parse(exp).to_chroma() if (exp := args.metafilter) else None
+    )
 
     # (4) create clients
     src_cli = await client(src_uri, src_api_key)

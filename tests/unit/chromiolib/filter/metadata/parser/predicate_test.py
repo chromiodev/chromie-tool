@@ -1,15 +1,8 @@
 import pytest
 
 from chromio.filter.errors import FilterSyntaxError
-from chromio.filter.metafilter import MetafilterParser as Parser
-from chromio.filter.metafilter import Optor, Predicate, SimpleCond
-
-
-@pytest.fixture
-def parser() -> Parser:
-  """Parser to use in the tests."""
-
-  return Parser()
+from chromio.filter.metadata import MetafilterParser as Parser
+from chromio.filter.metadata import Optor, Predicate, SimpleCond
 
 
 @pytest.mark.parametrize(
@@ -52,13 +45,13 @@ def test_parse_between_predicate(parser: Parser, text: str, optor: Optor) -> Non
   assert parser.parse(text) == SimpleCond(Predicate("year", optor, [1990, 1999]))
 
 
-def test_parse_not_optor(parser: Parser) -> None:
+def test_parse_not_predicate(parser: Parser) -> None:
   """Check that parse() parses the predicate: not field."""
 
   assert parser.parse("not closed") == SimpleCond(Predicate("closed", Optor.NOT_EQ, True))
 
 
-def test_parse_bool_cmp(parser: Parser) -> None:
+def test_parse_bool_cmp_predicate(parser: Parser) -> None:
   """Check that parse() parses the predicate: field."""
 
   assert parser.parse("closed") == SimpleCond(Predicate("closed", Optor.EQ, True))
@@ -67,8 +60,8 @@ def test_parse_bool_cmp(parser: Parser) -> None:
 @pytest.mark.parametrize(
   ("text", "e"),
   (
-    pytest.param("dir == Quentin", r"mismatched input 'Quentin' expecting"),
-    pytest.param("'Quentin' == dir", r"mismatched input ''Quentin'' expecting"),
+    pytest.param("dir=Quentin", r"input 'dir=Quentin'", id="literal w/o quotes"),
+    pytest.param("'Quentin'=dir", r"input ''Quentin''", id="literal as 1st operand"),
   ),
 )
 def test_parse_raises_syntax_error(parser: Parser, text: str, e: str) -> None:
