@@ -98,9 +98,9 @@ Examples:
 Predicates:
 
 ```
-field     # similar to: field == true
-not field # similar to: field != true
-field = literal_scalar
+field                   # similar to: field == true
+not field               # similar to: field != true
+field = literal_scalar  # similar to: field == literal_scalar
 field == literal_scalar
 field != literal_scalar
 field < literal_scalar
