@@ -1,8 +1,10 @@
 __pycache__
 addopts
 aiofiles
+antlr
 asyncio
 autouse
+btrn
 capsys
 chromadb
 chromie
@@ -13,6 +15,7 @@ colls
 dbms
 delenv
 dotenv
+DQUOTE
 eurostat
 exportColls
 gemini
@@ -40,6 +43,7 @@ metafilter
 metafiltro
 minversion
 optor
+optors
 ospath
 parseargs
 pipx
@@ -60,6 +64,7 @@ pythoniclabs
 pythonpath
 setenv
 siakro
+SQUOTE
 styleguide
 testdb
 testpaths

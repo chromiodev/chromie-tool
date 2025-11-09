@@ -85,6 +85,7 @@ Cobertura | 100% con pytest-cov
 Documentación de este documento | Español, inglés
 CI/CD | GitHub Actions
 Chroma | chromadb
+Generador sintáctico | ANTLR4
 
 
 ## Gestión del proyecto

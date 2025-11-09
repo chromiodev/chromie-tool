@@ -1,6 +1,11 @@
 {
   "pythonVersion": "3.13",
   "pythonPlatform": "All",
-  "include": ["chromio/", "tests/"],
-  "exclude": ["**/node_modules/", "**/__pycache__/"]
+  "include": ["chromie/", "chromio/", "tests/"],
+  "exclude": [
+    "**/node_modules/",
+    "**/__pycache__/",
+    "**/.antlr*",
+    "chromio/filter/metadata/_antlr4/"
+  ]
 }
