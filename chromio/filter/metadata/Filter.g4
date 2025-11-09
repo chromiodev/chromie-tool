@@ -84,7 +84,7 @@ between_optor:
 /// A logical operator.
 bin_logical_optor: optor=(AND | OR) {return $optor.text};
 
-/// A literal.
+/// A literal scalar.
 literal_text: val=LITERAL_TEXT {return $val.text[1:-1]};
 literal_num: val=LITERAL_INT {return int($val.text)};
 
@@ -94,7 +94,7 @@ literal_scalar:
   | LITERAL_BOOL {return $LITERAL_BOOL.text == 'true'}
 ;
 
-/// A list literal: [...].
+/// A literal list: [...].
 literal_list:
   LBRACKET items+=literal_scalar (COMMA items+=literal_scalar)+ RBRACKET {return $items}
 ;
