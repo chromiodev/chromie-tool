@@ -5,12 +5,12 @@
 
 ### Purpose of *Chromie*
 
-**Chromie** is a command-line interface (CLI) tool designed to facilitate the import and export of data from and to a **Chroma** vector database.
+**Chromie** is a command-line interface (CLI) tool designed to facilitate importing and exporting data from and to a **Chroma** vector database.
 
 The project is composed of two main parts:
 
 - **chromio**:
-  A **Python** library that contains all the business logic to interact with **Chroma**.
+  A **Python** library that contains all the business logic for interacting with **Chroma**.
   It is reusable and can be integrated into other projects.
 
 - **chromie**:
@@ -35,9 +35,9 @@ rec | record
 rpt | report
 
 
-## General architecture
+## General Architecture
 
-### Separation of responsibilities
+### Separation of Responsibilities
 
 **Chromie**'s architecture is based on a clear separation between the business logic and the user interface.
 
@@ -45,7 +45,7 @@ rpt | report
 
   - It has no knowledge of the CLI.
 
-  - Manages the connection with **Chroma**.
+  - Manages the connection to **Chroma**.
 
   - Contains the logic for reading, writing, filtering, and transforming data.
 
@@ -59,15 +59,15 @@ rpt | report
 
   - Uses **argparse** to define and parse commands and arguments.
 
-  - Orchestrates the calls to the **chromio** library to execute the requested actions.
+  - Orchestrates calls to the **chromio** library to execute the requested actions.
 
-  - It is responsible for presenting the results and reports to the user in the console.
+  - It is responsible for presenting results and reports to the user in the console.
 
-### High-level component diagram
+### High-level Component Diagram
 
 ```mermaid
 ---
-title: Component diagram
+title: Component Diagram
 config:
 ---
 
@@ -81,9 +81,9 @@ graph LR
 ```
 
 
-## *chromio* library
+## *chromio* Library
 
-### Connectivity to *Chroma*
+### *Chroma* Connectivity
 
 The connection is managed by two main components:
 
@@ -93,7 +93,7 @@ The connection is managed by two main components:
 - **`client`**:
   Client to a **Chroma** instance from a ***`ChromioUri`*** and additional information if necessary.
 
-### Import/export engine (`ie`)
+### Import/Export Engine (`ie`)
 
 It is the heart of the library and contains the logic for moving data.
 
@@ -139,11 +139,11 @@ classDiagram
 
 ## *chromie* CLI
 
-### Entry point (*app.py*)
+### Entry Point (*app.py*)
 
 Main program file.
 
-### Command structure (*cmds/*)
+### Command Structure (*cmds/*)
 
 Each command is represented and implemented by a module in this directory.
 Each of them inherits or specializes the ***`Cmd`*** class defined in ***`chromio.tools`***.

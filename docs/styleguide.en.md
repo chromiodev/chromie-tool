@@ -3,7 +3,7 @@
 
 ## Introduction
 
-This document establishes the coding conventions and style guidelines to be followed.
+This document establishes the coding conventions and style guides to be followed.
 The goal is to maintain clean, readable, and consistent code throughout the project.
 Adherence to these rules is mandatory for all contributors.
 
@@ -66,7 +66,7 @@ The configuration for these tools can be found in the **.ruff.toml**, **ruff.for
 
     04. A **Returns:** section to describe the return value.
 
-    05. A **Raises:** section to describe the raised exceptions.
+    05. A **Raises:** section to describe the exceptions raised.
 
 - **Example**:
 
@@ -106,14 +106,14 @@ The configuration for these tools can be found in the **.ruff.toml**, **ruff.for
     - **tests/functional**: For functional tests.
 
 - **Test Naming**:
-  Test filenames must follow the **\*_test.py** pattern.
-  To avoid naming conflicts, integration test files must be prefixed with **itg_** and functional tests with **fn_**.
+  Test file names must follow the **\*_test.py** pattern.
+  To avoid naming conflicts, integration test files must be prefixed with **itg_** and functional ones with **fn_**.
   No special affix needs to be applied to unit tests.
   
   Test functions must start with **test_**.
 
 - **Test Structure**: Follow the **AAA(C)** (*arrange, act, assessment, cleanup*) pattern.
-  Each block should be preceded by a comment identifying it.
+  Each block should be preceded by a comment that identifies it.
   Example:
 
   ```python
@@ -134,11 +134,11 @@ The configuration for these tools can be found in the **.ruff.toml**, **ruff.for
   ```
 
 - **Fixtures**:
-  The use of **pytest** *fixtures* is recommended for the setup (*arrange*) and teardown (*cleanup*) sections.
+  The use of **pytest** *fixtures* is recommended for the *arrange* and *cleanup* sections.
 
 - **Mocks**:
   For creating test doubles (*mocks*, *stubs*, etc.), the **pytest-mock** component must be used.
-  Direct use of **`unittest.mock`** is not allowed.
+  The direct use of **`unittest.mock`** is not allowed.
 
 - **Test Data**:
   Synthetic data will be generated with the **Faker** plugin integrated into **pytest**.
@@ -146,7 +146,7 @@ The configuration for these tools can be found in the **.ruff.toml**, **ruff.for
 - **Custom Markers**:
   
   - ***`pytest.mark.readonly`*** to identify read-only integration and functional tests.
-    Tests without this mark are considered R/W (Read/Write).
+    Tests that do not have this mark are considered R/W.
 
   - ***`pytest.mark.attr(id="FT-component-number")`*** to link a functional test with its identifier in the specification document.
 

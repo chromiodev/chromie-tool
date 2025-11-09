@@ -1,19 +1,19 @@
-# *Chromie* Project Specification
+# *Chromie* project specification
 
 
 ## Introduction
 
 **Chroma** is establishing itself as a reference vector database management system due to its simplicity and power.
 However, a gap has been identified in its data import and export tools.
-The current **Chroma** command-line interface (CLI) does not allow data to be stored in portable files, limiting its use to migration between instances.
+The current **Chroma** command-line interface (CLI) does not allow storing data in portable files, limiting its use to migration between instances.
 
-This document details the design and requirements of the **Chromie** (*Chroma Import/Export*) project, an open-source CLI tool conceived to address this need.
-Its purpose is to provide an intuitive interface for importing and exporting records from **Chroma** collections to standardized **JSON** files, for local, remote and **Chroma Cloud** instances.
+This document details the design and requirements for the **Chromie** (*Chroma Import/Export*) project, an open-source CLI tool designed to address this need.
+Its purpose is to provide an intuitive interface for importing and exporting records from **Chroma** collections to standardized **JSON** files, for local and remote instances, as well as **Chroma Cloud**.
 
 The purpose of this document is to serve as a central reference point for understanding the project, its scope, and its requirements.
 
 
-## Project Vision
+## Project vision
 
 A command-line application designed to import and export **Chroma** collections to a standard **JSON** file format, facilitating data portability and backup.
 
@@ -30,7 +30,7 @@ A command-line application designed to import and export **Chroma** collections 
 The project is released under the **GNU General Public License v3.0** (**GPLv3**), thus ensuring that any derivative work remains open-source software (**OSS**).
 
 
-## Functional Requirements
+## Functional requirements
 
 The application exposes its functionality through a command-line interface (CLI) that allows users to interact with **Chroma** databases.
 
@@ -38,7 +38,7 @@ The application exposes its functionality through a command-line interface (CLI)
 
 [use-cases.md](use-cases.en.md)
 
-### Supported Environment Variables
+### Supported environment variables
 
 The following environment variables are used to configure the database connection:
 
@@ -50,11 +50,11 @@ CHROMA_API_KEY | API key to use with Chroma Cloud.
 CHROMA_TENANT | Database tenant identifier.
 CHROMA_DATABASE | Database name.
 
-### Data Schema
+### Data schema
 
 The import and export file format adheres to the schema, written with **JSON Schema**, available in the [schema.json](schema.json) file.
 
-### Connection String Format
+### Connection string format
 
 The URI connection strings are defined as follows:
 
@@ -65,9 +65,9 @@ Server | server://name:port/tenant/db/collection
 Chroma Cloud | cloud:///tenant/db/collection
 
 
-## Non-functional Requirements
+## Non-functional requirements
 
-These requirements establish the quality attributes, constraints, and technical dependencies of the project:
+These requirements establish the project's quality attributes, constraints, and technical dependencies:
 
 Requirement | Description
 :--: | :--
@@ -88,13 +88,13 @@ Chroma | chromadb
 Parser generator | ANTLR4
 
 
-## Project Management
+## Project management
 
 To maintain a healthy project and foster an active community, the following management guidelines have been defined.
 
 ### Roles
 
-- **Maintainer**: A role assumed by the initial development team.
+- **Maintainer**: Role assumed by the initial development team.
   They are responsible for the long-term direction of the project.
   A maintainer reviews pull requests, approves code, manages issue triage, and is the main contact for the community.
 
@@ -103,7 +103,7 @@ To maintain a healthy project and foster an active community, the following mana
 - **Core Contributor**: A contributor who has demonstrated consistent commitment and has made significant, high-quality contributions.
   They may be granted additional permissions to help with code review or triage management.
 
-### GitHub Labels
+### *GitHub* labels
 
 **GitHub** labels will be used to classify and organize issues and pull requests.
 This will make it easier for both existing and new contributors to find and track tasks.
@@ -117,7 +117,7 @@ These will be:
 
 - **Effort**: *s:xs*, *s:s*, *s:m*, *s:l*, *s:xl*.
 
-### Issue Acceptance Process
+### Issue acceptance process
 
 A clear process will be followed for accepting issues to optimize the workflow:
 
@@ -125,7 +125,7 @@ A clear process will be followed for accepting issues to optimize the workflow:
     This consists of:
 
     - **Validate**: Check that the information is clear and complete.
-      If it's a bug, verify that it can be reproduced.
+      If it's a *bug*, verify that it can be reproduced.
       If not, the author will be asked for more information.
 
     - **Identify duplicates**: Check if the problem has already been reported in another issue.
@@ -139,37 +139,37 @@ A clear process will be followed for accepting issues to optimize the workflow:
 03. **Assignment**: After labeling, the issue is ready to be addressed.
     A **maintainer** will assign it to an interested contributor or to themselves, kicking off its implementation.
 
-This process ensures that contributions are efficient and that contributors know the status of tasks at all times.
+This process ensures that contributions are efficient and that contributors always know the status of tasks.
 
 
 ## Process for adding a new command to *chromie*
 
 The process for adding a new command to **chromie** is described below:
 
-01. Add the corresponding use cases in the [use-cases.en.md](use-cases.en.md) document.
+01. Add the corresponding use cases to the [use-cases.en.md](use-cases.en.md) document.
 
-02. Modify the design document [design.en.md](design.en.md).
+02. Modify the [design.en.md](design.en.md) design document.
 
-03. Modify the schema document [schema.json](schema.json) if necessary.
+03. Modify the [schema.json](schema.json) schema document if necessary.
 
 04. Add integration tests if necessary to [tests/integration.en.md](tests/integration.en.md).
 
-05. Add functional tests [tests/functional.en.md](tests/functional.en.md).
+05. Add functional tests to [tests/functional.en.md](tests/functional.en.md).
 
 
 ## *Gemini* and *Gemini Code Assist*
 
 This project uses **Gemini** and **Gemini Code Assist** to support its development and the translation of documents in the **docs/spec/** directory into different languages.
-The specific configuration for **Gemini Code Assist** is located in the **.gemini** directory of the project and is a good starting point, along with this and other documents, for new contributors.
+The specific configuration for **Gemini Code Assist** is located in the project's **.gemini** directory and is a good starting point, along with this and other documents, for new contributors.
 Configuration can also be found in **vscode/settings.json**.
 
 
-## Other Documents
+## Other documents
 
-- **Style Guide**, [../styleguide.en.md](../styleguide.en.md).
+- **Style guide**, [../styleguide.en.md](../styleguide.en.md).
 
-- **Design Document: Chromie**, [design.en.md](design.en.md).
+- **Design document: Chromie**, [design.en.md](design.en.md).
 
-- **Integration Tests**, [tests/integration.en.md](tests/integration.en.md).
+- **Integration tests**, [tests/integration.en.md](tests/integration.en.md).
 
-- **Functional Tests**, [tests/functional.en.md](tests/functional.en.md).
+- **Functional tests**, [tests/functional.en.md](tests/functional.en.md).
