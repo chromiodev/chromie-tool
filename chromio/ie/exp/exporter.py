@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from time import time
@@ -52,7 +53,7 @@ class CollExporter(CollIEBase):
         [
           '  "metadata": {\n',
           f'    "chroma": {{"version": "{v}"}},\n',
-          f'    "coll": {{"name": "{coll.name}"}}\n',
+          f'    "coll": {_build_coll_repr(coll)}\n',
           "  },\n",
         ]
       )
@@ -84,3 +85,35 @@ class CollExporter(CollIEBase):
       duration=int(time() - start),
       file_path=str(file),
     )
+
+
+def _build_coll_repr(coll: AsyncCollection) -> str:
+  """Gets the configuration of a collection and builds its textual representation
+  to attach in the export file.
+
+  Args:
+    coll: Collection object.
+
+  Returns:
+    Collection representation.
+  """
+
+  # (1) add name
+  repr = f'"name": "{coll.name}", "configuration": {{'
+
+  # (2) add configuration
+  conf = coll.configuration
+
+  if (fn := conf.get("embedding_function")) is not None:  # pragma: no branch
+    repr += f'"embedding": "{fn.name()}"'
+
+  if (hnsw := conf.get("hnsw")) is not None:  # pragma: no cover
+    repr += f', "hnsw": {json.dumps(hnsw)}'
+
+  if (spann := conf.get("spann")) is not None:  # pragma: no branch
+    repr += f', "spann": {json.dumps(spann)}'
+
+  repr += "}"
+
+  # (3) return
+  return f"{{{repr}}}"
