@@ -2,7 +2,7 @@
   "version": "1.0",
   "metadata": {
     "chroma": {"version": "1.1.0"},
-    "coll": {"name": "test"}
+    "coll": {"name": "test", "configuration": {"embedding": "default", "spann": {"space": "cosine"}}}
   },
   "data": [
     {"id": "01cc", "metadata": {"title": "modern times", "year": "1936", "rating": 8.5, "cert": "G", "genres": "Comedy, Drama, Family", "director": "Charles Chaplin"}, "document": "Title: modern times\nDirector: Charles Chaplin\nReleased year: 1936\nCertificate: G\nRuntime: 87 min\nGenre: Comedy, Drama, Family\nRating: 8.5\nOverview: The Tramp struggles to live in modern industrial society with the help of a young homeless"},

@@ -9,40 +9,52 @@
       "description": "Schema version.",
       "const": "1.0"
     },
-
     "metadata": {
-      "description": "Export metadata.",
       "type": "object",
+      "description": "Export metadata.",
       "required": ["coll"],
       "properties": {
         "chroma": {
-          "description": "Chroma instance info.",
           "type": "object",
+          "description": "Chroma instance info.",
           "properties": {
             "version": {
-              "description": "Chroma instance version.",
-              "type": "string"
+              "type": "string",
+              "description": "Chroma instance version."
             }
           }
         },
-        "db": {
-          "description": "Source database name.",
-          "type": "string"
-        },
         "coll": {
-          "description": "Source collection info.",
           "type": "object",
+          "description": "Source collection info.",
           "required": ["name"],
           "properties": {
             "name": {
-              "description": "Collection name.",
-              "type": "string"
+              "type": "string",
+              "description": "Collection name."
+            },
+            "configuration": {
+              "type": "object",
+              "description": "Collection configuration.",
+              "properties": {
+                "embedding": {
+                  "type": "string",
+                  "description": "Embedding function name."
+                },
+                "hnsw": {
+                  "type": "object",
+                  "description": "HNSW configuration."
+                },
+                "spann": {
+                  "type": "object",
+                  "description": "SPANN configuration."
+                }
+              }
             }
           }
         }
       }
     },
-
     "data": {
       "description": "Collection records.",
       "type": "array",
@@ -51,20 +63,20 @@
         "required": ["id"],
         "properties": {
           "id": {
-            "description": "Record identifier.",
-            "type": "string"
+            "type": "string",
+            "description": "Record identifier."
           },
           "metadata": {
-            "description": "Record metadata.",
-            "type": "object"
+            "type": "object",
+            "description": "Record metadata."
           },
           "document": {
-            "description": "Record document.",
-            "type": "string"
+            "type": "string",
+            "description": "Record document."
           },
           "embedding": {
-            "description": "Embedding or vector.",
             "type": "array",
+            "description": "Embedding or vector.",
             "items": {
               "type": "number"
             }
