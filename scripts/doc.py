@@ -39,6 +39,8 @@ Observations that you must keep in mind:
   postconditions, respectively.
 
 - If you are translating a user story, remember its format: As a ROLE, I ACTION, so that REASON.
+
+- When you translate CCUU in a Mermaid comment, this is really UC.
 """
 
 
