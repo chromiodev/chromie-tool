@@ -13,7 +13,7 @@ class Downloader(ABC):
   # @override
   base = "https://github.com"
 
-  async def download(self, name: str, dst: Path, /, lang="en") -> None:
+  async def download(self, name: str, dst: Path, *, lang="en") -> None:
     """Downloads a dataset file.
 
     Args:

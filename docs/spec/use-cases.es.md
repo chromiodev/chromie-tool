@@ -46,18 +46,11 @@ graph LR
     «out» OK o error
   " }
 
-  listColls@{ shape: "rounded", label: "Lista de colecciones<hr>
-    «in» URI
-    «in» Clave API
-    «out» Nombres de las colecciones
-  " }
-
   %%%%%%%%%%%%%%%%
   %% relaciones %%
   %%%%%%%%%%%%%%%%
   user --> printUriSegments
   user --> pingInstance
-  user --> listColls
 ```
 
 #### Muestra los segmentos de un URI
@@ -98,6 +91,45 @@ graph LR
 
   - ¿Ha sido posible conectar?
 
+### Colecciones
+
+```mermaid
+---
+config:
+---
+
+graph LR
+  %%%%%%%%%%%%%
+  %% actores %%
+  %%%%%%%%%%%%%
+  user@{ icon: "fa:user", label: "Usuario" }
+
+  %%%%%%%%%%
+  %% CCUU %%
+  %%%%%%%%%%
+  listColls@{ shape: "rounded", label: "Lista de colecciones<hr>
+    «in» URI
+    «in» Clave API
+    «out» Nombres de las colecciones
+  " }
+
+  createColl@{ shape: "rounded", label: "Crea una colección<hr>
+    «in» URI
+    «in» Clave API
+  " }
+  
+  printCollConf@{ shape: "rounded", label: "Muestra info de colección<hr>
+    «in» URI
+    «in» Clave API
+  " }
+
+  %%%%%%%%%%%%%%%%
+  %% relaciones %%
+  %%%%%%%%%%%%%%%%
+  user --> listColls
+  user --> createColl
+  user --> printCollConf
+```
 #### Lista de colecciones disponibles
 
 - **Historia de usuario**:
@@ -119,6 +151,46 @@ graph LR
 - **Salida**:
 
   - Lista con los nombres de las colecciones y sus contadores si se ha solicitado.
+
+#### Crea una colección
+
+- **Historia de usuario**:
+  Como *usuario*,
+  quiero *crear colecciones*,
+  para *facilitar la configuración de nuevas colecciones a las que importar*.
+
+- **Prioridad**:
+  Alta
+
+- **Entrada**:
+
+  - URI de la instancia a la que acceder.
+
+  - Clave de API si fuera necesaria para abrir la conexión.
+
+- **Salida**:
+
+  - Informe de la creación.
+
+#### Muestra info de colección
+
+- **Historia de usuario**:
+  Como *usuario*,
+  quiero *conocer la información de una colección*,
+  para *saber cuál es su configuración actual*.
+
+- **Prioridad**:
+  Alta
+
+- **Entrada**:
+
+  - URI de la instancia a la que acceder.
+
+  - Clave de API si fuera necesaria para abrir la conexión.
+
+- **Salida**:
+
+  - Info de la colección.
 
 ### Exportación de datos
 

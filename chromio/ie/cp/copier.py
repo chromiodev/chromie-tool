@@ -16,7 +16,7 @@ class CollCopier(CollIEBase):
     self,
     src_coll: AsyncCollection,
     dst_coll: AsyncCollection,
-    /,
+    *,
     limit: int | None = None,
     metafilter: dict | None = None,
   ) -> CollCopyRpt:

@@ -53,7 +53,7 @@ class ChromioUri:
   @classmethod
   def server(
     cls,
-    /,
+    *,
     host=default_server_host,
     port=default_server_port,
     tenant=default_tenant,
