@@ -1,7 +1,7 @@
 import json
 
 
-def dumps(recs: dict | list[dict], /, indent=0, sep="\n") -> str:
+def dumps(recs: dict | list[dict], *, indent=0, sep="\n") -> str:
   """Builds a JSONL string for a record or a list of records.
 
   Args:
@@ -32,7 +32,7 @@ def __convert_record_to_jsonl(rec: dict) -> str:
   return json.dumps(rec, indent=None)
 
 
-def __convert_records_to_jsonl(recs: list[dict], /, indent=0, sep="\n") -> str:
+def __convert_records_to_jsonl(recs: list[dict], *, indent=0, sep="\n") -> str:
   """Builds a JSONL string for a list of records.
 
   Args:

@@ -20,7 +20,7 @@ class CollExporter(CollIEBase):
     self,
     coll: AsyncCollection,
     file: Path,
-    /,
+    *,
     v: str,
     limit: int | None = None,
     metafilter: dict | None = None,

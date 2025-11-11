@@ -14,7 +14,7 @@ class CollWriter:
     self,
     records: list[dict],
     coll: AsyncCollection,
-    /,
+    *,
     fields=DEFAULT_FIELDS,
     batch_size=DEFAULT_BATCH_SIZE,
     limit: int | None = None,

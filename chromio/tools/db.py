@@ -21,6 +21,7 @@ class DbTool:
   async def create_coll(
     self,
     name: str,
+    *,
     efn: str | None = None,
     model: str = "all-MiniLM-L6-v2",
     space: _Space | None = None,

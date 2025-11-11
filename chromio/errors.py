@@ -8,7 +8,7 @@ class ChromieError(Exception, ABC):
     super().__init__(msg)
 
   @property
-  def msg(self) -> str:
+  def msg(self) -> str:  # pragma: no cover
     """Error message."""
 
     return self.args[0]

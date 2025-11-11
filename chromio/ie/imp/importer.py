@@ -20,7 +20,7 @@ class CollImporter(CollIEBase):
     self,
     coll: AsyncCollection,
     file: Path,
-    /,
+    *,
     limit: int | None = None,
     remove: list[str] = [],
     set: dict = {},

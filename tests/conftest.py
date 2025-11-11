@@ -204,6 +204,9 @@ async def db(server: tuple[str, int]) -> AsyncClientAPI:
   return await AsyncHttpClient(host=server[0], port=server[1])
 
 
+cli = db
+
+
 @pytest.fixture(scope="function")
 async def coll(db: AsyncClientAPI) -> AsyncCollection:
   """Collection to use in the tests."""

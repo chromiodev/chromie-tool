@@ -102,7 +102,7 @@ class CollCmd(Cmd):
         exit(1)
     else:
       try:
-        conf = await db.create_coll(name, efn, model, space)
+        conf = await db.create_coll(name, efn=efn, model=model, space=space)
         print(f"Configuration used:\n{conf}")
       except CollAlreadyExistsError:
         print(f"Collection '{name}' already exists.", file=sys.stderr)
