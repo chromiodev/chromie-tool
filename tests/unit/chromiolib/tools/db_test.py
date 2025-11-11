@@ -13,6 +13,11 @@ def tool(mocker: MockerFixture) -> DbTool:
   return DbTool(db=mocker.AsyncMock(spec=AsyncClientAPI))
 
 
+###################
+# get_coll_conf() #
+###################
+
+
 async def test_get_coll_conf_existing(mocker: MockerFixture, tool: DbTool) -> None:
   """Check that get_coll_conf() returns the configuration of an existing collection."""
 
@@ -67,6 +72,11 @@ async def test_get_coll_conf_unexisting(mocker: MockerFixture, tool: DbTool) -> 
     await tool.get_coll_conf("pytest")
 
 
+#################
+# create_coll() #
+#################
+
+
 async def test_create_coll_new(mocker: MockerFixture, tool: DbTool) -> None:
   """Check that create_coll() creates a new collection when not existing."""
 
@@ -98,3 +108,58 @@ async def test_create_coll_existing(mocker: MockerFixture, tool: DbTool) -> None
 
   # (3) assessment
   assert get_collection.await_count == 1
+
+
+################
+# list_colls() #
+################
+
+
+async def test_list_colls_wo_count(mocker: MockerFixture, tool: DbTool) -> None:
+  """Check that list_colls() returns the collection names."""
+
+  # (1) arrange
+  tool.db.list_collections = list_collections = mocker.AsyncMock(
+    return_value=([coll1 := mocker.AsyncMock(), coll2 := mocker.AsyncMock()])
+  )
+
+  type(coll1).name = mocker.PropertyMock(return_value="albums")
+  coll1.count = mocker.AsyncMock(return_value=12)
+
+  type(coll2).name = mocker.PropertyMock(return_value="movies")
+  coll2.count = mocker.AsyncMock(return_value=21)
+
+  # (2) act
+  out = await tool.list_colls()
+
+  # (3) assessment
+  assert out == [{"name": "albums"}, {"name": "movies"}]
+
+  assert list_collections.await_count == 1
+  assert coll1.count.call_count == 0
+  assert coll2.count.call_count == 0
+
+
+async def test_list_colls_w_count(mocker: MockerFixture, tool: DbTool) -> None:
+  """Check that list_colls() returns the names and counts of the collections."""
+
+  # (1) arrange
+  tool.db.list_collections = list_collections = mocker.AsyncMock(
+    return_value=([coll1 := mocker.AsyncMock(), coll2 := mocker.AsyncMock()])
+  )
+
+  type(coll1).name = mocker.PropertyMock(return_value="albums")
+  coll1.count = mocker.AsyncMock(return_value=12)
+
+  type(coll2).name = mocker.PropertyMock(return_value="movies")
+  coll2.count = mocker.AsyncMock(return_value=21)
+
+  # (2) act
+  out = await tool.list_colls(count=True)
+
+  # (3) assessment
+  assert out == [{"name": "albums", "count": 12}, {"name": "movies", "count": 21}]
+
+  assert list_collections.await_count == 1
+  assert coll1.count.call_count == 1
+  assert coll2.count.call_count == 1

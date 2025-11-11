@@ -82,3 +82,29 @@ class DbTool:
       return (await self.db.get_collection(name)).configuration_json
     except Exception:
       raise CollNotFoundError(name)
+
+  async def list_colls(self, *, count=False) -> list[dict[str, Any]]:
+    """Returns the collections.
+
+    Args:
+      count: Must the counts be returned.
+
+    Returns:
+      The collections with its info.
+    """
+
+    db = self.db
+
+    # (1) get collections
+    colls = []
+
+    for coll in await db.list_collections():
+      info: dict[str, Any] = {"name": coll.name}
+
+      if count:
+        info["count"] = await coll.count()
+
+      colls.append(info)
+
+    # (2) return info
+    return colls

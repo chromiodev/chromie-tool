@@ -84,12 +84,10 @@ class CollCmd(Cmd):
 
     # (2) create db tool to use
     try:
-      cli = await client(uri, api_key)
+      db = DbTool(await client(uri, api_key))
     except Exception as e:
       print(f"Server or database not found: '{e}'.", file=sys.stderr)
       exit(1)
-
-    db = DbTool(cli)
 
     # (3) perform operation
     name = uri.coll

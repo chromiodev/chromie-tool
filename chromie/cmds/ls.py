@@ -5,6 +5,7 @@ from typing import Any, override
 
 from chromio.client import client
 from chromio.tools import Cmd
+from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
 
@@ -51,18 +52,18 @@ class LsCmd(Cmd):
       print("Expected API key for Chroma Cloud connection.")
       exit(1)
 
-    # (2) create client
+    # (2) create db tool
     try:
-      cli = await client(uri, api_key)
+      db = DbTool(await client(uri, api_key))
     except Exception as e:
       print(f"Server or database not found: '{e}'.", file=sys.stderr)
       exit(1)
 
     # (3) print
-    for coll in await cli.list_collections():
-      print(coll.name, end="")
+    for coll in await db.list_colls(count=count):
+      print(coll["name"], end="")
 
       if count:
-        print(":", await coll.count())
+        print(":", coll["count"])
       else:
         print()
