@@ -3,10 +3,10 @@ import sys
 from dataclasses import dataclass
 from typing import Any, override
 
-import chromadb.utils.embedding_functions as emb
-
 from chromio.client import client
+from chromio.errors import CollAlreadyExistsError, CollNotFoundError
 from chromio.tools import Cmd
+from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
 EMBEDDING_FNS = ("Default", "SentenceTransformer")
@@ -43,7 +43,7 @@ class CollCmd(Cmd):
         "action": "store_true",
       },
       {
-        "names": ["--embedding", "-e"],
+        "names": ["--embedding", "--efn", "-e"],
         "help": "Embedding function to use.",
         "choices": EMBEDDING_FNS,
       },
@@ -67,7 +67,7 @@ class CollCmd(Cmd):
   @override
   async def _handle(self, args: Any) -> None:
     # (1) args
-    api_key, emb_fn, model, space = (
+    api_key, efn, model, space = (
       args.key,
       args.embedding,
       args.model,
@@ -82,37 +82,28 @@ class CollCmd(Cmd):
       print("Expected collection name.", file=sys.stderr)
       exit(1)
 
-    # (2) create client
+    # (2) create db tool to use
     try:
       cli = await client(uri, api_key)
     except Exception as e:
       print(f"Server or database not found: '{e}'.", file=sys.stderr)
       exit(1)
 
+    db = DbTool(cli)
+
     # (3) perform operation
     name = uri.coll
 
     if args.info:
-      coll = await cli.get_collection(name)
-      print(coll.configuration_json)
+      try:
+        print(await db.get_coll_conf(name))
+      except CollNotFoundError:
+        print(f"Collection '{name}' not found.", file=sys.stderr)
+        exit(1)
     else:
       try:
-        await cli.get_collection(name)
+        conf = await db.create_coll(name, efn, model, space)
+        print(f"Configuration used:\n{conf}")
+      except CollAlreadyExistsError:
         print(f"Collection '{name}' already exists.", file=sys.stderr)
         exit(1)
-      except Exception:
-        await cli.create_collection(
-          name,
-          configuration=(
-            conf := {
-              "embedding_function": (
-                emb.DefaultEmbeddingFunction()
-                if emb_fn is None or emb_fn == "Default"
-                else emb.SentenceTransformerEmbeddingFunction(model)
-              ),
-              "hnsw": None if (space := space) is None else {"space": space},
-            }
-          ),
-        )
-
-        print(f"Configuration used:\n{conf}")
