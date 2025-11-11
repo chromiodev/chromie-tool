@@ -76,6 +76,16 @@ chromie ls server:////
 chromie ls -c server:////
 ```
 
+### Working with collections (create and print info)
+
+```bash
+# print info on an existing collection
+chromie coll -i cloud://///collection_name
+
+# create a new collection
+chromie coll -e SentenceTransformer -s cosine cloud://///collection_name
+```
+
 ### Metadata filters
 
 The **`--metafilter`** or **`-f`** options allow to select records from metadata in the **`cp`** and **`exp`** commands.
