@@ -21,7 +21,9 @@ class DbTool:
   """DB object to use for running the operations."""
 
   async def create_coll_with_conf(
-    self, name: str, conf: dict[str, Any]
+    self,
+    name: str,
+    conf: dict[str, Any],
   ) -> AsyncCollection:
     """Creates a collection from a configuration object returned by Chroma.
 
