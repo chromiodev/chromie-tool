@@ -133,7 +133,12 @@ async def test_create_coll_when_existing(mocker: MockerFixture, tool: DbTool) ->
     pytest.param({}, id="default w/o conf"),
     pytest.param({"embedding_function": {"name": "default"}}, id="default"),
     pytest.param(
-      {"embedding_function": {"name": "sentence_transformer"}}, id="sentence_transformer"
+      {"embedding_function": {"name": "sentence_transformer"}},
+      id="sentence_transformer",
+    ),
+    pytest.param(
+      {"embedding_function": {"name": "default"}, "hnsw": {"space": "l2"}},
+      id="w/ hnsw",
     ),
   ),
 )

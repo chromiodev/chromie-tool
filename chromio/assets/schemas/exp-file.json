@@ -46,7 +46,7 @@
                   "description": "HNSW configuration."
                 },
                 "spann": {
-                  "type": "object",
+                  "type": ["object", "null"],
                   "description": "SPANN configuration."
                 }
               }

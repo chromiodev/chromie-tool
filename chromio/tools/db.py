@@ -48,9 +48,12 @@ class DbTool:
       case _:
         raise ValueError(f"Embedding function '{n}' not supported.")
 
-    hnsw = (
-      None if (space := conf.get("spann", {}).get("space")) is None else {"space": space}
-    )
+    if (hnsw := conf.get("hnsw")) is None:
+      hnsw = (
+        None
+        if (space := conf.get("spann", {}).get("space")) is None
+        else {"space": space}
+      )
 
     # (2) create collection if not exists
     try:
