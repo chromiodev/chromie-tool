@@ -1,6 +1,7 @@
+from typing import Any
+
 import pytest
 from chromadb.api.models.AsyncCollection import AsyncCollection
-from pytest import Pytester
 
 from chromio.ie.consts import DEFAULT_BATCH_SIZE, DEFAULT_FIELDS
 from chromio.ie.imp.importer import CollImporter
@@ -16,27 +17,22 @@ def importer() -> CollImporter:
 @pytest.mark.attr(id="ITG-IMP-01")
 @pytest.mark.usefixtures("truncate_coll")
 async def test_import_all_records(
-  pytester: Pytester,
   importer: CollImporter,
   coll: AsyncCollection,
-  cc_count: int,
+  cc_records: list[dict[str, Any]],
 ) -> None:
   """Check that CollImporter.import_coll() imports all the records from the file."""
 
   # (1) precondition: the collection must not contain records
   assert await coll.count() == 0
 
-  # (2) arrange
-  input_file = pytester.copy_example("tests/data/cc-export.json")
+  # (2) act
+  out = await importer.import_coll(coll, cc_records)
 
-  # (3) act
-  out = await importer.import_coll(coll, input_file)
-
-  # (4) assessment
+  # (3)) assessment
   # report
   assert out.coll == coll.name
-  assert out.file_path == str(input_file)
-  assert out.count == cc_count
+  assert out.count == (cc_count := len(cc_records))
 
   # collection
   assert await coll.count() == cc_count
@@ -45,10 +41,9 @@ async def test_import_all_records(
 @pytest.mark.attr(id="ITG-IMP-02")
 @pytest.mark.usefixtures("truncate_coll")
 async def test_import_with_limit(
-  pytester: Pytester,
   importer: CollImporter,
   coll: AsyncCollection,
-  cc_count: int,
+  cc_records: list[dict[str, Any]],
 ) -> None:
   """Check that CollImporter.import_coll() imports the maximum number of records set."""
 
@@ -56,18 +51,14 @@ async def test_import_with_limit(
 
   # (1) precondition: the collection must not contain records
   assert await coll.count() == 0
-  assert cc_count > limit
+  assert len(cc_records) > limit
 
-  # (2) arrange
-  input_file = pytester.copy_example("tests/data/cc-export.json")
+  # (2) act
+  out = await importer.import_coll(coll, cc_records, limit=limit)
 
-  # (3) act
-  out = await importer.import_coll(coll, input_file, limit=limit)
-
-  # (4) assessment
+  # (3) assessment
   # report
   assert out.coll == coll.name
-  assert out.file_path == str(input_file)
   assert out.count == limit
 
   # collection

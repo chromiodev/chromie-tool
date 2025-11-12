@@ -126,7 +126,7 @@ class ImpCmd(Cmd):
 
     # (5) import
     importer = CollImporter(batch_size, fields)
-    rpt = await importer.import_coll(coll, file, limit=limit, remove=remove, set=set)
+    rpt = await importer.import_coll(coll, c["data"], limit=limit, remove=remove, set=set)
 
     # (6) show report
     print(
@@ -134,6 +134,6 @@ class ImpCmd(Cmd):
         f"Collection: {rpt.coll}\n"
         f"Count: {rpt.count}\n"
         f"Duration (s): {rpt.duration}\n"
-        f"File: {rpt.file_path}"
+        f"File: {file}"
       )
     )

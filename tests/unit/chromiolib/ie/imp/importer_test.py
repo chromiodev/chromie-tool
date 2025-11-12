@@ -1,5 +1,5 @@
 from math import ceil
-from pathlib import Path
+from typing import Any
 
 import pytest
 from pytest_mock import AsyncMockType
@@ -18,8 +18,7 @@ def importer(default_batch_size: int) -> CollImporter:
 async def test_import_all(
   importer: CollImporter,
   coll: AsyncMockType,
-  data_dir: Path,
-  cc_count: int,
+  cc_records: list[dict[str, Any]],
   default_batch_size: int,
 ) -> None:
   """Check that import() imports all the records."""
@@ -29,13 +28,12 @@ async def test_import_all(
   (add := coll.add).return_value = None
 
   # (2) act
-  out = await importer.import_coll(coll, file_path := data_dir / "cc-export.json")
+  out = await importer.import_coll(coll, cc_records)
 
   # (3) assessment
   # report
   assert out.coll == "test"
-  assert out.count == cc_count
-  assert out.file_path == str(file_path)
+  assert out.count == (cc_count := len(cc_records))
   assert out.duration >= 0
 
   # add mock
@@ -45,8 +43,7 @@ async def test_import_all(
 async def test_import_all_removing_metadata(
   importer: CollImporter,
   coll: AsyncMockType,
-  data_dir: Path,
-  cc_count: int,
+  cc_records: list[dict[str, Any]],
   default_batch_size: int,
 ) -> None:
   """Check that import() imports the records w/o some metafields."""
@@ -56,15 +53,12 @@ async def test_import_all_removing_metadata(
   (add := coll.add).return_value = None
 
   # (2) act
-  out = await importer.import_coll(
-    coll, file_path := data_dir / "cc-export.json", remove=["cert", "rating"]
-  )
+  out = await importer.import_coll(coll, cc_records, remove=["cert", "rating"])
 
   # (3) assessment
   # report
   assert out.coll == "test"
-  assert out.count == cc_count
-  assert out.file_path == str(file_path)
+  assert out.count == (cc_count := len(cc_records))
   assert out.duration >= 0
 
   # add mock
@@ -77,8 +71,7 @@ async def test_import_all_removing_metadata(
 async def test_import_all_setting_metadata(
   importer: CollImporter,
   coll: AsyncMockType,
-  data_dir: Path,
-  cc_count: int,
+  cc_records: list[dict[str, Any]],
   default_batch_size: int,
 ) -> None:
   """Check that import() imports the records w/ some metadata set to other values."""
@@ -88,15 +81,12 @@ async def test_import_all_setting_metadata(
   (add := coll.add).return_value = None
 
   # (2) act
-  out = await importer.import_coll(
-    coll, file_path := data_dir / "cc-export.json", set={"cert": "C", "dir": "D"}
-  )
+  out = await importer.import_coll(coll, cc_records, set={"cert": "C", "dir": "D"})
 
   # (3) assessment
   # report
   assert out.coll == "test"
-  assert out.count == cc_count
-  assert out.file_path == str(file_path)
+  assert out.count == (cc_count := len(cc_records))
   assert out.duration >= 0
 
   # add mock
