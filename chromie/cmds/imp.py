@@ -1,13 +1,18 @@
+import json
 import os
 import sys
 from dataclasses import dataclass
 from typing import Any, override
+
+from aiofiles import open, ospath
+from chromadb.errors import NotFoundError
 
 from chromio.client import client
 from chromio.ie import Field
 from chromio.ie.consts import DEFAULT_BATCH_SIZE
 from chromio.ie.imp.importer import CollImporter
 from chromio.tools import Cmd
+from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
 
@@ -81,28 +86,43 @@ class ImpCmd(Cmd):
 
   @override
   async def _handle(self, args: Any) -> None:
-    # (1) precondition: API key if needed
+    # (1) preconditions
+    # source file must exist
+    if not await ospath.isfile(file := args.input):
+      print(f"File '{file}' not found.", file=sys.stderr)
+      exit(1)
+
+    # API key if needed
     api_key = None
 
     if (uri := parse_uri(args.dst)).schema == "cloud" and not (api_key := args.key):
       print("Expected API key for Chroma Cloud connection.", file=sys.stderr)
       exit(1)
 
-    # (2) precondition: collection expected in the URI
+    # collection expected in the URI
     if (coll_name := uri.coll) is None:
       print(f"Expected collection in the URI: '{uri}'.", file=sys.stderr)
       exit(1)
 
-    # (3) args
-    file = args.input
+    # (2) args
     batch_size, limit = args.batch, args.limit
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
     remove = md if (md := args.metadata_to_remove) is not None else []
     set = md if (md := args.metadata_to_set) is not None else {}
 
-    # (4) create client
+    # (3) read file
+    async with open(file, "r") as f:
+      c = json.loads(await f.read())
+
+    # (4) get collection creating it if not exists
     cli = await client(uri, api_key)
-    coll = await cli.create_collection(coll_name, get_or_create=True)
+
+    try:
+      coll = await cli.get_collection(coll_name)
+    except NotFoundError:
+      coll = await DbTool(cli).create_coll_with_conf(
+        coll_name, c["metadata"]["coll"].get("configuration", {})
+      )
 
     # (5) import
     importer = CollImporter(batch_size, fields)

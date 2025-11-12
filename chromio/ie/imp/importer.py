@@ -6,10 +6,9 @@ from time import time
 from aiofiles import open
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
-from chromio.ie.imp.writer import CollWriter
-
 from .._db import CollIEBase
 from .rpt import CollImportRpt
+from .writer import CollWriter
 
 
 @dataclass
@@ -37,6 +36,7 @@ class CollImporter(CollIEBase):
     Returns:
       An import report.
     """
+
     # (1) read the export file
     start = time()
     recs = []

@@ -1,5 +1,8 @@
+from typing import Any
+
 import pytest
 from chromadb.api import AsyncClientAPI
+from chromadb.errors import ChromaError
 from pytest_mock import MockerFixture
 
 from chromio.errors import CollAlreadyExistsError, CollNotFoundError
@@ -77,37 +80,107 @@ async def test_get_coll_conf_unexisting(mocker: MockerFixture, tool: DbTool) -> 
 #################
 
 
-async def test_create_coll_new(mocker: MockerFixture, tool: DbTool) -> None:
+@pytest.mark.parametrize(
+  ("emb_name",),
+  (
+    pytest.param("default"),
+    pytest.param("sentence_transformer"),
+  ),
+)
+async def test_create_coll_when_not_existing(
+  mocker: MockerFixture, tool: DbTool, emb_name: str
+) -> None:
   """Check that create_coll() creates a new collection when not existing."""
 
   # (1) arrange
-  tool.db.get_collection = get_collection = mocker.AsyncMock(side_effect=ValueError())
   tool.db.create_collection = create_collection = mocker.AsyncMock(return_value=None)
 
   # (2) act
-  out = await tool.create_coll("pytest", efn="Default", space="l2")
+  out = await tool.create_coll("pytest", emb_name=emb_name, space="l2")
 
   # (3) assessment
   assert isinstance(out, dict)
   assert out["embedding_function"] is not None
   assert out["hnsw"]["space"] == "l2"
 
-  assert get_collection.await_count == 1
   assert create_collection.await_count == 1
 
 
-async def test_create_coll_existing(mocker: MockerFixture, tool: DbTool) -> None:
+async def test_create_coll_when_existing(mocker: MockerFixture, tool: DbTool) -> None:
   """Check that create_coll() raises error if collection already existing."""
 
   # (1) arrange
-  tool.db.get_collection = get_collection = mocker.AsyncMock(return_value={})
+  tool.db.create_collection = create_collection = mocker.AsyncMock(
+    side_effect=ChromaError("Collection 'eurostat' already exists.")  # type: ignore
+  )
 
   # (2) act
   with pytest.raises(CollAlreadyExistsError, match="'pytest' already exists"):
     await tool.create_coll("pytest")
 
   # (3) assessment
-  assert get_collection.await_count == 1
+  assert create_collection.await_count == 1
+
+
+###########################
+# create_coll_with_conf() #
+###########################
+
+
+@pytest.mark.parametrize(
+  ("conf",),
+  (
+    pytest.param({}, id="default w/o conf"),
+    pytest.param({"embedding_function": {"name": "default"}}, id="default"),
+    pytest.param(
+      {"embedding_function": {"name": "sentence_transformer"}}, id="sentence_transformer"
+    ),
+  ),
+)
+async def test_create_coll_with_conf_when_not_existing(
+  mocker: MockerFixture,
+  tool: DbTool,
+  conf: dict[str, Any],
+) -> None:
+  """Check that create_coll_with_conf() creates a new collection when not existing."""
+
+  # (1) arrange
+  tool.db.create_collection = create_collection = mocker.AsyncMock()
+
+  # (2) act
+  out = await tool.create_coll_with_conf("pytest", conf)
+
+  # (3) assessment
+  assert out is not None
+  assert create_collection.await_count == 1
+
+
+async def test_create_coll_with_conf_when_existing(
+  mocker: MockerFixture,
+  tool: DbTool,
+) -> None:
+  """Check that create_coll_with_conf() raises error if the collection already exists."""
+
+  # (1) arrange
+  tool.db.create_collection = create_collection = mocker.AsyncMock(
+    side_effect=ChromaError("Collection already exists")  # type: ignore
+  )
+
+  # (2) act and assessment
+  with pytest.raises(CollAlreadyExistsError, match=r"'pytest' already exists"):
+    await tool.create_coll_with_conf("pytest", {})
+
+  assert create_collection.await_count == 1
+
+
+async def test_create_coll_with_conf_embedding_not_supported(
+  mocker: MockerFixture,
+  tool: DbTool,
+) -> None:
+  """Check that create_coll_with_conf() raises error if the embedding is unknown."""
+
+  with pytest.raises(ValueError, match=r"Embedding function 'other' not supported."):
+    await tool.create_coll_with_conf("pytest", {"embedding_function": {"name": "other"}})
 
 
 ################

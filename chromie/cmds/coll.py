@@ -9,7 +9,7 @@ from chromio.tools import Cmd
 from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
-EMBEDDING_FNS = ("Default", "SentenceTransformer")
+EMBEDDING_FNS = ("default", "sentence_transformer", "st")
 HNSW_SPACES = ("cosine", "ip", "l2")
 
 
@@ -44,21 +44,23 @@ class CollCmd(Cmd):
       },
       {
         "names": ["--embedding", "--efn", "-e"],
-        "help": "Embedding function to use.",
+        "help": f"Embedding function to use: {', '.join(EMBEDDING_FNS)}.",
         "choices": EMBEDDING_FNS,
       },
       {
         "names": ["--model", "-m"],
         "help": (
-          "Model to use, only used if embedding set and not Default. "
-          "For example, for SentenceTransformer: "
-          "all-MiniLM-L6-v2, all-MiniLM-L12-v2 or paraphrase-multilingual-MiniLM-L12-v2.all-MiniLM-L12-v2"
+          "Model to use. Only used if embedding is sentence_transformer. "
+          "Examples: "
+          "all-MiniLM-L6-v2, all-MiniLM-L12-v2, "
+          "paraphrase-multilingual-MiniLM-L12-v2 or "
+          "paraphrase-multilingual-mpnet-base-v2."
         ),
         "default": "all-MiniLM-L6-v2",
       },
       {
         "names": ["--space"],
-        "help": "HNSW space.",
+        "help": f"HNSW space: {', '.join(HNSW_SPACES)}.",
         "choices": HNSW_SPACES,
         "default": HNSW_SPACES[0],
       },
@@ -82,6 +84,9 @@ class CollCmd(Cmd):
       print("Expected collection name.", file=sys.stderr)
       exit(1)
 
+    if efn == "st":  # pragma: no cover
+      efn = "sentence_transformer"
+
     # (2) create db tool to use
     try:
       db = DbTool(await client(uri, api_key))
@@ -100,7 +105,7 @@ class CollCmd(Cmd):
         exit(1)
     else:
       try:
-        conf = await db.create_coll(name, efn=efn, model=model, space=space)
+        conf = await db.create_coll(name, emb_name=efn, model=model, space=space)
         print(f"Configuration used:\n{conf}")
       except CollAlreadyExistsError:
         print(f"Collection '{name}' already exists.", file=sys.stderr)
