@@ -37,16 +37,16 @@
               "type": "object",
               "description": "Collection configuration.",
               "properties": {
-                "embedding": {
-                  "type": "string",
-                  "description": "Embedding function name."
+                "embedding_function": {
+                  "type": "object",
+                  "description": "Embedding function configuration."
                 },
                 "hnsw": {
-                  "type": "object",
+                  "type": ["object", "null"],
                   "description": "HNSW configuration."
                 },
                 "spann": {
-                  "type": "object",
+                  "type": ["object", "null"],
                   "description": "SPANN configuration."
                 }
               }
