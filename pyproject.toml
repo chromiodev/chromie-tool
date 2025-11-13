@@ -1,6 +1,6 @@
 [project]
 name = "chromie-tool"
-version = "0.6.0"
+version = "0.7.0"
 description = "Chroma import/export tool."
 authors = [
   {name = "Raúl G. González", email = "raul@chromio.dev"},
