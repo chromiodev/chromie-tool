@@ -9,8 +9,7 @@ from chromio.tools import Cmd
 from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
-EMBEDDING_FNS = ("default", "sentence_transformer", "st")
-HNSW_SPACES = ("cosine", "ip", "l2")
+from ._consts import EMBEDDING_FNS, HNSW_SPACES
 
 
 @dataclass(frozen=True)
@@ -44,11 +43,13 @@ class CollCmd(Cmd):
       },
       {
         "names": ["--embedding", "--efn", "-e"],
+        "metavar": "name",
         "help": f"Embedding function to use: {', '.join(EMBEDDING_FNS)}.",
         "choices": EMBEDDING_FNS,
       },
       {
-        "names": ["--model", "-m"],
+        "names": ["--model", "-o"],
+        "metavar": "name",
         "help": (
           "Model to use. Only used if embedding is sentence_transformer. "
           "Examples: "
@@ -83,9 +84,6 @@ class CollCmd(Cmd):
     if uri.coll is None:
       print("Expected collection name.", file=sys.stderr)
       exit(1)
-
-    if efn == "st":  # pragma: no cover
-      efn = "sentence_transformer"
 
     # (2) create db tool to use
     try:
