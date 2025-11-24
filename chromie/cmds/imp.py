@@ -148,7 +148,7 @@ class ImpCmd(Cmd):
       conf = c["metadata"]["coll"].get("configuration", {})
 
       if efn is not None:
-        efn_conf = conf.get("embedding_function", {})
+        conf["embedding_function"] = efn_conf = conf.get("embedding_function", {})
 
         match efn:
           case "default":
@@ -163,9 +163,8 @@ class ImpCmd(Cmd):
             }
 
         if space is not None:
-          conf["spann"] = conf.get("spann", {})["space"] = space
-
-        c["metadata"]["coll"]["configuration"] = conf
+          (spann_conf := conf.get("spann", {}))["space"] = space
+          conf["spann"] = spann_conf
 
       # create collection
       coll = await DbTool(cli).create_coll_with_conf(coll_name, conf)
