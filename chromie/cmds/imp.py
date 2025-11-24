@@ -15,11 +15,11 @@ from chromio.tools import Cmd
 from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
+from ._consts import EMBEDDING_FNS, HNSW_SPACES
+
 
 @dataclass(frozen=True)
 class ImpCmd(Cmd):
-  """Import one collection from a file."""
-
   # @override
   name: str = "imp"
 
@@ -46,6 +46,29 @@ class ImpCmd(Cmd):
         "metavar": "token",
         "default": os.getenv("CHROMA_API_KEY"),
         "required": False,
+      },
+      {
+        "names": ["--embedding", "--efn", "-e"],
+        "metavar": "name",
+        "help": f"Embedding function to set if collection to create: {', '.join(EMBEDDING_FNS)}.",
+        "choices": EMBEDDING_FNS,
+      },
+      {
+        "names": ["--model", "-o"],
+        "metavar": "name",
+        "help": (
+          "Model to use. Only used if embedding is sentence_transformer. "
+          "Examples: "
+          "all-MiniLM-L6-v2, all-MiniLM-L12-v2, "
+          "paraphrase-multilingual-MiniLM-L12-v2 or "
+          "paraphrase-multilingual-mpnet-base-v2."
+        ),
+        "default": "all-MiniLM-L6-v2",
+      },
+      {
+        "names": ["--space"],
+        "help": f"HNSW space: {', '.join(HNSW_SPACES)}.",
+        "choices": HNSW_SPACES,
       },
       {
         "names": ["--fields", "-F"],
@@ -109,6 +132,7 @@ class ImpCmd(Cmd):
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
     remove = md if (md := args.metadata_to_remove) is not None else []
     set = md if (md := args.metadata_to_set) is not None else {}
+    efn, model, space = args.embedding, args.model, args.space
 
     # (3) read file
     async with open(file, "r") as f:
@@ -120,9 +144,29 @@ class ImpCmd(Cmd):
     try:
       coll = await cli.get_collection(coll_name)
     except NotFoundError:
-      coll = await DbTool(cli).create_coll_with_conf(
-        coll_name, c["metadata"]["coll"].get("configuration", {})
-      )
+      # configuration to use
+      conf = c["metadata"]["coll"].get("configuration", {})
+
+      if efn is not None:
+        efn_conf = conf.setdefault("embedding_function", {})
+
+        match efn:
+          case "default":
+            efn_conf["name"] = "default"
+          case "sentence_transformer":
+            efn_conf["name"] = "sentence_transformer"
+            efn_conf["config"] = {
+              "device": "cpu",
+              "kwargs": {},
+              "model_name": model,
+              "normalize_embeddings": False,
+            }
+
+        if space is not None:
+          conf.setdefault("spann", {})["space"] = space
+
+      # create collection
+      coll = await DbTool(cli).create_coll_with_conf(coll_name, conf)
 
     # (5) import
     importer = CollImporter(batch_size, fields)

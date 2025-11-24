@@ -240,6 +240,7 @@ graph BT
     importIntoUnknownServer@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-04: Intento de importación a base de datos inaccesible" }
     importIntoCollRemovingMetadata@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-05: Importa a una colección sin algunos metadatos" }
     importIntoCollSettingMetadata@{ shape: "rounded", label: "#lt;#lt;testcase>><br>FN-IMP-06: Importa a una colección estableciendo algunos metadatos" }
+    importIntoNonExistingCollUsingEmbeddingPassed@{ shape: "rounded", label: "#lt;#lt;testcase><br>FN-IMP-07: Importa a una colección inexistente creada con configuración indicada en la línea de comandos" }
   end
 
   importIntoEmptyColl -.-> importColl
@@ -248,6 +249,7 @@ graph BT
   importIntoUnknownServer -.-> importColl
   importIntoCollRemovingMetadata -.-> importColl
   importIntoCollSettingMetadata -.-> importColl
+  importIntoNonExistingCollUsingEmbeddingPassed -.-> importColl
 ```
 
 #### Importa a una colección vacía (*FN-IMP-01*)
@@ -298,7 +300,31 @@ graph BT
 
   - **Salida estándar**: Se muestra un informe de la operación, indicando el número de registros procesados.
 
-#### Intento de importación a base de datos inaccesible (*FN-IMP-03*)
+#### Importa a una colección inexistente (*FN-IMP-03*)
+
+- **Descripción**:
+  Comprueba que **`chromie imp`** crea la colección destino si esta no existe.
+
+- **Tipo**:
+  L/E.
+
+- **Precondiciones**:
+
+  - El archivo de entrada es válido.
+
+  - La colección destino no existe.
+
+- **Poscondiciones**:
+
+  - La colección contiene los datos importados.
+
+- **Salida esperada**:
+
+  - **Código de salida**: 0.
+
+  - **Salida estándar**: Se muestra un informe de la operación, indicando el número de registros procesados.
+
+#### Intento de importación a base de datos inaccesible (*FN-IMP-04*)
 
 - **Descripción**:
   Comprueba que **`chromie imp`** gestiona el error cuando la base de datos de destino no es accesible.
@@ -374,6 +400,33 @@ graph BT
   - **Código de salida**: 0.
 
   - **Salida estándar**: Se muestra un informe de la operación.
+
+#### Importa a una colección inexistente creada con configuración indicada en la línea de comandos (*FN-IMP-07*)
+
+- **Descripción**:
+  Comprueba que el comando **`chromie imp`** importa los datos a una colección inexistente.
+  La crea y la configura con los argumentos pasados como, p.ej., su función de representación vectorial.
+
+- **Tipo**:
+  L/E.
+
+- **Preconditiones**:
+  
+  - El archivo de entrada es válido y contiene un número conocido de registros.
+
+  - La colección de destino no existe.
+
+- **Poscondiciones**:
+
+  - La colección se ha creado con la función de representación indicada en la opción **`--efn`**.
+
+  - La colección contiene el mismo número de registros que el archivo de entrada.
+
+- **Salida esparada**:
+
+  - **Código de salida**: 0.
+
+  - **Śalida estándar**: Se muestra un informe de la operación.
 
 ### Analizador de URIs (*URI*)
 
