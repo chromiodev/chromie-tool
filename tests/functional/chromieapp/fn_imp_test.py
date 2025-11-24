@@ -89,7 +89,7 @@ async def test_import_into_non_existing_coll(
   pytester: Pytester,
   capsys: CaptureFixture,
   db: AsyncClientAPI,
-  cc_records: list[dict],
+  cc_count: int,
 ) -> None:
   """Check that 'chromie imp' imports into a non-existent collection."""
 
@@ -113,7 +113,7 @@ async def test_import_into_non_existing_coll(
   out.stdout.re_match_lines_random(
     (
       f"Collection: {coll_name}",
-      f"Count: {len(cc_records)}",
+      f"Count: {cc_count}",
       r"Duration \(s\): .+",
     ),
   )
@@ -236,3 +236,53 @@ async def test_import_setting_metafields(
   assert await coll.count() == count
   assert (md := cast(dict, await coll.get(rec["id"]))["metadatas"][0])["cert"] == "C"
   assert md["dir"] == "D"
+
+
+@pytest.mark.readonly
+@pytest.mark.attr(id="FN-IMP-07")
+async def test_import_into_non_existing_coll_with_conf_passed(
+  data_dir: Path,
+  pytester: Pytester,
+  capsys: CaptureFixture,
+  db: AsyncClientAPI,
+  cc_count: int,
+) -> None:
+  """Check that 'chromie imp' imports into a non-existent collection, creating the collection
+  with the embedding function passed.
+  """
+
+  coll_name = "pytest_fn_imp_07"
+
+  # (1) precondition: the collection does not exist
+  try:
+    await db.delete_collection(coll_name)
+  except Exception:
+    pass
+
+  # (2) arrange
+  input_file = pytester.copy_example(str(data_dir / "cc-export.json"))
+
+  # (3) act
+  out = pytester.run(
+    "chromie", "imp", "--efn=sentence_transformer", input_file, f"server://///{coll_name}"
+  )
+  capsys.readouterr()
+
+  # (4) assessment
+  # term
+  assert out.ret == 0
+  out.stdout.re_match_lines_random(
+    (
+      f"Collection: {coll_name}",
+      f"Count: {cc_count}",
+      r"Duration \(s\): .+",
+    ),
+  )
+
+  # db
+  coll = await db.get_collection(coll_name)
+  assert coll.configuration_json["embedding_function"]["name"] == "sentence_transformer"
+  assert (await coll.count()) == cc_count
+
+  # (5) cleanup
+  await db.delete_collection(coll_name)
