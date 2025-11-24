@@ -144,11 +144,11 @@ class ImpCmd(Cmd):
     try:
       coll = await cli.get_collection(coll_name)
     except NotFoundError:
-      # configuratioon to use
+      # configuration to use
       conf = c["metadata"]["coll"].get("configuration", {})
 
       if efn is not None:
-        conf["embedding_function"] = efn_conf = conf.get("embedding_function", {})
+        efn_conf = conf.setdefault("embedding_function", {})
 
         match efn:
           case "default":
@@ -163,8 +163,7 @@ class ImpCmd(Cmd):
             }
 
         if space is not None:
-          (spann_conf := conf.get("spann", {}))["space"] = space
-          conf["spann"] = spann_conf
+          conf.setdefault("spann", {})["space"] = space
 
       # create collection
       coll = await DbTool(cli).create_coll_with_conf(coll_name, conf)
