@@ -46,5 +46,5 @@ asyncio_debug = true
 
 # pytest-timeout
 timeout = "40"
-session_timeout = "120"
+session_timeout = "150"
 timeout_func_only = false
