@@ -9,7 +9,7 @@ from chromio.tools import Cmd
 from chromio.tools.db import DbTool
 from chromio.uri import parse_uri
 
-from ._consts import EMBEDDING_FNS, HNSW_SPACES
+from ._consts import DEFAULT_SPACE, EMBEDDING_FNS, SPACES
 
 
 @dataclass(frozen=True)
@@ -61,9 +61,9 @@ class CollCmd(Cmd):
       },
       {
         "names": ["--space"],
-        "help": f"HNSW space: {', '.join(HNSW_SPACES)}.",
-        "choices": HNSW_SPACES,
-        "default": HNSW_SPACES[0],
+        "help": f"Space: {', '.join(SPACES)}.",
+        "choices": SPACES,
+        "default": DEFAULT_SPACE,
       },
     ]
 
