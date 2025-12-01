@@ -41,6 +41,7 @@ metacampos
 metadatas
 metafield
 metafields
+metafile
 metafilter
 metafiltro
 minversion

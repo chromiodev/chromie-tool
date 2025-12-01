@@ -1,13 +1,13 @@
 from asyncio import TaskGroup
 from dataclasses import dataclass
+from pathlib import Path
 from time import time
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
-from .._core import Recs
 from .._db import CollIEBase
-from .producer import RecBatchProducer
 from .queue import RecBatchQueue
+from .reader import RecBatchReader
 from .rpt import CollImportRpt
 from .writer import RecBatchWriter
 
@@ -19,9 +19,10 @@ class CollImporter(CollIEBase):
   async def import_coll(
     self,
     coll: AsyncCollection,
-    recs: Recs,
+    file_path: Path,
     *,
     writers: int = 2,
+    limit: int | None = None,
     remove: list[str] = [],
     set: dict = {},
   ) -> CollImportRpt:
@@ -29,8 +30,9 @@ class CollImporter(CollIEBase):
 
     Args:
       coll: Collection to import.
-      recs: Records to import.
+      file_path: Path to the JSONL file with the records.
       writers: Number of consumer/writer workers.
+      limit: Maximum number of records to import.
       remove: Metadata to remove in the import.
       set: Metadata to set/override in the import.
 
@@ -47,20 +49,22 @@ class CollImporter(CollIEBase):
 
     async with TaskGroup() as pg, TaskGroup() as cg:
       pg.create_task(
-        RecBatchProducer(
+        RecBatchReader(
           queue=q,
+          file_path=file_path,
+          limit=limit,
           batch_size=self.batch_size,
           remove=remove,
           set=set,
-        ).run(recs),
-        name="Producer",
+        ).run(),
+        name="JSONL file reader",
       )
 
       for i in range(writers):
         ct.append(
           cg.create_task(
             RecBatchWriter(queue=q, coll=coll).run(),
-            name=f"Consumer #{i + 1}",
+            name=f"Record batch writer #{i + 1}",
           )
         )
 

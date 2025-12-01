@@ -32,8 +32,13 @@ class ImpCmd(Cmd):
     return [
       {
         "names": ["input"],
-        "help": "file path to import",
+        "help": "path to the JSONL file to import",
         "required": True,
+      },
+      {
+        "names": ["metafile"],
+        "help": "path to the JSON metadata file to use in the import",
+        "required": False,
       },
       {
         "names": ["dst"],
@@ -116,9 +121,13 @@ class ImpCmd(Cmd):
   @override
   async def _handle(self, args: Any) -> None:
     # (1) preconditions
-    # source file must exist
+    # source files must exist
     if not await ospath.isfile(file := args.input):
       print(f"File '{file}' not found.", file=sys.stderr)
+      exit(1)
+
+    if (metafile := args.metafile) is not None and not await ospath.isfile(metafile):
+      print(f"File '{metafile}' not found.", file=sys.stderr)
       exit(1)
 
     # API key if needed
@@ -140,18 +149,21 @@ class ImpCmd(Cmd):
     set = md if (md := args.metadata_to_set) is not None else {}
     efn, model, space = args.embedding, args.model, args.space
 
-    # (3) read file
-    async with open(file, "r") as f:
-      c = json.loads(await f.read())
-
-    # (4) get collection creating it if not exists
+    # (3) get collection creating it if not exists
     cli = await client(uri, api_key)
 
     try:
       coll = await cli.get_collection(coll_name)
     except NotFoundError:
+      # read metadata file content
+      if metafile is not None:
+        async with open(metafile, "r") as f:
+          c = json.loads(await f.read())
+      else:
+        c = {"coll": {}}
+
       # configuration to use
-      conf = c["metadata"]["coll"].get("configuration", {})
+      conf = c.get("configuration", {})
 
       if efn is not None:
         efn_conf = conf.setdefault("embedding_function", {})
@@ -174,27 +186,30 @@ class ImpCmd(Cmd):
       # create collection
       coll = await DbTool(cli).create_coll_with_conf(coll_name, conf)
 
-    # (5) import
-    importer = CollImporter(batch_size, fields)
+    # (4) import
+    try:
+      # import
+      importer = CollImporter(batch_size, fields)
 
-    if (recs := c["data"]) and limit is not None:
-      recs = recs[:limit]
-
-    rpt = await importer.import_coll(
-      coll,
-      recs,
-      writers=writers,
-      remove=remove,
-      set=set,
-    )
-
-    # (6) show report
-    print(
-      (
-        f"Collection: {rpt.coll}\n"
-        f"Batches: {rpt.batches}\n"
-        f"Count: {rpt.count}\n"
-        f"Duration (s): {rpt.duration}\n"
-        f"File: {file}"
+      rpt = await importer.import_coll(
+        coll,
+        file,
+        limit=limit,
+        writers=writers,
+        remove=remove,
+        set=set,
       )
-    )
+
+      # show report
+      print(
+        (
+          f"Source file: {file}\n"
+          f"Destination collection: {rpt.coll}\n"
+          f"Batches performed: {rpt.batches}\n"
+          f"Records written: {rpt.count}\n"
+          f"Duration (s): {rpt.duration}"
+        )
+      )
+    except Exception as e:
+      print(e, file=sys.stderr)
+      exit(1)

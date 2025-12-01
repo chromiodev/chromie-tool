@@ -10,10 +10,12 @@ from .queue import RecBatchQueue
 
 @dataclass
 class RecBatchWriter:
-  """A worker for writing record batches to a Chroma collection asynchronously."""
+  """A worker for insert record batches into a Chroma collection
+  from an asynchronous queue.
+  """
 
   queue: RecBatchQueue
-  """Asynchronous queue with the record batches to import."""
+  """Queue with the record batches to import."""
 
   coll: AsyncCollection
   """Collection where to import."""
@@ -22,7 +24,7 @@ class RecBatchWriter:
   """Record fields to write."""
 
   async def run(self) -> tuple[int, int]:
-    """Dequeues and writes record batches.
+    """Runs the writer, dequeuing and writing the records in batches.
 
     Returns:
       (number of batches performed, number of records written).
