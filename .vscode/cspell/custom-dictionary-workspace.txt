@@ -47,6 +47,7 @@ minversion
 optor
 optors
 ospath
+paraphrase-multilingual-mpnet-base-v2
 parseargs
 pipx
 poscondición
@@ -66,6 +67,7 @@ pythoniclabs
 pythonpath
 setenv
 siakro
+spann
 SQUOTE
 styleguide
 testdb

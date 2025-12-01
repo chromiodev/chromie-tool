@@ -9,7 +9,7 @@ from chromadb.errors import NotFoundError
 
 from chromio.client import client
 from chromio.ie import Field
-from chromio.ie.consts import DEFAULT_BATCH_SIZE
+from chromio.ie.consts import DEFAULT_BATCH_SIZE, DEFAULT_WRITERS
 from chromio.ie.imp.importer import CollImporter
 from chromio.tools import Cmd
 from chromio.tools.db import DbTool
@@ -91,11 +91,10 @@ class ImpCmd(Cmd):
         "type": lambda arg: {(i := kv.split(":"))[0]: i[1] for kv in arg.split(",")},
       },
       {
-        "names": ["--batch", "-b"],
-        "help": "batch size",
+        "names": ["--batch-size", "-b"],
+        "help": "size of the record batches",
         "type": int,
         "metavar": "int",
-        "required": False,
         "default": DEFAULT_BATCH_SIZE,
       },
       {
@@ -104,6 +103,13 @@ class ImpCmd(Cmd):
         "type": int,
         "metavar": "int",
         "required": False,
+      },
+      {
+        "names": ["--writers", "-w"],
+        "help": "number of workers to use for writing the data",
+        "type": int,
+        "metavar": "int",
+        "default": DEFAULT_WRITERS,
       },
     ]
 
@@ -128,7 +134,7 @@ class ImpCmd(Cmd):
       exit(1)
 
     # (2) args
-    batch_size, limit = args.batch, args.limit
+    batch_size, limit, writers = args.batch_size, args.limit, args.writers
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
     remove = md if (md := args.metadata_to_remove) is not None else []
     set = md if (md := args.metadata_to_set) is not None else {}
@@ -170,7 +176,17 @@ class ImpCmd(Cmd):
 
     # (5) import
     importer = CollImporter(batch_size, fields)
-    rpt = await importer.import_coll(coll, c["data"], limit=limit, remove=remove, set=set)
+
+    if (recs := c["data"]) and limit is not None:
+      recs = recs[:limit]
+
+    rpt = await importer.import_coll(
+      coll,
+      recs,
+      consumers=writers,
+      remove=remove,
+      set=set,
+    )
 
     # (6) show report
     print(

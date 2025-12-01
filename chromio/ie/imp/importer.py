@@ -1,12 +1,15 @@
+from asyncio import TaskGroup
 from dataclasses import dataclass
 from time import time
-from typing import Any
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
+from .._core import Recs
 from .._db import CollIEBase
+from .consumer import RecBatchConsumer
+from .producer import RecBatchProducer
+from .queue import RecBatchQueue
 from .rpt import CollImportRpt
-from .writer import CollWriter
 
 
 @dataclass
@@ -16,9 +19,9 @@ class CollImporter(CollIEBase):
   async def import_coll(
     self,
     coll: AsyncCollection,
-    recs: list[dict[str, Any]],
+    recs: Recs,
     *,
-    limit: int | None = None,
+    consumers: int = 2,
     remove: list[str] = [],
     set: dict = {},
   ) -> CollImportRpt:
@@ -27,7 +30,7 @@ class CollImporter(CollIEBase):
     Args:
       coll: Collection to import.
       recs: Records to import.
-      limit: Maximum number of records to import.
+      consumers: Number of consumer workers.
       remove: Metadata to remove in the import.
       set: Metadata to set/override in the import.
 
@@ -35,23 +38,37 @@ class CollImporter(CollIEBase):
       An import report.
     """
 
+    # (1) prepare
     start = time()
+    q = RecBatchQueue()
 
-    # (1) remove/set metafields if needed
-    if len(remove) > 0 or len(set) > 0:
-      for rec in recs:
-        md = rec["metadata"]
+    # (2) import
+    ct = []  # consumer tasks
 
-        for key in remove:
-          del md[key]
+    async with TaskGroup() as pg, TaskGroup() as cg:
+      pg.create_task(
+        RecBatchProducer(
+          queue=q,
+          batch_size=self.batch_size,
+          remove=remove,
+          set=set,
+        ).run(recs),
+        name="Producer",
+      )
 
-        for key, val in set.items():
-          md[key] = val
+      for i in range(consumers):
+        ct.append(
+          cg.create_task(
+            RecBatchConsumer(queue=q, coll=coll).run(),
+            name=f"Consumer #{i + 1}",
+          )
+        )
 
-    # (2) write
-    count = await CollWriter().write(
-      recs, coll, fields=self.fields, limit=limit, batch_size=self.batch_size
+      await q.join()
+
+    # (3) generate the report
+    return CollImportRpt(
+      coll=coll.name,
+      count=sum(t.result() for t in ct),
+      duration=int(time() - start),
     )
-
-    # (3) return report
-    return CollImportRpt(coll=coll.name, count=count, duration=int(time() - start))
