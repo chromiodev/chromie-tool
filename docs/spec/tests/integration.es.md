@@ -31,8 +31,8 @@ Dependencia | Tipo | Descripción
 :--: | :--: | :--
 Hardware | Interna | Equipo con al menos 2GB de RAM
 Sistema operativo | Interna | Ubuntu 24.04
-Python | Interna | 3.13
-Framework de pruebas | Interna | pytest 8.4
+Python | Interna | 3.14
+Framework de pruebas | Interna | pytest 9.0
 Chroma | Externa | Docker chromadb/chroma
 
 Las pruebas se ubicarán en el directorio **tests/integration** del proyecto.

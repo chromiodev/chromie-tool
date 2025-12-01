@@ -7,7 +7,7 @@ authors = [
 ]
 license = "GPL-3.0-or-later"
 readme = "README.md"
-requires-python = ">=3.12.0, <3.14.0"
+requires-python = ">=3.14.0,<3.15.0"
 keywords= [
   "chroma",
   "chromadb",
@@ -23,7 +23,7 @@ classifiers= [
 
   "Environment :: Console",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
 
   # Topic
   "Topic :: Database",

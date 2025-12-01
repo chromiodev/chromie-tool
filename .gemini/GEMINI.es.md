@@ -22,7 +22,7 @@ El proyecto está diseñado con una clara separación de responsabilidades:
 
 ## Pila tecnológica
 
-- **Lenguaje**: Python 3.13+
+- **Lenguaje**: Python 3.14+
 
 - **Gestor de dependencias y entorno**: Poetry
 

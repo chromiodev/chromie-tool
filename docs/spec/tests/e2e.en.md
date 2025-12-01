@@ -26,8 +26,8 @@ Dependency | Type | Description
 :---: | :---: | :---
 Hardware | Internal | Machine with at least 2GB of RAM
 Operating system | Internal | Ubuntu 24.04
-Python | Internal | 3.13
-Test framework | Internal | pytest 8.4
+Python | Internal | 3.14
+Test framework | Internal | pytest 9.0
 Chroma | Internal | Docker chromadb/chroma
 
 The tests will be located in the project's **tests/e2e** directory.

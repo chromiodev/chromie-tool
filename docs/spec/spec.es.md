@@ -73,7 +73,7 @@ Requisito | Descripción
 :--: | :--
 IDE | VS Code
 Modelado | UML (con Mermaid)
-Plataforma | Python 3.13+
+Plataforma | Python 3.14+
 Concurrencia | asyncio
 Sistemas operativos | Linux, Windows, macOS
 Gestión de paquetes | Poetry
