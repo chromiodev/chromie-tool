@@ -1,56 +1,55 @@
-from dataclasses import dataclass
+from asyncio import QueueShutDown
+from dataclasses import dataclass, field
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
-from ..consts import DEFAULT_BATCH_SIZE, DEFAULT_FIELDS
+from ..consts import DEFAULT_FIELDS
 from ..field import Field
+from .queue import RecBatchQueue
 
 
 @dataclass
-class CollWriter:
-  """A component for writing records into collections."""
+class RecBatchWriter:
+  """A worker for writing record batches to a Chroma collection asynchronously."""
 
-  async def write(
-    self,
-    records: list[dict],
-    coll: AsyncCollection,
-    *,
-    fields=DEFAULT_FIELDS,
-    batch_size=DEFAULT_BATCH_SIZE,
-    limit: int | None = None,
-  ) -> int:
-    """Writes data in a collection.
+  queue: RecBatchQueue
+  """Asynchronous queue with the record batches to import."""
 
-    Args:
-      records: Records to write.
-      coll: Collection to write.
-      fields: Fields to write. id and doc always.
-      batch_size: Number of records to write in every batch.
-      limit: Maximum number of records to write. If None, all of them.
+  coll: AsyncCollection
+  """Collection where to import."""
+
+  fields: list[Field] = field(default_factory=lambda: DEFAULT_FIELDS)
+  """Record fields to write."""
+
+  async def run(self) -> tuple[int, int]:
+    """Dequeues and writes record batches.
 
     Returns:
-      The number of records written.
+      (number of batches performed, number of records written).
     """
 
-    # (1) determine maximum number of records to write
-    size = len(records)
-    max = size if limit is None or limit > size else limit
+    # (1) write batches
+    count, batches = 0, 0
+    coll, fields, q = self.coll, self.fields, self.queue
 
-    # (2) write batch by batch
-    for i in range(0, max, batch_size):
-      # determine j (batch end)
-      if (j := i + batch_size) > max:
-        j = max
+    try:
+      while True:
+        batch = await q.get()
 
-      # write batch
-      batch = records[i:j]
+        await coll.add(
+          ids=[r["id"] for r in batch],
+          documents=[r["document"] for r in batch],
+          metadatas=[r["metadata"] for r in batch] if Field.meta in fields else None,
+          embeddings=[r["embedding"] for r in batch]
+          if Field.embedding in fields
+          else None,
+        )
 
-      await coll.add(
-        ids=[r["id"] for r in batch],
-        documents=[r["document"] for r in batch],
-        metadatas=[r["metadata"] for r in batch] if Field.meta in fields else None,
-        embeddings=[r["embedding"] for r in batch] if Field.embedding in fields else None,
-      )
+        q.task_done()
+        batches += 1
+        count += len(batch)
+    except QueueShutDown:
+      pass
 
-    # (3) return
-    return max
+    # (2) return number of records written
+    return (batches, count)

@@ -6,10 +6,10 @@ from chromadb.api.models.AsyncCollection import AsyncCollection
 
 from .._core import Recs
 from .._db import CollIEBase
-from .consumer import RecBatchConsumer
 from .producer import RecBatchProducer
 from .queue import RecBatchQueue
 from .rpt import CollImportRpt
+from .writer import RecBatchWriter
 
 
 @dataclass
@@ -21,7 +21,7 @@ class CollImporter(CollIEBase):
     coll: AsyncCollection,
     recs: Recs,
     *,
-    consumers: int = 2,
+    writers: int = 2,
     remove: list[str] = [],
     set: dict = {},
   ) -> CollImportRpt:
@@ -30,7 +30,7 @@ class CollImporter(CollIEBase):
     Args:
       coll: Collection to import.
       recs: Records to import.
-      consumers: Number of consumer workers.
+      writers: Number of consumer/writer workers.
       remove: Metadata to remove in the import.
       set: Metadata to set/override in the import.
 
@@ -56,10 +56,10 @@ class CollImporter(CollIEBase):
         name="Producer",
       )
 
-      for i in range(consumers):
+      for i in range(writers):
         ct.append(
           cg.create_task(
-            RecBatchConsumer(queue=q, coll=coll).run(),
+            RecBatchWriter(queue=q, coll=coll).run(),
             name=f"Consumer #{i + 1}",
           )
         )
@@ -69,6 +69,7 @@ class CollImporter(CollIEBase):
     # (3) generate the report
     return CollImportRpt(
       coll=coll.name,
-      count=sum(t.result() for t in ct),
+      batches=sum(t.result()[0] for t in ct),
+      count=sum(t.result()[1] for t in ct),
       duration=int(time() - start),
     )

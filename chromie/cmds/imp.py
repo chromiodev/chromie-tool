@@ -183,7 +183,7 @@ class ImpCmd(Cmd):
     rpt = await importer.import_coll(
       coll,
       recs,
-      consumers=writers,
+      writers=writers,
       remove=remove,
       set=set,
     )
@@ -192,6 +192,7 @@ class ImpCmd(Cmd):
     print(
       (
         f"Collection: {rpt.coll}\n"
+        f"Batches: {rpt.batches}\n"
         f"Count: {rpt.count}\n"
         f"Duration (s): {rpt.duration}\n"
         f"File: {file}"
