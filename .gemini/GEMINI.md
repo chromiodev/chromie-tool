@@ -22,7 +22,7 @@ The project is designed with a clear separation of responsibilities:
 
 ## Technology Stack
 
-- **Language**: Python 3.13+
+- **Language**: Python 3.14+
 
 - **Dependency and Environment Manager**: Poetry
 

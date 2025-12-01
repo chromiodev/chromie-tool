@@ -73,7 +73,7 @@ Requirement | Description
 :--: | :--
 IDE | VS Code
 Modeling | UML (with Mermaid)
-Platform | Python 3.13+
+Platform | Python 3.14+
 Concurrency | asyncio
 Operating systems | Linux, Windows, macOS
 Package management | Poetry
