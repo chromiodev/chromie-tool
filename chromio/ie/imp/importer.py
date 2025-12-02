@@ -22,7 +22,7 @@ class CollImporter(CollIEBase):
     coll: AsyncCollection,
     file_path: Path,
     *,
-    p: Callable[..., None],
+    p: Callable[..., None] = print,
     writers: int = 2,
     limit: int | None = None,
     remove: list[str] = [],

@@ -5,19 +5,16 @@ from typing import Any, Callable, cast
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
-from .._queue import RecBatchQueue
+from .._writer import RecBatchWriter as RecBatchWriterBase
 from ..consts import DEFAULT_FIELDS
 from ..field import Field
 
 
 @dataclass
-class RecBatchWriter:
-  """A worker for insert record batches into a Chroma collection
+class RecBatchWriter(RecBatchWriterBase):
+  """A worker for inserting record batches into a Chroma collection
   from an asynchronous queue.
   """
-
-  queue: RecBatchQueue
-  """Queue with the record batches to import."""
 
   coll: AsyncCollection
   """Collection where to import."""
@@ -35,18 +32,17 @@ class RecBatchWriter:
       (number of batches performed, number of records written).
     """
 
-    # (1) prepare context
+    # (1) prepare working context
     name: str = cast(Any, asyncio.current_task()).get_name()
+    coll, fields, q = self.coll, self.fields, self.queue
 
     # (2) write batches
     count, batches = 0, 0
-    coll, fields, q = self.coll, self.fields, self.queue
 
     try:
       while True:
         batch = await q.get()
         batches += 1
-        count += len(batch)
 
         p(f"{name}: writing record batch #{batches}...")
 
@@ -60,8 +56,9 @@ class RecBatchWriter:
         )
 
         q.task_done()
+        count += len(batch)
     except QueueShutDown:
       pass
 
-    # (3) return number of records written
+    # (3) return
     return (batches, count)

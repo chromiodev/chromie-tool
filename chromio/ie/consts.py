@@ -8,3 +8,6 @@ DEFAULT_FIELDS: list[Field] = [Field.id, Field.meta, Field.doc]
 
 DEFAULT_WRITERS = 2
 """Default number of writer workers to use in the imports."""
+
+DEFAULT_READERS = 2
+"""Default number of reader workers to use in the exports."""
