@@ -2,6 +2,7 @@ import json
 import os
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, override
 
 from aiofiles import open, ospath
@@ -34,11 +35,13 @@ class ImpCmd(Cmd):
         "names": ["input"],
         "help": "path to the JSONL file to import",
         "required": True,
+        "type": Path,
       },
       {
         "names": ["metafile"],
         "help": "path to the JSON metadata file to use in the import",
         "required": False,
+        "type": Path,
       },
       {
         "names": ["dst"],
