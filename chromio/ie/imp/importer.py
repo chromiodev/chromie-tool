@@ -7,8 +7,8 @@ from typing import Callable
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
 from .._db import CollIEBase
-from .queue import RecBatchQueue
-from .reader import RecBatchReader
+from .._queue import RecBatchQueue
+from .reader import RecFileReader
 from .rpt import CollImportRpt
 from .writer import RecBatchWriter
 
@@ -52,7 +52,7 @@ class CollImporter(CollIEBase):
 
     async with TaskGroup() as pg, TaskGroup() as cg:
       pg.create_task(
-        RecBatchReader(
+        RecFileReader(
           queue=q,
           file_path=file_path,
           limit=limit,

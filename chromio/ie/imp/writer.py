@@ -5,9 +5,9 @@ from typing import Any, Callable, cast
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
+from .._queue import RecBatchQueue
 from ..consts import DEFAULT_FIELDS
 from ..field import Field
-from .queue import RecBatchQueue
 
 
 @dataclass

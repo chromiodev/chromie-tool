@@ -4,11 +4,12 @@ from pathlib import Path
 
 from aiofiles import open
 
-from .queue import RecBatchQueue
+from .._reader import RecBatchReader
+from ..consts import DEFAULT_BATCH_SIZE
 
 
 @dataclass
-class RecBatchReader:
+class RecFileReader(RecBatchReader):
   """A worker for reading a JSONL with Chroma records and producing its batches
   to an asynchronous queue.
 
@@ -16,16 +17,13 @@ class RecBatchReader:
   For example, remove metadata if needed. So, the writers only write.
   """
 
-  queue: RecBatchQueue
-  """Asynchronous queue where to insert the record batches."""
-
   file_path: Path
   """Path to the JSONL file with the records."""
 
   limit: int | None = None
   """Maximum number of records to read/produce."""
 
-  batch_size: int = 250
+  batch_size: int = DEFAULT_BATCH_SIZE
   """Size for the record batches to enqueue."""
 
   remove: list[str] = field(default_factory=list)
