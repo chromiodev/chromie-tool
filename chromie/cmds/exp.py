@@ -6,7 +6,7 @@ from typing import Any, override
 from chromio.client import client
 from chromio.filter.metadata import MetafilterParser
 from chromio.ie import Field
-from chromio.ie.consts import DEFAULT_BATCH_SIZE
+from chromio.ie.consts import DEFAULT_BATCH_SIZE, DEFAULT_READERS
 from chromio.ie.exp import CollExporter
 from chromio.tools import Cmd
 from chromio.uri import parse_uri
@@ -14,8 +14,6 @@ from chromio.uri import parse_uri
 
 @dataclass(frozen=True)
 class ExpCmd(Cmd):
-  """Export one collection."""
-
   # @override
   name: str = "exp"
 
@@ -72,6 +70,19 @@ class ExpCmd(Cmd):
         "metavar": "expr",
         "required": False,
       },
+      {
+        "names": ["--readers", "-r"],
+        "help": "number of readers to use for reading the records",
+        "type": int,
+        "metavar": "int",
+        "default": DEFAULT_READERS,
+      },
+      {
+        "names": ["--no-progress", "-P"],
+        "help": "do not print the progress",
+        "action": "store_true",
+        "default": False,
+      },
     ]
 
   @override
@@ -90,27 +101,36 @@ class ExpCmd(Cmd):
 
     # (3) args
     file = args.out
-    batch_size, limit = args.batch, args.limit
+    batch_size, limit, readers = args.batch, args.limit, args.readers
     fields = [Field[args.fields[i]] for i in range(len(args.fields))]
+    progress = not args.no_progress
     metafilter = (
       MetafilterParser().parse(exp).to_chroma() if (exp := args.metafilter) else None
     )
 
     # (4) create client
     cli = await client(uri, api_key)
-    v = await cli.get_version()
     coll = await cli.get_collection(coll_name)
 
     # (5) export
     exporter = CollExporter(batch_size, fields)
-    rpt = await exporter.export_coll(coll, file, v=v, limit=limit, metafilter=metafilter)
+    rpt = await exporter.export_recs(
+      coll,
+      file,
+      readers=readers,
+      batch_size=batch_size,
+      limit=limit,
+      metafilter=metafilter,
+      p=print if progress else lambda *_: None,
+    )
 
     # (6) show report
     print(
       (
-        f"Collection: {rpt.coll}\n"
-        f"Count: {rpt.count}\n"
+        f"Collection exported: {rpt.coll}\n"
+        f"Batches performed: {rpt.batches}\n"
+        f"Records exported: {rpt.count}\n"
         f"Duration (s): {rpt.duration}\n"
-        f"File: {rpt.file_path}"
+        f"Data export file: {rpt.file_path}"
       )
     )
