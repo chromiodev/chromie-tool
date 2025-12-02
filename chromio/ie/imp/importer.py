@@ -2,6 +2,7 @@ from asyncio import TaskGroup
 from dataclasses import dataclass
 from pathlib import Path
 from time import time
+from typing import Callable
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
@@ -21,6 +22,7 @@ class CollImporter(CollIEBase):
     coll: AsyncCollection,
     file_path: Path,
     *,
+    p: Callable[..., None],
     writers: int = 2,
     limit: int | None = None,
     remove: list[str] = [],
@@ -31,6 +33,7 @@ class CollImporter(CollIEBase):
     Args:
       coll: Collection to import.
       file_path: Path to the JSONL file with the records.
+      p: Function to use for printing the progress.
       writers: Number of consumer/writer workers.
       limit: Maximum number of records to import.
       remove: Metadata to remove in the import.
@@ -63,8 +66,8 @@ class CollImporter(CollIEBase):
       for i in range(writers):
         ct.append(
           cg.create_task(
-            RecBatchWriter(queue=q, coll=coll).run(),
-            name=f"Record batch writer #{i + 1}",
+            RecBatchWriter(queue=q, coll=coll).run(p),
+            name=f"Batch writer #{i + 1}",
           )
         )
 

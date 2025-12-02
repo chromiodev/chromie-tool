@@ -14,8 +14,6 @@ from chromio.uri import parse_uri
 
 @dataclass(frozen=True)
 class ExpCmd(Cmd):
-  """Export one collection."""
-
   # @override
   name: str = "exp"
 

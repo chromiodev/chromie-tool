@@ -119,6 +119,12 @@ class ImpCmd(Cmd):
         "metavar": "int",
         "default": DEFAULT_WRITERS,
       },
+      {
+        "names": ["--no-progress", "-P"],
+        "help": "do not print the progress",
+        "action": "store_true",
+        "default": False,
+      },
     ]
 
   @override
@@ -151,6 +157,7 @@ class ImpCmd(Cmd):
     remove = md if (md := args.metadata_to_remove) is not None else []
     set = md if (md := args.metadata_to_set) is not None else {}
     efn, model, space = args.embedding, args.model, args.space
+    progress = not args.no_progress
 
     # (3) get collection creating it if not exists
     cli = await client(uri, api_key)
@@ -201,11 +208,13 @@ class ImpCmd(Cmd):
         writers=writers,
         remove=remove,
         set=set,
+        p=print if progress else lambda *_: None,
       )
 
       # show report
       print(
         (
+          f"{'\n' if progress else ''}"
           f"Source file: {file}\n"
           f"Destination collection: {rpt.coll}\n"
           f"Batches performed: {rpt.batches}\n"

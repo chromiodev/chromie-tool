@@ -1,5 +1,7 @@
+import asyncio
 from asyncio import QueueShutDown
 from dataclasses import dataclass, field
+from typing import Any, Callable, cast
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
@@ -23,20 +25,30 @@ class RecBatchWriter:
   fields: list[Field] = field(default_factory=lambda: DEFAULT_FIELDS)
   """Record fields to write."""
 
-  async def run(self) -> tuple[int, int]:
+  async def run(self, p: Callable[..., None]) -> tuple[int, int]:
     """Runs the writer, dequeuing and writing the records in batches.
+
+    Args:
+      p: Function to use for printing the progress.
 
     Returns:
       (number of batches performed, number of records written).
     """
 
-    # (1) write batches
+    # (1) prepare context
+    name: str = cast(Any, asyncio.current_task()).get_name()
+
+    # (2) write batches
     count, batches = 0, 0
     coll, fields, q = self.coll, self.fields, self.queue
 
     try:
       while True:
         batch = await q.get()
+        batches += 1
+        count += len(batch)
+
+        p(f"{name}: writing record batch #{batches}...")
 
         await coll.add(
           ids=[r["id"] for r in batch],
@@ -48,10 +60,8 @@ class RecBatchWriter:
         )
 
         q.task_done()
-        batches += 1
-        count += len(batch)
     except QueueShutDown:
       pass
 
-    # (2) return number of records written
+    # (3) return number of records written
     return (batches, count)
