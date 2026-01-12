@@ -14,8 +14,6 @@ from chromio.uri import parse_uri
 
 @dataclass(frozen=True)
 class CpCmd(Cmd):
-  """Copy one collection."""
-
   # @override
   name: str = "cp"
 

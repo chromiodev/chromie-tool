@@ -51,7 +51,7 @@ class CollExporter(CollIEBase):
 
     # (2) export
     async with TaskGroup() as ig, TaskGroup() as wg:
-      # id batch generator
+      # id batch generator for the records to export
       ig.create_task(
         IdBatchFeeder(
           coll=coll,
@@ -63,7 +63,7 @@ class CollExporter(CollIEBase):
         name="Id batch feeder",
       )
 
-      # JSONL writer
+      # record batch writer to JSONL file
       wt = wg.create_task(
         RecFileWriter(
           file_path=file_path,
@@ -72,7 +72,7 @@ class CollExporter(CollIEBase):
         name="Record file writer",
       )
 
-      # record batch generators
+      # record batch generators to export
       async with TaskGroup() as rg:
         for i in range(readers):
           rg.create_task(
