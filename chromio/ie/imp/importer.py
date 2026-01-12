@@ -1,12 +1,16 @@
+from asyncio import TaskGroup
 from dataclasses import dataclass
+from pathlib import Path
 from time import time
-from typing import Any
+from typing import Callable
 
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
 from .._db import CollIEBase
+from .._queue import RecBatchQueue
+from .reader import RecFileReader
 from .rpt import CollImportRpt
-from .writer import CollWriter
+from .writer import RecBatchWriter
 
 
 @dataclass
@@ -16,8 +20,10 @@ class CollImporter(CollIEBase):
   async def import_coll(
     self,
     coll: AsyncCollection,
-    recs: list[dict[str, Any]],
+    file_path: Path,
     *,
+    p: Callable[..., None] = print,
+    writers: int = 2,
     limit: int | None = None,
     remove: list[str] = [],
     set: dict = {},
@@ -26,7 +32,9 @@ class CollImporter(CollIEBase):
 
     Args:
       coll: Collection to import.
-      recs: Records to import.
+      file_path: Path to the JSONL file with the records.
+      p: Function to use for printing the progress.
+      writers: Number of consumer/writer workers.
       limit: Maximum number of records to import.
       remove: Metadata to remove in the import.
       set: Metadata to set/override in the import.
@@ -35,23 +43,40 @@ class CollImporter(CollIEBase):
       An import report.
     """
 
+    # (1) prepare
     start = time()
+    q = RecBatchQueue()
 
-    # (1) remove/set metafields if needed
-    if len(remove) > 0 or len(set) > 0:
-      for rec in recs:
-        md = rec["metadata"]
+    # (2) import
+    ct = []  # consumer tasks
 
-        for key in remove:
-          del md[key]
+    async with TaskGroup() as pg, TaskGroup() as cg:
+      pg.create_task(
+        RecFileReader(
+          queue=q,
+          file_path=file_path,
+          limit=limit,
+          batch_size=self.batch_size,
+          remove=remove,
+          set=set,
+        ).run(),
+        name="JSONL file reader",
+      )
 
-        for key, val in set.items():
-          md[key] = val
+      for i in range(writers):
+        ct.append(
+          cg.create_task(
+            RecBatchWriter(queue=q, coll=coll).run(p),
+            name=f"Batch writer #{i + 1}",
+          )
+        )
 
-    # (2) write
-    count = await CollWriter().write(
-      recs, coll, fields=self.fields, limit=limit, batch_size=self.batch_size
+      await q.join()
+
+    # (3) generate the report
+    return CollImportRpt(
+      coll=coll.name,
+      batches=sum(t.result()[0] for t in ct),
+      count=sum(t.result()[1] for t in ct),
+      duration=int(time() - start),
     )
-
-    # (3) return report
-    return CollImportRpt(coll=coll.name, count=count, duration=int(time() - start))

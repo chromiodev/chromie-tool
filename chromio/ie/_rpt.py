@@ -9,6 +9,9 @@ class CollIERpt(ABC):
   coll: str
   """Collection name."""
 
+  batches: int
+  """Number of batches written performed for writing the records."""
+
   count: int
   """Number of records imported, exported or copied."""
 
